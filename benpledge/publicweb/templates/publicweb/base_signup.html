@@ -1,0 +1,43 @@
+{% extends "publicweb/base.html" %}
+
+{% block content %}
+<div class="container contentoffset">
+  <div class="col-sm-offset-4 col-sm-6">
+  <h2>Create account</h2>
+  </div>
+
+  <form class="form-horizontal" role="form" method="post">
+  {% csrf_token %}
+    <div class="form-group">
+      <label class="col-sm-4 control-label" for="inputemail">Email Address</label>
+      <div class="col-sm-6">
+        <input type="email" class="form-control" id="inputemail" name="inputemail" placeholder= "Enter email" autofocus>
+        <p class="help-block">We will use this to update you on your pledges and if you ever forget your password</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-4 control-label" for="inputusername">Username</label>
+      <div class="col-sm-6">
+      <input type="text" class="form-control" id="inputusername" name="inputusername" placeholder="Username">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-4 control-label" for="inputpassword">Password</label>
+      <div class="col-sm-6">
+        <input type="password" class="form-control" id="inputpassword" name="inputpassword">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-4 control-label" for="inputconfirmpassword" placeholder="password">Confirm Password</label>
+      <div class="col-sm-6">
+        <input type="password" class="form-control" id="inputconfirmpassword" name="inputconfirmpassword" placeholder="Confirm Password">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-4 col-sm-6">
+        <button type="submit" class="btn btn-primary">Create Account</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock content %}

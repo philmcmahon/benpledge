@@ -1,0 +1,54 @@
+{% extends "publicweb/base_register.html" %}
+{% load publicweb_filters %}
+{% load widget_tweaks %}
+{% block register_page %}
+<div class="container contentoffset">
+  <div class="row">
+    <div class="col-sm-offset-3 col-sm-6">
+      <h2>Create account</h2>
+    </div> 
+  </div>
+
+  {% if form.errors %}
+  <div class="row">
+    <div class="col-sm-offset-2 col-sm-5 alert alert-info">
+      <p>Sorry, did you enter everything correctly?</p>      
+    </div>
+  </div>    
+  {% endif %}
+
+  <form class="form-horizontal" role="form" method="post">
+  {% csrf_token %}
+  {% for field in form %}
+    {% if field.errors or form.non_field_errors and field.label|passwordfield %}
+      <div class="form-group has-warning">
+    {% elif form.errors %}
+      <div class="form-group has-success">
+    {% else %}
+      <div class="form-group">
+    {% endif %}
+      <label class="col-sm-3 control-label" for="{{field.auto_id}}">{{field.label}}</label>
+      <div class="col-sm-4">
+        {% render_field field class+="form-control" %}
+        {% for error in field.errors %}
+        <p class="text-warning">{{error}}</p>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+  <!--Passwords not matching-->
+  {% if form.non_field_errors %}
+    <div class="col-sm-offset-3 col-sm-4">
+        {% for error in form.non_field_errors %}
+        <p class="text-warning">{{error}}</p>
+        {% endfor %}
+      </div>
+  {% endif %}  
+    <div class="form-group">
+      <div class="col-sm-offset-4 col-sm-6">
+        <button type="submit" class="btn btn-primary">Create Account</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock register_page %}
