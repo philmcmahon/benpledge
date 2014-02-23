@@ -37,11 +37,21 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     # third party applications
     'south',
-    # local application
+    'registration',
+    'bootstrap3',
+    'widget_tweaks',
+    # local applications
     'publicweb'
 )
+
+ACCOUNT_ACTIVATION_DAYS = 7
+SITE_ID = 1
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = '/home/phil/benpledge/benpledge/emails/' # change this to a proper location
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -55,7 +65,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'benpledge.urls'
 
 WSGI_APPLICATION = 'benpledge.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases

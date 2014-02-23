@@ -1,0 +1,9 @@
+{% extends "publicweb/base_register.html" %}
+{% block register_page %}
+{% load crispy_forms_tags %}
+<form method="POST" action="">
+    {% csrf_token %}
+    {{userform }}
+    <input type="submit">
+</form>
+{% endblock register_page %}

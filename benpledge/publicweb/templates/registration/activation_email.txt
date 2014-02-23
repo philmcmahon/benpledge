@@ -1,0 +1,3 @@
+Please activate your account at {{site.name}} by clicking the link below or by copying and pasting it into your address bar.
+
+{{site.domain}}/accounts/activate/{{activation_key}}
