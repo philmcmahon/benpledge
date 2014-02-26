@@ -40,7 +40,7 @@
   <body>
 
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
+      <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -48,18 +48,31 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">benpledge</a>
+          <a class="navbar-brand" href="/">benpledge</a>
         </div>
-        <div class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form">
-            <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
+        <div class="collapse navbar-collapse navbar-right">
+        <ul class="nav navbar-nav ">
+          {% if user.is_authenticated %}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{user}} <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/accounts/profile/">Profile</a></li>
+                </ul>
+            </li>
+            <li>
+                <form>
+                <a class="btn btn-primary navbar-btn" href="/accounts/logout">Log Out</a>
+                </form>
+            </li>
+            {% else %}
+            <li>
+                <form>
+                <a class="btn btn-primary navbar-btn" href="/accounts/login">Log In</a>
+                </form>
+            </li>
+            <li>----  </li>
+            {% endif %}
+        </ul>
         </div><!--/.navbar-collapse -->
       </div>
     </div>
@@ -77,11 +90,10 @@
     </div>
 
     <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster 
+    ================================================== 
+    Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>-->
-    {% bootstrap_javascript %}
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 
   </body>
 </html>
