@@ -1,0 +1,10 @@
+{% extends 'publicweb/base_offset.html'%}
+{% block main_content %}
+<h1> Cancel pledge. </h1>
+<p>Are you sure you want to cancel your pledge?</p>
+<form class="form-inline" method="post" role="form">
+  {% csrf_token %}
+    <button class="btn btn-primary">Cancel</button>
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+{% endblock%}

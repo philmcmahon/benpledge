@@ -1,0 +1,8 @@
+{% extends "publicweb/base_offset.html" %}
+{% block main_content %}
+<ul>
+{% for a in areas %}
+    <li><a href="{% url 'pledges_for_area' a.postcode_district %}">{{a}}</a></li>
+{% endfor %}
+</ul>
+{% endblock main_content %}

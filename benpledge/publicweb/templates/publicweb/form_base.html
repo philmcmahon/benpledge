@@ -48,6 +48,8 @@
     {% endif %}  
       <div class="form-group">
         <div class="col-sm-offset-4 col-sm-6">
+          {% block cancel_button %}
+          {% endblock %}
           <button type="submit" class="btn btn-primary">{% block submit_text %}{% endblock %}</button>
         </div>
       </div>

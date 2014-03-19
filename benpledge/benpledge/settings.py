@@ -44,14 +44,15 @@ INSTALLED_APPS = (
     'bootstrap3',
     'widget_tweaks',
     # local applications
-    'publicweb'
+    'publicweb',
+    'debug_toolbar',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
 SITE_ID = 1
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = '/home/phil/benpledge/benpledge/emails/' # change this to a proper location
+EMAIL_FILE_PATH = BASE_DIR +'/emails/' 
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -96,3 +97,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_URL = '/accounts/login'
+
+MEDIA_ROOT = BASE_DIR + '/publicweb/media/'
+MEDIA_URL = BASE_DIR + '/media/'

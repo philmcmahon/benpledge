@@ -1,0 +1,8 @@
+{% extends "publicweb/form_base.html" %}
+
+{% block header %} Update Pledge {% endblock %}
+{% block form_error_message %}Sorry, something went wrong{% endblock %}
+{% block cancel_button %}
+    <a href="{% url 'profile' %}"><button type="button" class="btn btn-danger">Cancel</button></a>
+{% endblock %}
+{% block submit_text %}Update{% endblock %}

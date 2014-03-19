@@ -20,3 +20,11 @@ body {
 .contentoffset {
     padding-top: 10px;
 }
+
+.pledge-btn-group {
+    float: right;
+}
+
+.boolean-hidden-text {
+    display: none;
+}

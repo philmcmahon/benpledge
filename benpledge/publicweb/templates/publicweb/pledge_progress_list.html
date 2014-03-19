@@ -1,0 +1,35 @@
+<div class="panel panel-primary">
+<div class="panel-heading">
+  <h3 class="panel-title">{% if not area %}Your pledges{% else %} {{area}} pledges{% endif %}</h3>
+</div>
+<div class="panel-body">
+{% if not pledge_progress %}
+  {% if not area %}
+  <p>You've not made any pledges yet. Have a look at the measures below to see what might be possible. </p>
+  {% else %}
+  <p>No pledges have been made in this area yet.</p>
+  {% endif %}
+{% endif %}
+{% for k, p in pledge_progress.iteritems %}
+  {{ p.pledge.measure.name }} by {{p.pledge.deadline}} {% if area %} - {{p.pledge.user}} {% endif %}
+  <div class="btn-group pledge-btn-group">
+  <a href="{% url 'measure' p.pledge.measure.id %}"><button type="button" class="btn btn-default">View Measure</button></a>
+  {% if not area %}
+    <button type="button" class="btn btn-default">Get Help</button>
+    <a href="{% url 'delete_pledge' p.pledge.id %}"><button type="button" class="btn btn-default">Cancel Pledge</button></a>
+  {% endif %}
+  </div>
+  <br><br>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="{{ p.time_progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{p.time_progress}}%;">
+    <span></span>
+    </div>
+  </div>
+{% endfor %}
+
+
+</div>
+<div class="panel-footer">
+
+</div>
+</div>

@@ -3,3 +3,6 @@
 {% block header %} Create Account {% endblock %}
 {% block form_error_message %}Sorry, did you enter everything correctly?{% endblock %}
 {% block submit_text %}Create Account{% endblock %}
+{% block cancel_button %}
+    <a href="{% url 'index' %}"><button type="button" class="btn btn-danger">Cancel</button></a>
+{% endblock %}

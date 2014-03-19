@@ -1,0 +1,130 @@
+[
+    {
+        "model": "publicweb.area",
+        "pk": 1,
+        "fields": {
+            "postcode_district": "BS1",
+            "area_name": "City Centre/Redcliffe"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 2,
+        "fields": {
+            "postcode_district": "BS2",
+            "area_name": "Kingsdown/St Paul's"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 3,
+        "fields": {
+            "postcode_district": "BS3",
+            "area_name": "Bedminster/Southville/Bower Ashton"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 4,
+        "fields": {
+            "postcode_district": "BS4",
+            "area_name": "Brislington/Knowle/Knowle West/St Anne's"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 5,
+        "fields": {
+            "postcode_district": "BS5",
+            "area_name": "Easton/St George/Redfield/Whitehall/Eastville"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 6,
+        "fields": {
+            "postcode_district": "BS6",
+            "area_name": "Cotham/Redland/Montpelier/Westbury Park"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 7,
+        "fields": {
+            "postcode_district": "BS7",
+            "area_name": "Bishopston/Horfield/Lockleaze/Ashley Down/St. Andrew's"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 8,
+        "fields": {
+            "postcode_district": "BS8",
+            "area_name": "Clifton/Hotwells/Leigh Woods"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 9,
+        "fields": {
+            "postcode_district": "BS9",
+            "area_name": "Combe Dingle/Sneyd Park/Stoke Bishop/Westbury on Trym/Henleaze"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 10,
+        "fields": {
+            "postcode_district": "BS10",
+            "area_name": "Unknown"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 11,
+        "fields": {
+            "postcode_district": "BS11",
+            "area_name": "Unknown"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 12,
+        "fields": {
+            "postcode_district": "BS12",
+            "area_name": "Unknown"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 13,
+        "fields": {
+            "postcode_district": "BS13",
+            "area_name": "Unknown"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 14,
+        "fields": {
+            "postcode_district": "BS14",
+            "area_name": "Unknown"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 15,
+        "fields": {
+            "postcode_district": "BS15",
+            "area_name": "Unknown"
+        }
+    },
+    {
+        "model": "publicweb.area",
+        "pk": 16,
+        "fields": {
+            "postcode_district": "BS16",
+            "area_name": "Unknown"
+        }
+    }
+]
