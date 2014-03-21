@@ -54,6 +54,7 @@ def measure(request, measure_id):
 @login_required
 def dwelling_form(request):
     dwelling = get_dwelling(request.user)
+    current_user_profile = UserProfile.objects.get(user=request.user)
     if request.method == 'POST':
         form = DwellingForm(request.POST, instance=dwelling)
 
@@ -64,6 +65,7 @@ def dwelling_form(request):
 
         if form.is_valid():
             if dwelling == None:
+                current_user_profile.dwelling = updated_dwelling
                 current_user_profile.save()
             return profile(request)
     else:
@@ -151,7 +153,11 @@ def profile(request):
     for m in measures:
         measure_ids[convert_name_to_identifier(m.name)] = m.id
 
-    user_measures = get_user_hat_results(request.user)
+    userprofile = UserProfile.objects.get(user=request.user)
+    if userprofile.dwelling:
+        user_measures = get_user_hat_results(request.user)
+    else:
+        user_measures = None
 
     pledge_progress = get_pledges_with_progress(request.user)
     # if not pledge_progress:
