@@ -20,11 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '0eu763+(x*w0i)%zx1x$7d0fs5ce*!#fjm=ux+q8v+)=k+u%my'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['95.85.39.60']
 
 
 # Application definition
@@ -45,7 +45,6 @@ INSTALLED_APPS = (
     'widget_tweaks',
     # local applications
     'publicweb',
-    'debug_toolbar',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
@@ -74,7 +73,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS' : {
-            'read_default_file': '/home/phil/benpledge/dbconfig.cnf',
+            'read_default_file': '/opt/benpledge/dbconfig.cnf',
         },
     }
 }
@@ -95,10 +94,16 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-
+STATIC_ROOT = '/opt/benpledge/static/'
 STATIC_URL = '/static/'
 
 LOGIN_URL = '/accounts/login'
 
 MEDIA_ROOT = BASE_DIR + '/publicweb/media/'
 MEDIA_URL = BASE_DIR + '/media/'
+
+try:
+    from local_settings import *
+except ImportError:
+    print "local settings not found"
+    pass
