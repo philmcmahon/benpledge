@@ -50,7 +50,7 @@ INSTALLED_APPS = (
 ACCOUNT_ACTIVATION_DAYS = 7
 SITE_ID = 1
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_FILE_PATH = BASE_DIR +'/emails/' 
 
 MIDDLEWARE_CLASSES = (
@@ -101,6 +101,13 @@ LOGIN_URL = '/accounts/login'
 
 MEDIA_ROOT = BASE_DIR + '/publicweb/media/'
 MEDIA_URL = BASE_DIR + '/media/'
+
+# Email settings
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'benpledgehelp'
+EMAIL_HOST_PASSWORD = 'retrofit123'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 try:
     from local_settings import *
