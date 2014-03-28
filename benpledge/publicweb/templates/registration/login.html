@@ -1,8 +1,12 @@
 {% extends "publicweb/form_base.html" %}
 
 {% block header %} Login {% endblock %}
+{% block subheading %} Don't have an account yet? Please <a href="/accounts/register">register</a>. {% endblock %}
 {% block form_error_message %}Sorry, login failed. Please check your username and password.{% endblock %}
 {% block submit_text %}Login{% endblock %}
 {% block cancel_button %}
     <a href="{% url 'index' %}"><button type="button" class="btn btn-danger">Cancel</button></a>
 {% endblock %}
+{% block button_help_text %}
+<p><a href="/accounts/password_reset">Reset password</a> </p>
+{% endblock button_help_text %}

@@ -1,0 +1,36 @@
+{% extends "publicweb/base_offset.html" %}
+{% block main_content %}
+
+<div class="row">
+  <div class="col-md-10">
+  <h1> Top tips for saving energy </h1>
+  {% if top_tips %}
+
+  <div class="row">
+  <ol class="list-group">
+    {% for t in top_tips %}
+    <li class="list-group-item">
+        <h4 class="list-group-item-heading">{{ t.name }}</h4>
+        <p class="lis-group-item-text">{{ t.description }}</p>
+    </li>
+    {% endfor %}
+    </ol>
+    </div>
+  {% endif %}
+
+    <a class="btn btn-success btn-xlarge" href="{% url 'general_measures' %}">View full measures list</a>
+<!--   </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-md-10"> -->
+    <a class="btn btn-success btn-xlarge" href="{% url 'dwelling_form' %}">Provide further information</a>
+  </div>
+</div>
+
+<div class="row">
+<div class="col-md-10">
+<p>You can either view a list of all the different energy saving measures available or provide some additional information so that we can advise as to the measures that might be most suitable for your home.</p>
+</div>
+</div>
+{% endblock main_content %}

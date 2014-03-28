@@ -16,12 +16,41 @@ class Measure(models.Model):
     def __unicode__(self):
         return self.name
 
+class Organisation(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(default="No description available.")
+    website = models.URLField()
+    logo = models.ImageField(null=True, blank=True, upload_to='logos%Y/%m/%d')
+    LOCAL = 1
+    CITY_WIDE = 2
+    NATIONAL = 3
+    TYPE_CHOICES = (
+        (LOCAL, 'Local'),
+        (CITY_WIDE, 'City wide'),
+        (NATIONAL, 'National'),
+        )
+    organisation_type = models.IntegerField(choices=TYPE_CHOICES,
+        default=LOCAL)
+
+    def __unicode__(self):
+        return self.name
+
+class TopTip(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(default='No description available.', null=True, blank=True)
+    measure_id = models.ForeignKey(Measure, null=True, blank=True)
+    display_on_welcome_screen = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return self.name
+
 class Pledge(models.Model):
     measure = models.ForeignKey(Measure)
     user = models.ForeignKey(User, related_name='user')
     deadline = models.DateField()
     date_made = models.DateTimeField(default=datetime.now())
     hat_results = models.ForeignKey('HatResultsDatabase', null=True, blank=True)
+    receive_updates = models.BooleanField(default=False)
 
     def time_progress(pledge):
         # convert date to datetime
@@ -41,6 +70,12 @@ class Area(models.Model):
         return self.postcode_district + " - " + self.area_name
 
 class Dwelling(models.Model):
+
+    number_of_inhabitants = models.IntegerField(blank=True, null=True)
+    aprroximate_spent_on_gas_per_month = models.IntegerField(blank = True, null=True)
+    approximate_spent_on_electricity_per_month = models.IntegerField(blank = True, null=True)
+    gas_supplier = models.CharField(max_length=50, blank=True, null=True)
+    electricity_supplier = models.CharField(max_length=50, blank=True, null=True)
     # tenure
     OWN = 1
     PRIVATELY_RENTING = 2
@@ -98,6 +133,11 @@ class Dwelling(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     dwelling = models.ForeignKey(Dwelling, null=True, blank=True)
+
+    gas_spend_per_month = models.IntegerField(null=True, blank=True)
+    electricity_spend_per_month = models.IntegerField(null=True, blank=True)
+    gas_provider = models.CharField(max_length=20, null=True, blank=True)
+    electricity_provider = models.CharField(max_length=20, null=True, blank=True)
 
     def __unicode__(self):
         return str(self.user) + ' profile'
@@ -168,9 +208,30 @@ class HatMetaData(models.Model):
     def __unicode__(self):
         return self.label
 
-# class HatResultsDatabase
+class LsoaDomesticEnergyConsumption(models.Model):
+    year = models.CharField(max_length=4)
+    la_code = models.CharField(max_length=9)
+    msoa_code = models.CharField(max_length=9)
+    msoa_name = models.CharField(max_length=20)
+    lsoa_code = models.CharField(max_length=9)
+    lsoa_name = models.CharField(max_length=20)
+    total_electricity_and_gas_consumption_mwh = models.IntegerField()
+    ordinary_electricity_consumption_mwh = models.IntegerField()
+    economy_7_electricity_consumption_mwh = models.IntegerField()
+    gas_consumption_mwh = models.IntegerField()
+    number_of_ordinary_electricity_meters = models.IntegerField()
+    average_ordinary_electricity_consumption_kwh = models.IntegerField()
+    number_of_economy_7_electricity_meters = models.IntegerField()
+    average_economy_7_electricity_consumption_kwh = models.IntegerField()
+    number_domestic_gas_meters = models.IntegerField()
+    average_domestic_gas_consumption_kwh = models.IntegerField()
 
-#class HouseIDLookup
+class PostcodeOaLookup(models.Model):
+    postcode = models.CharField(max_length=8)
+    oa_code = models.CharField(max_length=9)
+    lsoa_code = models.CharField(max_length=9)
+    lsoa_name = models.CharField(max_length=20)
+    msoa_code = models.CharField(max_length=9)
+    la_code = models.CharField(max_length=9)
 
-# class MeasuresList
-# class MetaData
+

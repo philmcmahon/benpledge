@@ -10,9 +10,27 @@
                 Welcome to the Bristol Energy Network energy pledge system. Sign up to get energy recommendations for your home, find out about funding opportunities and more.
             </p>
             <p>
-            <a class="btn btn-success btn-xlarge" href="accounts/register">Get Started</a>
+            <a class="btn btn-success btn-xlarge" href="{% url 'get_started' %}">Get Started</a>
             </p>
         </div>
     </div>
+<div class="row">
+<div class="col-md-4 col-md-offset-4">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+        Are you...
+        </div>
+    <div class="panel-body">
+    <ul class="home-list"> 
+     <li><i class="fa fa-check-square-o"></i>Interested in fighting climate change?</li>
+    <li><i class="fa fa-check-square-o"></i>Interested in saving money?</li>
+    <li><i class="fa fa-check-square-o"></i>Looking for support?</li>
+    </ul>
+    </div>
+
+    </div>
+</div>
+</div>
+<br>
 {% endblock content %}
 

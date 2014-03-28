@@ -13,7 +13,7 @@
                     <img src="{{ measure.measure_image_1.url }}" alt="Image of {{measure.name}}" class="img-responsive">
                 {% endif %}
                 {% if hat_info %}
-                <h3> Predicted effect on your home</h3>
+                <h3> Predicted effect on your home calculated using CSE's Housing Assessment Tool</h3>
                 <div class="table-responsive">
                 <table class="table table-bordered">
                   <tr>
@@ -23,9 +23,9 @@
                     <th>Change</th>
                   </tr>
                   <tr>
-                    <td>{{ hat_info.current_sap_rating }}</td>
-                    <td>{{ hat_info.post_measure_sap_rating }}</td>
-                    <td>{{ hat_info.sap_change }}</td>
+                    <td>{{ hat_info.current_sap_rating|round_to_nearest_integer }}</td>
+                    <td>{{ hat_info.post_measure_sap_rating|round_to_nearest_integer }}</td>
+                    <td>{{ hat_info.sap_change|round_to_nearest_integer }}</td>
                   </tr>
                   <tr>
                     <th rowspan="2">Energy Consumption<br></th>
@@ -34,21 +34,21 @@
                     <th>Change</th>
                   </tr>
                   <tr>
-                    <td>{{ hat_info.current_energy_consumption_kwh }} kWh</td>
-                    <td>{{ hat_info.post_measure_energy_consumption_kwh }} kWh</td>
-                    <td>{{ hat_info.consumption_change }} kWh</td>
+                    <td>{{ hat_info.current_energy_consumption_kwh|round_to_nearest_10 }} kWh</td>
+                    <td>{{ hat_info.post_measure_energy_consumption_kwh|round_to_nearest_10 }} kWh</td>
+                    <td>{{ hat_info.consumption_change|round_to_nearest_10 }} kWh</td>
                   </tr>
                   <tr>
                     <th>Annual Cost Reduction<br></th>
-                    <td colspan="3">£{{ hat_info.annual_cost_reduction }}</td>
+                    <td colspan="3">£{{ hat_info.annual_cost_reduction|round_to_nearest_10 }}</td>
                   </tr>
                   <tr>
                     <th>Annual CO2 Emissions Reduction<br></th>
-                    <td colspan="3">{{ hat_info.annual_co2_reduction }} kgCO2</td>
+                    <td colspan="3">{{ hat_info.annual_co2_reduction|round_to_nearest_10 }} kgCO2</td>
                   </tr>
                   <tr>
                     <th>Approximate Installation Costs<br></th>
-                    <td colspan="3">£{{ hat_info.approximate_installation_costs }}</td>
+                    <td colspan="3">£{{ hat_info.approximate_installation_costs|round_to_nearest_10 }}</td>
                   </tr>
                   <tr>
                     <th>Green Deal Funding Likely?<br></th>
@@ -89,6 +89,13 @@
                         <input type="hidden" name="hat_results_id" value="{{ hat_info.id }}">
                         <label for="pledge-slider" class="sr-only">Time period</label>
                         <input name="time_period" with="100%" type="text" class="span2" value="4" id="pledge-slider" data-slider-min="0" data-slider-max="18" data-slider-step="1" data-slider-value="3" >
+                        <span id="duration-text">3 months </span>
+                        <div class="checkbox">
+                        <label for="receive_updates">
+                        Tick this box to receive occasional updates and support about your pledge from us via email. <input type="checkbox" name="receive_updates">
+                        </label>
+                        </div>
+                        <br>
                         <button type="submit" class="btn btn-primary">Pledge</button>
                       </form>
                   </div>
@@ -118,13 +125,9 @@
                   </div>
                   <div class="panel-footer">
                     <div class="btn-group">
-                    <a href="{% url 'edit_pledge' pledge.id %}">
-                        <button type="button" class="btn btn-default">Edit pledge</button>
-                    </a>
-                    <button type="button" class="btn btn-default">Get Help</button>
-                    <a href="{% url 'delete_pledge' pledge.id %}">
-                    <button type="button" class="btn btn-default">Cancel Pledge</button>
-                    </a>
+                    <a href="{% url 'edit_pledge' pledge.id %}" class="btn btn-default">Edit pledge</a>
+                    <a href="{% url 'help_page' %}" class="btn btn-default">Get Help/Contact</a>
+                    <a href="{% url 'delete_pledge' pledge.id %}" class="btn btn-default">Cancel Pledge</a>
                     <br><br>
                 </div>
                   </div>

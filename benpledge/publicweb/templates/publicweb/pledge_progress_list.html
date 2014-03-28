@@ -11,12 +11,12 @@
   {% endif %}
 {% endif %}
 {% for k, p in pledge_progress.iteritems %}
-  {{ p.pledge.measure.name }} by {{p.pledge.deadline}} {% if area %} - {{p.pledge.user}} {% endif %}
+  {{ p.pledge.measure.name }} by {{p.pledge.deadline}} {% if area %} - {{p.pledge.user}} {% endif %} <span class="text-success">({{ p.pledge.hat_results.consumption_change }} kWh)</span>
   <div class="btn-group pledge-btn-group">
-  <a href="{% url 'measure' p.pledge.measure.id %}"><button type="button" class="btn btn-default">View Measure</button></a>
+  <a href="{% url 'measure' p.pledge.measure.id %}" class="btn btn-default">View Measure</a>
   {% if not area %}
-    <button type="button" class="btn btn-default">Get Help</button>
-    <a href="{% url 'delete_pledge' p.pledge.id %}"><button type="button" class="btn btn-default">Cancel Pledge</button></a>
+    <a href="{% url 'help_page' %}" class="btn btn-default">Get Help/Contact</a>
+    <a href="{% url 'delete_pledge' p.pledge.id %}" class="btn btn-default">Cancel Pledge</a>
   {% endif %}
   </div>
   <br><br>
@@ -30,6 +30,6 @@
 
 </div>
 <div class="panel-footer">
-
+<h3> Total pledged reduction: {{ total_reduction }} kWh</h3>
 </div>
 </div>

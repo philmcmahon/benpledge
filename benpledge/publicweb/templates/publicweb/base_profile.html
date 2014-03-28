@@ -5,16 +5,17 @@
 <div class="row clearfix">
     <div class="col-md-12 column">
         <div class="row clearfix">
-            <div class="col-md-1 column">
-            </div>
-            <div class="col-md-10 column">
+            <div class="col-md-10">
             <h1>Welcome {{user}}</h1>
-            <a href="{% url 'dwelling_form' %}">My Home</a> <br>
-<!--             <a href="{% url 'possible_measures' %}">Possible Measures</a>
+<!--            <a href="{% url 'dwelling_form' %}">My Home</a> <br>
+             <a href="{% url 'possible_measures' %}">Possible Measures</a>
 p -->            
 
             {% include "publicweb/pledge_progress_list.html" %}
             <h2> Measures</h2>
+
+            {% if user_measures %}
+            <h4>Information from CSE's Housing Assessment Tool</h4>
             <table id="sortable-measures-table" class="table tablesorter">
             <thead>
             <tr>
@@ -32,9 +33,9 @@ p -->
             {% if m.hat_results %}
               <tr>
                 <td><a href="{% url 'measure' k %}">{{ m.measure_name }}</a></td>
-                <td>{{ m.hat_results.consumption_change }}</td>
-                <td>£{{ m.hat_results.annual_cost_reduction }}</td>
-                <td>£{{ m.hat_results.approximate_installation_costs }}</td>
+                <td>{{ m.hat_results.consumption_change|round_to_nearest_10 }}</td>
+                <td>£{{ m.hat_results.annual_cost_reduction|round_to_nearest_10 }}</td>
+                <td>£{{ m.hat_results.approximate_installation_costs|round_to_nearest_10 }}</td>
                 <td>{{ m.payback_time_estimate }}</td>
                 <td><span class="{{ m.hat_results.grean_deal|boolean_to_glyphicon }}"></span><p class="boolean-hidden-text">{{ m.hat_results.grean_deal}}</p></td>
                 <td><span class="{{ m.hat_results.eco_finance|boolean_to_glyphicon }}"></span><p class="boolean-hidden-text">{{ m.hat_results.eco_finance}}</p></td>
@@ -43,38 +44,11 @@ p -->
             {% endfor %}
             </tbody>
             </table>
-
-            {% load staticfiles %}
-
-<img id="house_graphic" src="{% static "publicweb/img/house_graphic.png" %}" class="img-responsive" alt="House image" usemap="#house_map" alt="House image" />
-<map name="house_map" id="house_map">
-<div class="hasTooltip"><area  class="hasTooltip" shape="rect" coords="21,17,376,141" alt="Loft insulation" title="Loft insulation" target="_self" href="{% url 'measure' 1 %}"     /></div> 
-
-<area  shape="rect" coords="450,51,805,175" alt="Solar Panel" title="Solar panel" target="_self" href="{% url 'measure' 12 %}"     />
-<area  shape="rect" coords="59,168,210,367" alt="Secondary glazing for windows" title="Secondary glazing for windows" target="_self" href="{% url 'measure' 23 %}"     />
-<area  shape="rect" coords="175,167,339,229" alt="Secondary glazing for windows" title="Secondary glazing for windows" target="_self" href="{% url 'measure' 23 %}"     />
-<area  shape="rect" coords="214,239,418,418" alt="Radiator controls" title="Radiator controls" target="_self" href="{% url 'measure' 1 %}"     />
-<area  shape="rect" coords="452,206,695,415" alt="Insulated hot water tank" title="Insulated hot water tank" target="_self" href="{% url 'measure' 17 %}"     />
-<area  shape="rect" coords="726,184,969,425" alt="Cavity wall insulation" title="Cavity wall insulation" target="_self" href="{% url 'measure' measure_ids.cavity_wall_insulation %}"     />
-<area  shape="rect" coords="29,421,285,539" alt="" title="Smart lighting" target="_self" href="{% url 'measure' 22 %}"     />
-<area  shape="rect" coords="296,430,530,526" alt="Central heating controls" title="Central heating controls" target="_self" href="{% url 'measure' 1 %}"     />
-<area  shape="rect" coords="533,432,701,554" alt="Energy efficient boiler" title="Energy efficient boiler" target="_self" href="{% url 'measure' 1 %}"     />
-<area  shape="rect" coords="30,528,185,830" alt="Draught proofed doors" title="Draught proofed doors" target="_self" href="{% url 'measure' measure_ids.draught_proofing %}"     />
-<area  shape="rect" coords="159,741,477,832" alt="Draught proofed floors" title="Draught proofed floors" target="_self" href="{% url 'measure' measure_ids.draught_proofing %}"     />
-<area  shape="rect" coords="183,564,351,744" alt="TV not left on stand by" title="TV not left on stand by" target="_self" href="{% url 'measure' 1 %}"     />
-<area  shape="rect" coords="349,535,592,739" alt="A-rated fridges and other white goods" title="A-rated fridges and other white goods" target="_self" href="{% url 'measure' 1 %}"     />
-<area  shape="rect" coords="589,550,717,758" alt="Full load in the washing machine" title="Full load in the washing machine" target="_self" href="{% url 'measure' 1 %}"     />
-<area  shape="rect" coords="721,438,967,626" alt="Hanging out in the sun" title="Hanging out in the sun" target="_self" href="{% url 'measure' 1 %}"     />
-<area  shape="rect" coords="739,655,959,771" alt="Smarter driving" title="Smarter driving" target="_self" href="{% url 'measure' 1 %}"     />
-<area  shape="rect" coords="586,770,812,843" alt="Better by bike" title="Better by bike" target="_self" href="{% url 'measure' 1 %}"     />
-</map>
-
-
-
+            {% endif %}
 
             </div>
-            <div class="col-md-1 column">
-
+            <div class="col-md-2">
+            <a class="btn btn-success" href="{% url 'dwelling_form' %}">Update home.</a>
             </div>
         </div>
     </div>

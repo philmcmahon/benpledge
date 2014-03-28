@@ -1,0 +1,34 @@
+{% extends "publicweb/base_offset.html" %}
+{% block main_content %}
+<h1> Ways to save energy</h1>
+<div class="row">
+    <div class="col-md-10">
+        {% include "publicweb/measure_map.html" %}
+    </div>
+    <div class="col-md-2">
+        <a class="btn btn-success" href="{% url 'dwelling_form' %}">Provide further information</a>
+
+    </div>
+</div>
+<div class="row">
+    <h3>Energy Saving Measures</h3>
+    <p> This is the full list of possible energy saving measures we have information about. Note that many of these are large project and you should seek some advice before attempting them.</p>
+
+    <div class="col-md-6">
+    <div class="list-group">
+        {% for m in measures1 %}
+            <a href="{% url 'measure' m.id %}" class="list-group-item">{{ m.name }}</a>
+        {% endfor %}
+    </div>
+    </div>
+    <div class="col-md-6">
+    <div class="list-group">
+        {% for m in measures2 %}
+            <a href="{% url 'measure' m.id %}" class="list-group-item">{{ m.name }}</a>
+        {% endfor %}
+    </div>
+    </div>
+
+</div>
+
+{% endblock main_content %}

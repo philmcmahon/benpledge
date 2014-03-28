@@ -7,6 +7,8 @@
     <div class="row">
       <div class="col-sm-offset-3 col-sm-6">
         <h2>{% block header %}{% endblock %}</h2>
+        <h4>{% block subheading %}{% endblock %}</h4>
+        {% block helptext %}{% endblock %}
       </div> 
     </div>
 
@@ -17,6 +19,7 @@
       </div>
     </div>    
     {% endif %}
+    <div class="row">
     {% block form_opening_tag %}
     <form class="form-horizontal" role="form" method="post">
     {% endblock form_opening_tag %}
@@ -37,6 +40,7 @@
           {% endfor %}
         </div>
       </div>
+      {% block field_logic %}{% endblock %}
     {% endfor %}
     <!--Passwords not matching-->
     {% if form.non_field_errors %}
@@ -51,9 +55,11 @@
           {% block cancel_button %}
           {% endblock %}
           <button type="submit" class="btn btn-primary">{% block submit_text %}{% endblock %}</button>
+          {% block button_help_text %}{% endblock %}
         </div>
       </div>
     </form>
+    </div>
   </div>
   </div>
 {% endblock content %}

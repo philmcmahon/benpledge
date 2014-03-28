@@ -7,12 +7,75 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, timedelta, date
 
-from models import Measure, Dwelling, UserProfile, HatMetaData, HouseIdLookup, HatResultsDatabase, Pledge, Area
+from models import Measure, Dwelling, UserProfile, HatMetaData, HouseIdLookup, HatResultsDatabase, Pledge, Area, PostcodeOaLookup, LsoaDomesticEnergyConsumption, TopTip, Organisation
 from forms import DwellingForm, PledgeForm
 
 
 def index(request):
     return render(request, 'publicweb/index.html')
+
+def get_started(request):
+    top_tips = TopTip.objects.filter(display_on_welcome_screen=True)
+    context = {
+        'top_tips': top_tips,
+    }
+    return render(request, 'publicweb/options.html', context)
+
+def general_measures(request):
+    mid_id = int(Measure.objects.latest('id').id)/2
+    measures1 = Measure.objects.filter(id__lte=mid_id)
+    measures2 = Measure.objects.filter(id__gt=mid_id)
+    context = {
+        'measure_ids': get_measures_with_identifiers(),
+        'measures1': measures1,
+        'measures2': measures2,
+    }
+    return render(request, 'publicweb/general_measures.html', context)
+
+def help_page(request):
+    organisations = Organisation.objects.all().order_by('organisation_type', 'name')
+    context = {
+        'organisations': organisations,
+    }
+    return render(request, 'publicweb/help_page.html', context)
+
+@login_required
+def profile(request):
+    measure_ids = get_measures_with_identifiers()
+
+    userprofile = UserProfile.objects.get(user=request.user)
+
+    if userprofile.dwelling:
+        user_measures = get_user_hat_results(request.user)
+    else:
+        user_measures = None
+        return dwelling_form(request)
+
+    pledge_progress = get_pledges_with_progress(request.user)
+    total_reduction = get_total_reduction(pledge_progress)
+    # if not pledge_progress:
+    #     pledge_progress = None
+
+    # user_pledges['time_progress'] = datetime.now() - user_pledges['date_made']
+
+
+    # get_consumption_row_for_postcode("BS8  2DJ")
+    context = {
+        'measure_ids': measure_ids, 
+        'user_measures': user_measures,
+        'pledge_progress' : pledge_progress,
+        'area': None,
+        'total_reduction': total_reduction,
+    }
+    return render(request, 'publicweb/base_profile.html', context)
+
+def get_total_reduction(pledges_with_progress):
+    """Returns the total carbon savings of all pledges in pledges_with_progress"""
+    total_reduction = 0
+    for k, p in pledges_with_progress.iteritems():
+        if p['pledge'].hat_results:
+            total_reduction += p['pledge'].hat_results.consumption_change
+    return total_reduction
 
 def measure(request, measure_id):
     m = Measure.objects.get(id=measure_id)
@@ -100,12 +163,13 @@ def make_pledge(request):
         measure = Measure.objects.get(id=measure_id)
         hat_results_id = request.POST['hat_results_id']
         hat_results = HatResultsDatabase.objects.get(id=hat_results_id)
-        print Pledge.objects.filter(measure=measure, user=request.user)
+        # print Pledge.objects.filter(measure=measure, user=request.user)
         if len(Pledge.objects.filter(measure=measure, user=request.user)) == 0:
             now = datetime.now()
             duration = time_period * 30 # time period is in months
             deadline = now + timedelta(days=duration)
-            pledge = Pledge(measure=measure, user=request.user, deadline=deadline, hat_results=hat_results)
+            pledge = Pledge(measure=measure, user=request.user, deadline=deadline,
+                hat_results=hat_results, receive_updates=request.POST.get('receive_updates', False))
             pledge.save()
         else:
             # if pledge has already been made for that measure...
@@ -130,11 +194,14 @@ def pledges_for_area(request, postcode_district):
     users_in_area = UserProfile.objects.filter(dwelling__in=dwellings_in_area)
     users_in_area = User.objects.filter(userprofile__in=users_in_area)
     pledges_in_area = Pledge.objects.filter(user__in=users_in_area)
+    pledge_progress = pledge_results_with_progress(pledges_in_area)
+    total_reduction = get_total_reduction(pledge_progress)
     print pledges_in_area
     print "printing area pledges"
     context = {
         'pledge_progress': pledge_results_with_progress(pledges_in_area),
         'area': area,
+        'total_reduction':total_reduction,
     }
     return render(request, 'publicweb/area_pledge_page.html', context)
 
@@ -146,33 +213,14 @@ def area_list(request):
 
 
 
-@login_required
-def profile(request):
+##### helper functions #####
+def get_measures_with_identifiers():
     measures = Measure.objects.all()
     measure_ids = {}
     for m in measures:
         measure_ids[convert_name_to_identifier(m.name)] = m.id
+    return measure_ids
 
-    userprofile = UserProfile.objects.get(user=request.user)
-    if userprofile.dwelling:
-        user_measures = get_user_hat_results(request.user)
-    else:
-        user_measures = None
-
-    pledge_progress = get_pledges_with_progress(request.user)
-    # if not pledge_progress:
-    #     pledge_progress = None
-
-    # user_pledges['time_progress'] = datetime.now() - user_pledges['date_made']
-    context = {
-        'measure_ids': measure_ids, 
-        'user_measures': user_measures,
-        'pledge_progress' : pledge_progress,
-        'area': None
-    }
-    return render(request, 'publicweb/base_profile.html', context)
-
-##### helper functions #####
 def get_pledges_with_progress(user):
     pledge_progress = {}
     # get pledges    
@@ -253,7 +301,10 @@ def convert_name_to_identifier(name):
     name = name.replace(' ', '_')
     return name
 
-
+def get_consumption_row_for_postcode(postcode):
+    postcode_lookup = PostcodeOaLookup.objects.get(postcode=postcode)
+    consumption_lookup = LsoaDomesticEnergyConsumption.objects.get(lsoa_code=postcode_lookup.lsoa_code)
+    print consumption_lookup
 
 
 
