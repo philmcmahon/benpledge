@@ -43,7 +43,6 @@ INSTALLED_APPS = (
     'registration',
     'bootstrap3',
     'widget_tweaks',
-    'localflavor',
     # local applications
     'publicweb',
 )
