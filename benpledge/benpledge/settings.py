@@ -22,7 +22,7 @@ SECRET_KEY = '0eu763+(x*w0i)%zx1x$7d0fs5ce*!#fjm=ux+q8v+)=k+u%my'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = ['95.85.39.60']
 
@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'registration',
     'bootstrap3',
     'widget_tweaks',
+    'localflavor',
     # local applications
     'publicweb',
 )

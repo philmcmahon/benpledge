@@ -44,6 +44,20 @@ class TopTip(models.Model):
     def __unicode__(self):
         return self.name
 
+class HomepageCheckList(models.Model):
+    ORDER_CHOICES = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+        )
+    order = models.IntegerField(choices=ORDER_CHOICES, default=1)
+    text = models.CharField(max_length=150)
+
+    def __unicode__(self):
+        return str(self.order) + ' - ' + self.text
+
 class Pledge(models.Model):
     measure = models.ForeignKey(Measure)
     user = models.ForeignKey(User, related_name='user')
@@ -51,6 +65,16 @@ class Pledge(models.Model):
     date_made = models.DateTimeField(default=datetime.now())
     hat_results = models.ForeignKey('HatResultsDatabase', null=True, blank=True)
     receive_updates = models.BooleanField(default=False)
+    INTEREST_ONLY = 1
+    PLEDGE = 2
+    PLEDGE_TYPE_CHOICES = (
+        (INTEREST_ONLY, 'Interest Only'),
+        (PLEDGE, 'Pledge'),
+        )
+    pledge_type = models.IntegerField(
+        choices=PLEDGE_TYPE_CHOICES,
+        default=PLEDGE)
+
 
     def time_progress(pledge):
         # convert date to datetime
@@ -125,6 +149,8 @@ class Dwelling(models.Model):
      related_name='hatmetadata_wall_type', null=True, blank=True)
     house_id = models.IntegerField(default=0)
     area = models.ForeignKey(Area, null=True, blank=True)
+    postcode = models.CharField(max_length=8, null=True, blank=True)
+
 
     def __unicode__(self):
         return str(self.id)
@@ -144,7 +170,6 @@ class UserProfile(models.Model):
 
     @receiver(user_activated)
     def link_profile_with_user(sender, **kwargs):
-        print("Profile linking")
         profile = UserProfile(user=kwargs['user'])
         profile.save()
 
@@ -234,4 +259,6 @@ class PostcodeOaLookup(models.Model):
     msoa_code = models.CharField(max_length=9)
     la_code = models.CharField(max_length=9)
 
+class EcoEligible(models.Model):
+    lsoa_code = models.CharField(max_length=9)
 

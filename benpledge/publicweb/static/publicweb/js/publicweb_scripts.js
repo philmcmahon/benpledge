@@ -13,39 +13,16 @@
 $(document).ready(function(e) {
     $("#sortable-measures-table").tablesorter(); 
     $('img[usemap]').rwdImageMaps();
-    $('area').each(function() {
-        $(this).qtip({
-            content: {
-                text: $(this).title
-            },
-            position: {
-                target : 'mouse',
-                adjust: {
-                    // Use initial position rather than continually following the mouse
-                    //mouse: false
-                }
-            },
-            // style: {
-            //     tip: {
-            //         corner: 'left bottom'
-            //     }
-            // }
-        });
-    });
+    // $('#house_map').mapster({
+    //     fillColor: 'ff0000',
+    //     fillOpacity: 0.5
+    // });
 });
 
-// var pledgeSlider = $('#pledge-slider').slider({
-//         formater: function(value) {
-//             return value + ' months';
-//         }
-//     })
-//     .on('slide', updateDurationText)
-//     .data('slider');
 var updateDurationText = function() {
     var slider_value = pledgeSlider.getValue();
     $("#duration-text").html(slider_value + ' months');
 };
-console.log("no non nonononono");
 var pledgeSlider = $('#pledge-slider').slider({
         formater: function(value) {
             return value + ' months';
@@ -54,5 +31,33 @@ var pledgeSlider = $('#pledge-slider').slider({
     .on('slide', updateDurationText)
     .data('slider');
 
+function updatePledgeForm() {
+    console.log("test");
+    if ($("interest-only").checked) {
+        console.log("checked");
+    }
+    else {
+        console.log("notchecked");
+    }
+}
 
-    //.on('slide', update_duration_text);
+
+// $('area').each(function() {
+//     $(this).qtip({
+//         content: {
+//             text: $(this).title
+//         },
+//         position: {
+//             target : 'mouse',
+//             adjust: {
+//                 // Use initial position rather than continually following the mouse
+//                 //mouse: false
+//             }
+//         },
+//         // style: {
+//         //     tip: {
+//         //         corner: 'left bottom'
+//         //     }
+//         // }
+//     });
+// });

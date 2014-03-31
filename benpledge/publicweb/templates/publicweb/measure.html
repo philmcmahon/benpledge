@@ -5,9 +5,7 @@
 <div class="row clearfix">
     <div class="col-md-12 column">
         <div class="row clearfix">
-            <div class="col-md-2 column">
-            </div>
-            <div class="col-md-8 column">
+            <div class="col-md-10 column">
                 <h1>{{measure.name}}</h1>
                 {% if measure.measure_image_1 %}
                     <img src="{{ measure.measure_image_1.url }}" alt="Image of {{measure.name}}" class="img-responsive">
@@ -79,22 +77,38 @@
                     <h3 class="panel-title">Sound interesting?</h3>
                   </div>
                   <div class="panel-body">
-                    If you think this is something that you might be able to do in your home then consider making a pledge. If you do so, we'll alert you to any help that might be available with this measure in your area, and (optionally) send you occasional emails to see how you're getting on with implementing it.
+                    <p>If you think this is something that you might be able to do in your home then consider making a pledge. If you do so, we'll alert you to any help that might be available with this measure in your area, and (optionally) send you occasional emails to see how you're getting on with implementing it.</p>
+
+                    <p>Alternatively, you can register your interest in this measure. If several people in your area also register their interest then we will look into obtaining a bulk order discount for you.</p>
                   </div>
                   <div class="panel-footer">
-                      How long do you think it will take you to implement this measure?<br>
-                      <form class="form-inline" method="post" role="form" action="{% url 'make_pledge' %}">
+
+                      <form class="form" method="post" role="form" action="{% url 'make_pledge' %}">
                       {% csrf_token %}
                         <input type="hidden" name="measure_id" value="{{ measure.id }}">
                         <input type="hidden" name="hat_results_id" value="{{ hat_info.id }}">
-                        <label for="pledge-slider" class="sr-only">Time period</label>
+
+
+                        <div class="checkbox">
+                          <label for="interest_only">
+                            Register interest only                 
+                          </label>
+                          <input id="interest-only" type="checkbox" name="interest_only" >
+                        </div>
+
+                        <div class="form-group">
+                      <label for="time_period">
+                      How long do you think it will take you to implement this measure?
+                      </label>
                         <input name="time_period" with="100%" type="text" class="span2" value="4" id="pledge-slider" data-slider-min="0" data-slider-max="18" data-slider-step="1" data-slider-value="3" >
                         <span id="duration-text">3 months </span>
+                        </div>
+
                         <div class="checkbox">
                         <label for="receive_updates">
                         Tick this box to receive occasional updates and support about your pledge from us via email. <input type="checkbox" name="receive_updates">
-                        </label>
-                        </div>
+                        </label
+>                        </div>
                         <br>
                         <button type="submit" class="btn btn-primary">Pledge</button>
                       </form>

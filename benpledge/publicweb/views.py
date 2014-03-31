@@ -7,12 +7,18 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, timedelta, date
 
-from models import Measure, Dwelling, UserProfile, HatMetaData, HouseIdLookup, HatResultsDatabase, Pledge, Area, PostcodeOaLookup, LsoaDomesticEnergyConsumption, TopTip, Organisation
+from models import Measure, Dwelling, UserProfile, HatMetaData, HouseIdLookup, HatResultsDatabase, Pledge, Area, PostcodeOaLookup, LsoaDomesticEnergyConsumption, TopTip, Organisation, HomepageCheckList
 from forms import DwellingForm, PledgeForm
+
+from postcode_parser import parse_uk_postcode
 
 
 def index(request):
-    return render(request, 'publicweb/index.html')
+    checklist = HomepageCheckList.objects.all().order_by('order')
+    context = {
+        'checklist': checklist,
+    }
+    return render(request, 'publicweb/index.html', context)
 
 def get_started(request):
     top_tips = TopTip.objects.filter(display_on_welcome_screen=True)
@@ -120,10 +126,15 @@ def dwelling_form(request):
     current_user_profile = UserProfile.objects.get(user=request.user)
     if request.method == 'POST':
         form = DwellingForm(request.POST, instance=dwelling)
+        try:
+            outward, inward = parse_uk_postcode(request.POST['postcode'])
+        except e:
+            pass
+        # postcode = outward + inward
 
-        print form.instance
         updated_dwelling = form.save(commit=False)
         updated_dwelling.house_id = get_house_id(updated_dwelling)
+        updated_dwelling.postcode = outward + inward
         updated_dwelling.save()
 
         if form.is_valid():
@@ -163,13 +174,20 @@ def make_pledge(request):
         measure = Measure.objects.get(id=measure_id)
         hat_results_id = request.POST['hat_results_id']
         hat_results = HatResultsDatabase.objects.get(id=hat_results_id)
+
+        if request.POST['interest_only']:
+            pledge_type = Pledge.INTEREST_ONLY
+        else:
+            pledge_type = Pledge.PLEDGE
+
         # print Pledge.objects.filter(measure=measure, user=request.user)
         if len(Pledge.objects.filter(measure=measure, user=request.user)) == 0:
             now = datetime.now()
             duration = time_period * 30 # time period is in months
             deadline = now + timedelta(days=duration)
             pledge = Pledge(measure=measure, user=request.user, deadline=deadline,
-                hat_results=hat_results, receive_updates=request.POST.get('receive_updates', False))
+                hat_results=hat_results, receive_updates=request.POST.get('receive_updates', False),
+                pledge_type=pledge_type)
             pledge.save()
         else:
             # if pledge has already been made for that measure...
@@ -189,19 +207,42 @@ def delete_pledge(request, pledge_id):
         return render(request, 'publicweb/delete_pledge.html')
 
 def pledges_for_area(request, postcode_district):
-    area = Area.objects.get(postcode_district=postcode_district)
+
+    spaced_postcode = ""
+    short_postcode = postcode_district[:3]
+    if len(postcode_district) > 4:
+        for i, c in enumerate(postcode_district[::-1]):
+            if i == 3:
+                if len(postcode_district) == 6:
+                    spaced_postcode += "  "
+                elif len(postcode_district) == 7:
+                    spaced_postcode += " "
+            spaced_postcode += c
+    spaced_postcode = spaced_postcode[::-1]
+    print short_postcode
+
+
+    area = Area.objects.get(postcode_district=short_postcode)
     dwellings_in_area = Dwelling.objects.filter(area=area)
     users_in_area = UserProfile.objects.filter(dwelling__in=dwellings_in_area)
     users_in_area = User.objects.filter(userprofile__in=users_in_area)
     pledges_in_area = Pledge.objects.filter(user__in=users_in_area)
     pledge_progress = pledge_results_with_progress(pledges_in_area)
     total_reduction = get_total_reduction(pledge_progress)
+
+    get_consumption_row_for_postcode("BS8  2DJ")
+    print "BS8  2DJ"
+    print spaced_postcode
+    consumption_data = get_consumption_row_for_postcode(spaced_postcode)
+
+
     print pledges_in_area
     print "printing area pledges"
     context = {
         'pledge_progress': pledge_results_with_progress(pledges_in_area),
         'area': area,
         'total_reduction':total_reduction,
+        'consumption_data': consumption_data,
     }
     return render(request, 'publicweb/area_pledge_page.html', context)
 
@@ -304,7 +345,7 @@ def convert_name_to_identifier(name):
 def get_consumption_row_for_postcode(postcode):
     postcode_lookup = PostcodeOaLookup.objects.get(postcode=postcode)
     consumption_lookup = LsoaDomesticEnergyConsumption.objects.get(lsoa_code=postcode_lookup.lsoa_code)
-    print consumption_lookup
+    return consumption_lookup
 
 
 

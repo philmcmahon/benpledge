@@ -22,9 +22,9 @@
         </div>
     <div class="panel-body">
     <ul class="home-list"> 
-     <li><i class="fa fa-check-square-o"></i>Interested in fighting climate change?</li>
-    <li><i class="fa fa-check-square-o"></i>Interested in saving money?</li>
-    <li><i class="fa fa-check-square-o"></i>Looking for support?</li>
+        {% for c in checklist %}
+     <li><i class="fa fa-check-square-o"></i>{{ c }}</li>
+        {% endfor %}
     </ul>
     </div>
 

@@ -2,4 +2,13 @@
 {% block main_content %}
 {% include "publicweb/pledge_progress_list.html" %}
 
+<div class="table-responsive">
+<h3> 2011 energy consumption </h3>
+<table class="table table-bordered">
+    <tr>
+        <th>Average gas consumption in your area per household</th>
+        <td>{{ consumption_data.average_domestic_gas_consumption_kwh }} kWh</td>
+    </tr>
+</table>
+</div>
 {% endblock main_content %}

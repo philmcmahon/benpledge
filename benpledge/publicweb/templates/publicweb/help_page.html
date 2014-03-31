@@ -1,8 +1,10 @@
 {% extends "publicweb/base_offset.html" %}
 {% block main_content %}
+<div class="row"><div class="col-md-10">
 {% for o in organisations %}
+
 <div class="row">
-  <div class="col-md-10">
+  <div class="col-md-12">
     <div class="row">
       <h3><a href="{{ o.website }}">{{ o.name }}</a></h3>
     </div>
@@ -10,7 +12,7 @@
       <div class="col-md-4">
         <img src="{{ o.logo.url }}" alt="{{ o.name }} logo" class="img-responsive">
       </div>
-      <div class="col-md-6">
+      <div class="col-md-8">
         {{ o.description }}
         <br>
         <a href="{{ o.website }}">{{ o.website }}</a>
@@ -19,4 +21,10 @@
   </div>
 </div>
 {% endfor %}
+</div> 
+<div class="col-md-2">
+    Email: <input type="email">
+    Message: <input type="text">
+  </div>
+  </div>
 {% endblock main_content %}
