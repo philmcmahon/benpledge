@@ -21,6 +21,7 @@
     {% load bootstrap3 %}
     {% bootstrap_css %}
     {% bootstrap_messages %}
+    {% load publicweb_filters %}
 
     <!-- Fontawesome icons -->
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
@@ -65,7 +66,26 @@
           </button>
           <a class="navbar-brand" href="/">benpledge</a>
         </div>
-        <div class="collapse navbar-collapse navbar-right">
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class={% active_page request "index" %}><a href="{% url 'index' %}">Home</a></li>
+            <li class={% active_page request "general_measures" %}><a href="{% url 'general_measures' %}">All Measures</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Pledges <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li class={% active_page request "all_pledges" %}><a href="#">All pledges</a></li>
+                <li class={% active_page request "area_list" %}><a href="{% url 'area_list' %}">Pledges by Area</a></li>
+              </ul>
+            </li>
+            {% if user.is_authenticated %}
+            <li class={% active_page request "profile" %}><a href="{% url 'profile' %}">Profile</a></li>
+            <li class={% active_page request "dwelling_form" %}><a href="{% url 'dwelling_form' %}">My Home</a></li>
+            {% endif %}
+
+
+          </ul>
+        
+        <div class="navbar-right">
         <ul class="nav navbar-nav ">
           {% if user.is_authenticated %}
             <li class="dropdown">
@@ -88,6 +108,7 @@
             <li>----  </li>
             {% endif %}
         </ul>
+        </div>
         </div><!--/.navbar-collapse -->
       </div>
     </div>

@@ -62,6 +62,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+  'django.contrib.auth.context_processors.auth',
+  'django.core.context_processors.request',
+)
+
 ROOT_URLCONF = 'benpledge.urls'
 
 WSGI_APPLICATION = 'benpledge.wsgi.application'
@@ -77,6 +82,14 @@ DATABASES = {
         },
     }
 }
+
+ADMINS = (
+    ('Philip McMahon', '13phil13+benpledgeerr@gmail.com'),
+)
+
+MANAGERS = (
+    ('Philip McMahon', '13phil13+benpledgelink@gmail.com'),
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -108,6 +121,7 @@ EMAIL_HOST_USER = 'benpledgehelp'
 EMAIL_HOST_PASSWORD = 'retrofit123'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+EMAIL_SUBJECT_PREFIX = 'benpledge - '
 
 try:
     from local_settings import *

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.views.generic.base import View
@@ -7,13 +7,16 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, timedelta, date
 
-from models import Measure, Dwelling, UserProfile, HatMetaData, HouseIdLookup, HatResultsDatabase, Pledge, Area, PostcodeOaLookup, LsoaDomesticEnergyConsumption, TopTip, Organisation, HomepageCheckList
+from models import (Measure, Dwelling, UserProfile, HatMetaData,
+    HouseIdLookup, HatResultsDatabase, Pledge, Area, PostcodeOaLookup,
+    LsoaDomesticEnergyConsumption, TopTip, Organisation, HomepageCheckList, EcoEligible)
 from forms import DwellingForm, PledgeForm
 
 from postcode_parser import parse_uk_postcode
 
 
 def index(request):
+    """Homepage"""
     checklist = HomepageCheckList.objects.all().order_by('order')
     context = {
         'checklist': checklist,
@@ -55,7 +58,7 @@ def profile(request):
         user_measures = get_user_hat_results(request.user)
     else:
         user_measures = None
-        return dwelling_form(request)
+        return redirect('dwelling_form')
 
     pledge_progress = get_pledges_with_progress(request.user)
     total_reduction = get_total_reduction(pledge_progress)
@@ -63,6 +66,11 @@ def profile(request):
     #     pledge_progress = None
 
     # user_pledges['time_progress'] = datetime.now() - user_pledges['date_made']
+
+    if userprofile.dwelling.postcode:
+        eco_eligible =  get_eco_eligible(userprofile.dwelling.postcode)
+    else:
+        eco_eligible = 'unknown'
 
 
     # get_consumption_row_for_postcode("BS8  2DJ")
@@ -72,8 +80,9 @@ def profile(request):
         'pledge_progress' : pledge_progress,
         'area': None,
         'total_reduction': total_reduction,
+        'eco_eligible': eco_eligible,
     }
-    return render(request, 'publicweb/base_profile.html', context)
+    return render(request, 'publicweb/base_profile.html', context) 
 
 def get_total_reduction(pledges_with_progress):
     """Returns the total carbon savings of all pledges in pledges_with_progress"""
@@ -126,22 +135,20 @@ def dwelling_form(request):
     current_user_profile = UserProfile.objects.get(user=request.user)
     if request.method == 'POST':
         form = DwellingForm(request.POST, instance=dwelling)
-        try:
-            outward, inward = parse_uk_postcode(request.POST['postcode'])
-        except e:
-            pass
-        # postcode = outward + inward
-
-        updated_dwelling = form.save(commit=False)
-        updated_dwelling.house_id = get_house_id(updated_dwelling)
-        updated_dwelling.postcode = outward + inward
-        updated_dwelling.save()
 
         if form.is_valid():
+            outward, inward = parse_uk_postcode(request.POST['postcode'])
+            updated_dwelling = form.save(commit=False)
+            updated_dwelling.house_id = get_house_id(updated_dwelling)
+            updated_dwelling.postcode = outward + inward
+            updated_dwelling.save()
             if dwelling == None:
                 current_user_profile.dwelling = updated_dwelling
                 current_user_profile.save()
             return profile(request)
+        else:
+            print form.errors
+            return render(request, 'publicweb/dwelling_form.html', {'form': form})
     else:
         form=DwellingForm(instance=dwelling)
         return render(request, 'publicweb/dwelling_form.html', {'form': form})
@@ -154,7 +161,7 @@ def edit_pledge(request, pledge_id):
 
         if form.is_valid():
             form.save()
-        return profile(request)
+        return redirect('profile')
     else:
         form = PledgeForm(instance=pledge)
         return render(request, 'publicweb/pledge_form.html', {'form': form})
@@ -175,7 +182,7 @@ def make_pledge(request):
         hat_results_id = request.POST['hat_results_id']
         hat_results = HatResultsDatabase.objects.get(id=hat_results_id)
 
-        if request.POST['interest_only']:
+        if request.POST.get('interest_only'):
             pledge_type = Pledge.INTEREST_ONLY
         else:
             pledge_type = Pledge.PLEDGE
@@ -193,7 +200,7 @@ def make_pledge(request):
             # if pledge has already been made for that measure...
             pass
         # this needs to ultimately redirect to a 'my pledges' page
-        return profile(request)
+        return redirect('profile')
     else:
         print "Not a POST request"
 
@@ -202,23 +209,14 @@ def delete_pledge(request, pledge_id):
     if request.method == 'POST':
         p = Pledge.objects.get(id=pledge_id)
         p.delete()
-        return profile(request)
+        return redirect('profile')
     else:
         return render(request, 'publicweb/delete_pledge.html')
 
 def pledges_for_area(request, postcode_district):
 
-    spaced_postcode = ""
     short_postcode = postcode_district[:3]
-    if len(postcode_district) > 4:
-        for i, c in enumerate(postcode_district[::-1]):
-            if i == 3:
-                if len(postcode_district) == 6:
-                    spaced_postcode += "  "
-                elif len(postcode_district) == 7:
-                    spaced_postcode += " "
-            spaced_postcode += c
-    spaced_postcode = spaced_postcode[::-1]
+    spaced_postcode = space_postcode(postcode_district)
     print short_postcode
 
 
@@ -230,14 +228,14 @@ def pledges_for_area(request, postcode_district):
     pledge_progress = pledge_results_with_progress(pledges_in_area)
     total_reduction = get_total_reduction(pledge_progress)
 
-    get_consumption_row_for_postcode("BS8  2DJ")
-    print "BS8  2DJ"
-    print spaced_postcode
+    # get_consumption_row_for_postcode("BS8  2DJ")
+    # print "BS8  2DJ"
+    # print spaced_postcode
     consumption_data = get_consumption_row_for_postcode(spaced_postcode)
 
 
-    print pledges_in_area
-    print "printing area pledges"
+    # print pledges_in_area
+    # print "printing area pledges"
     context = {
         'pledge_progress': pledge_results_with_progress(pledges_in_area),
         'area': area,
@@ -283,6 +281,8 @@ def get_user_hat_results(user):
     """ Returns dictionary of suitable measures for user """
     dwelling = get_dwelling(user)
     houseid = get_house_id(dwelling)
+    if not houseid:
+        return {}
     measures = Measure.objects.all()
     hat_results = {}
     for m in measures:
@@ -321,7 +321,7 @@ def get_house_id(dwelling):
             return 0
         else:
             combined_info += str(field.value)
-    house_id_lookup_row = HouseIdLookup.objects.get(index_id=combined_info)
+    house_id_lookup_row = HouseIdLookup.objects.filter(index_id=combined_info).first()
     return house_id_lookup_row.house_id
 
 
@@ -343,9 +343,32 @@ def convert_name_to_identifier(name):
     return name
 
 def get_consumption_row_for_postcode(postcode):
-    postcode_lookup = PostcodeOaLookup.objects.get(postcode=postcode)
-    consumption_lookup = LsoaDomesticEnergyConsumption.objects.get(lsoa_code=postcode_lookup.lsoa_code)
-    return consumption_lookup
+    """ Gets energy consumption information for postcode"""
+    postcode_lookup = PostcodeOaLookup.objects.filter(postcode=postcode).first()
+    if postcode_lookup:
+        consumption_lookup = LsoaDomesticEnergyConsumption.objects.filter(lsoa_code=postcode_lookup.lsoa_code).first()
+        return consumption_lookup
+    else:
+        return None
 
+def get_eco_eligible(postcode):
+    """Returns true if postcode is eligible for ECO funding"""
+    postcode_lookup = PostcodeOaLookup.objects.get(postcode=space_postcode(postcode))
+    eco_eligible = EcoEligible.objects.filter(lsoa_code=postcode_lookup.lsoa_code).first()
+    if eco_eligible:
+        return True
+    else:
+        return False
 
-
+def space_postcode(non_spaced_postcode_postcode):
+    """Adds  correct spacing to separate outward, inward sections of postcode"""
+    spaced_postcode = ""
+    if len(non_spaced_postcode_postcode) > 4:
+        for i, c in enumerate(non_spaced_postcode_postcode[::-1]):
+            if i == 3:
+                if len(non_spaced_postcode_postcode) == 6:
+                    spaced_postcode += "  "
+                elif len(non_spaced_postcode_postcode) == 7:
+                    spaced_postcode += " "
+            spaced_postcode += c
+    return spaced_postcode[::-1]

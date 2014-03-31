@@ -18,12 +18,12 @@
 <div class="col-md-4 col-md-offset-4">
     <div class="panel panel-success">
         <div class="panel-heading">
-        Are you...
+        <h4>Are you...</h4>
         </div>
     <div class="panel-body">
     <ul class="home-list"> 
         {% for c in checklist %}
-     <li><i class="fa fa-check-square-o"></i>{{ c }}</li>
+     <li><span class="home-list-text"><i class="fa fa-check-square-o"></i> {{ c.text }}</span></li>
         {% endfor %}
     </ul>
     </div>

@@ -160,11 +160,6 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     dwelling = models.ForeignKey(Dwelling, null=True, blank=True)
 
-    gas_spend_per_month = models.IntegerField(null=True, blank=True)
-    electricity_spend_per_month = models.IntegerField(null=True, blank=True)
-    gas_provider = models.CharField(max_length=20, null=True, blank=True)
-    electricity_provider = models.CharField(max_length=20, null=True, blank=True)
-
     def __unicode__(self):
         return str(self.user) + ' profile'
 

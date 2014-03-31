@@ -14,7 +14,7 @@
                 <h3> Predicted effect on your home calculated using CSE's Housing Assessment Tool</h3>
                 <div class="table-responsive">
                 <table class="table table-bordered">
-                  <tr>
+<!--                   <tr>
                     <th rowspan="2">SAP Rating<br></th>
                     <th>Before</th>
                     <th>After</th>
@@ -24,7 +24,7 @@
                     <td>{{ hat_info.current_sap_rating|round_to_nearest_integer }}</td>
                     <td>{{ hat_info.post_measure_sap_rating|round_to_nearest_integer }}</td>
                     <td>{{ hat_info.sap_change|round_to_nearest_integer }}</td>
-                  </tr>
+                  </tr> -->
                   <tr>
                     <th rowspan="2">Energy Consumption<br></th>
                     <th>Before</th>
@@ -93,7 +93,7 @@
                           <label for="interest_only">
                             Register interest only                 
                           </label>
-                          <input id="interest-only" type="checkbox" name="interest_only" >
+                          <input id="interest_only" type="checkbox" name="interest_only" >
                         </div>
 
                         <div class="form-group">

@@ -33,3 +33,8 @@ body {
 {
     list-style-type: none;
 }
+
+.home-list-text
+{
+    font-size:19px;
+}

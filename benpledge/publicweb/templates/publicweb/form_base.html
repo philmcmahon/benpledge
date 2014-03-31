@@ -15,7 +15,11 @@
     {% if form.errors %}
     <div class="row">
       <div class="col-sm-offset-2 col-sm-5 alert alert-info">
-        <p>{% block form_error_message %}{% endblock %}</p>      
+        <p>{% block form_error_message %}{% endblock %}</p> 
+        {{ form.errors }}
+        {% for e in form.errors %}
+          {{ e }}
+        {% endfor %}
       </div>
     </div>    
     {% endif %}

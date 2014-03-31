@@ -2,6 +2,7 @@
 {% block main_content %}
 {% include "publicweb/pledge_progress_list.html" %}
 
+{% if consumption_data %}
 <div class="table-responsive">
 <h3> 2011 energy consumption </h3>
 <table class="table table-bordered">
@@ -10,5 +11,6 @@
         <td>{{ consumption_data.average_domestic_gas_consumption_kwh }} kWh</td>
     </tr>
 </table>
+{% endif %}
 </div>
 {% endblock main_content %}

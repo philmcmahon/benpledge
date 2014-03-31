@@ -16,6 +16,7 @@ p -->
 
             {% if user_measures %}
             <h4>Information from CSE's Housing Assessment Tool</h4>
+            <h5>(To be used as a guideline only)</h5>
             <table id="sortable-measures-table" class="table tablesorter">
             <thead>
             <tr>
@@ -51,6 +52,15 @@ p -->
             <div class="btn-group-vertical">
             <a class="btn btn-success" href="{% url 'dwelling_form' %}">Update home</a>
             <a class="btn btn-success" href="{% url 'general_measures' %}">View all measures</a>
+            <br>
+
+            {% if eco_eligible %}
+              {% if eco_eligible != 'unknown' %}
+                <p>Based on your postcode, it looks like you live in an area which is eligible for ECO (Energy Company Obligation) funding. </p>
+                {% endif %}
+            {% else %}
+            <p>Based on your postcode, it does not look like you live in an area which is eligible for ECO (Energy Company Obligation) funding.</p>
+            {% endif %}
             </div>
             </div>
         </div>
