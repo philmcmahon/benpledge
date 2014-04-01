@@ -1,0 +1,11 @@
+# ignore db configuration file containing password
+dbconfig.cnf
+*.pyc
+.*swp
+.elasticbeanstalk/
+benpledge.sublime-project
+benpledge.sublime-workspace
+benpledge/benpledge/local_settings.py
+benpledge/emails/
+benpledge/publicweb/migrations/*
+
