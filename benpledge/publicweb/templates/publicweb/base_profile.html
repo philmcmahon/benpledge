@@ -45,6 +45,9 @@ p -->
             {% endfor %}
             </tbody>
             </table>
+            
+            {% else %}
+            <p>We need some more information to calculate the effect of different retrofit measures. Click <a href="{% url 'dwelling_form' %}">here</a> to provide more information or <a href="{% url 'general_measures' %}">view all measures</a>. (If you are reading this and have alreaday filled out all fields marked with a <b>*</b> for your home then unfortunately we are not able to predict energy savings for your home.)</p>
             {% endif %}
 
             </div>

@@ -32,3 +32,13 @@ def active_page(request, view_name):
         return "active" if resolve(request.path_info).url_name == view_name else ""
     except Resolver404:
         return ""
+
+@register.filter
+def required_for_hat(field_label):
+    labels_required_for_hat = (['Dwelling type', 'Property age',
+        'Number of bedrooms', 'Heating fuel', 'Heating type', 'Loft insulation',
+        'Wall type'])
+    if field_label in labels_required_for_hat:
+        return field_label + '*'
+    else:
+        return field_label

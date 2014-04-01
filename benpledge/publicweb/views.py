@@ -137,10 +137,14 @@ def dwelling_form(request):
         form = DwellingForm(request.POST, instance=dwelling)
 
         if form.is_valid():
-            outward, inward = parse_uk_postcode(request.POST['postcode'])
+            # if not form.null_postcode:
+            #     outward, inward = parse_uk_postcode(request.POST['postcode'])
+            #     postcode = outward + inward
+            # else:
+            #     postcode = None
             updated_dwelling = form.save(commit=False)
             updated_dwelling.house_id = get_house_id(updated_dwelling)
-            updated_dwelling.postcode = outward + inward
+            # updated_dwelling.postcode = form.cleaned_data
             updated_dwelling.save()
             if dwelling == None:
                 current_user_profile.dwelling = updated_dwelling
@@ -317,7 +321,7 @@ def get_house_id(dwelling):
         dwelling.heating_type, dwelling.loft_insulation, dwelling.wall_type])
     combined_info = ''
     for field in metadata_properties:
-        if not field.value:
+        if not field:
             return 0
         else:
             combined_info += str(field.value)

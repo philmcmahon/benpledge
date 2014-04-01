@@ -1,14 +1,17 @@
 {% extends "publicweb/form_base.html" %}
 
 {% block header %} Your Home {% endblock %}
-{% block helptext %}<p>Please fill in as much of this form as you can. All fields are optional so if you're not sure of a value just leave it blank for now.</p>{% endblock helptext %}
+{% block helptext %}<p class="help-block">Please fill in as much of this form as you can. All fields are optional so if you're not sure of a value just leave it blank for now.</p>{% endblock helptext %}
 {% block form_error_message %}Sorry, something went wrong{% endblock %}
 {% block field_logic %}
 {% if field.label == "Electricity supplier" %}
-<div class="row">
-<div class="col-sm-offset-3 col-sm-6">
-<p>The fields below will help us try and predict the effect of different energy saving measures.</p></div>
-</div>
+<div class="row"><div class="col-sm-offset-3 col-sm-6"><p class="help-block">
+The fields below will help us try and predict the effect of different energy saving measures. <b>*</b> indicates a field required for us to make a prediction.
+</p></div></div>
+{% elif field.label == 'Postcode' %}
+<div class="row"><div class="col-sm-offset-3 col-sm-6"><p class="help-block">
+We will use your postcode to determine whether you are eligible for ECO funding and to determine the pledges that have been made on different streets. At no point will it be made publicly available.
+</p></div></div>
 {% endif %}
 {% endblock field_logic %}
 {% block cancel_button %}
