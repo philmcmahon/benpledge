@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'registration',
     'bootstrap3',
     'widget_tweaks',
+    'contact_form',
     # local applications
     'publicweb',
 )
@@ -89,6 +90,7 @@ ADMINS = (
 
 MANAGERS = (
     ('Philip McMahon', '13phil13+benpledgelink@gmail.com'),
+    ('p2', '13phil13@gmail.com')
 )
 
 # Internationalization
@@ -113,7 +115,7 @@ STATIC_URL = '/static/'
 LOGIN_URL = '/accounts/login'
 
 MEDIA_ROOT = BASE_DIR + '/publicweb/media/'
-MEDIA_URL = BASE_DIR + '/media/'
+MEDIA_URL = BASE_DIR + '/publicweb/media/'
 
 # Email settings
 EMAIL_HOST = 'smtp.gmail.com'
