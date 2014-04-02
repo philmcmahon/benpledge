@@ -106,16 +106,16 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_URL = '/accounts/login'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_ROOT = '/opt/benpledge/static/'
-STATIC_URL = '/static/'
+STATIC_URL = 'http://benpledge.philipmcmahon.co.uk/static/'
 
-LOGIN_URL = '/accounts/login'
-
-MEDIA_ROOT = BASE_DIR + '/publicweb/media/'
-MEDIA_URL = BASE_DIR + '/publicweb/media/'
+MEDIA_ROOT = '/opt/benpledge/static/media/'
+MEDIA_URL = 'http://benpledge.philipmcmahon.co.uk/static/media/'
 
 # Email settings
 EMAIL_HOST = 'smtp.gmail.com'
