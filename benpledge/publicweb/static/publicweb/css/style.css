@@ -38,3 +38,11 @@ body {
 {
     font-size:19px;
 }
+
+
+
+#map-canvas {
+    height: 400px;
+    margin: 0px;
+    padding: 0px
+  }

@@ -1,0 +1,9 @@
+Message sent from {{ site }} contact form.
+-------------------------------------------
+Name of sender: {{ name }}
+Email: {{ email }}
+Message:
+{{ body }}
+
+-------------------------------------------
+

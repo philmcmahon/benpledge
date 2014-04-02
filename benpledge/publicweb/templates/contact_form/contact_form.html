@@ -1,0 +1,12 @@
+{% extends "publicweb/form_base.html" %}
+
+{% block header %} Contact {% endblock %}
+{% block subheading %} Send us an email. {% endblock %}
+{% block form_error_message %} Sorry, something went wrong{% endblock %}
+{% block submit_text %}Send{% endblock %}
+{% block cancel_button %}
+    <a href="{% url 'help_page' %}"><button type="button" class="btn btn-danger">Cancel</button></a>
+{% endblock %}
+{% block button_help_text %}
+
+{% endblock button_help_text %}

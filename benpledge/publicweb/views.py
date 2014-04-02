@@ -193,9 +193,12 @@ def make_pledge(request):
 
         # print Pledge.objects.filter(measure=measure, user=request.user)
         if len(Pledge.objects.filter(measure=measure, user=request.user)) == 0:
-            now = datetime.now()
-            duration = time_period * 30 # time period is in months
-            deadline = now + timedelta(days=duration)
+            if pledge_type == Pledge.PLEDGE:
+                now = datetime.now()
+                duration = time_period * 30 # time period is in months
+                deadline = now + timedelta(days=duration)
+            else:
+                deadline = None
             pledge = Pledge(measure=measure, user=request.user, deadline=deadline,
                 hat_results=hat_results, receive_updates=request.POST.get('receive_updates', False),
                 pledge_type=pledge_type)
@@ -221,14 +224,13 @@ def pledges_for_area(request, postcode_district):
 
     short_postcode = postcode_district[:3]
     spaced_postcode = space_postcode(postcode_district)
-    print short_postcode
-
+    
 
     area = Area.objects.get(postcode_district=short_postcode)
     dwellings_in_area = Dwelling.objects.filter(area=area)
     users_in_area = UserProfile.objects.filter(dwelling__in=dwellings_in_area)
     users_in_area = User.objects.filter(userprofile__in=users_in_area)
-    pledges_in_area = Pledge.objects.filter(user__in=users_in_area)
+    pledges_in_area = Pledge.objects.filter(user__in=users_in_area, pledge_type = Pledge.PLEDGE)
     pledge_progress = pledge_results_with_progress(pledges_in_area)
     total_reduction = get_total_reduction(pledge_progress)
 
@@ -247,6 +249,22 @@ def pledges_for_area(request, postcode_district):
         'consumption_data': consumption_data,
     }
     return render(request, 'publicweb/area_pledge_page.html', context)
+
+def all_pledges(request):
+    pledges = Pledge.objects.all()
+    pledges_with_postcodes = {}
+    for p in pledges:
+        if p.user.userprofile.dwelling and p.user.userprofile.dwelling.postcode:
+            # pjson = Pledge.objects.get(id=p.id).value()
+            postcode = p.user.userprofile.dwelling.postcode
+            pledges_with_postcodes[str(p.id)] = ({'pledge': 
+                {'measure': str(p.measure),
+                'user':str(p.user)
+                }, 'postcode': str(postcode)})
+    context = {
+        'pledges_with_postcodes':pledges_with_postcodes,
+    }
+    return render(request, 'publicweb/all_pledges.html', context)
 
 def area_list(request):
     context = {
@@ -267,7 +285,7 @@ def get_measures_with_identifiers():
 def get_pledges_with_progress(user):
     pledge_progress = {}
     # get pledges    
-    user_pledges = Pledge.objects.filter(user=user)
+    user_pledges = Pledge.objects.filter(user=user, pledge_type = Pledge.PLEDGE)
     pledge_progress = pledge_results_with_progress(user_pledges)
     return pledge_progress
 

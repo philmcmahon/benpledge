@@ -61,7 +61,7 @@ class HomepageCheckList(models.Model):
 class Pledge(models.Model):
     measure = models.ForeignKey(Measure)
     user = models.ForeignKey(User, related_name='user')
-    deadline = models.DateField()
+    deadline = models.DateField(null=True, blank=True)
     date_made = models.DateTimeField(default=datetime.now())
     hat_results = models.ForeignKey('HatResultsDatabase', null=True, blank=True)
     receive_updates = models.BooleanField(default=False)

@@ -1,0 +1,15 @@
+{% extends "publicweb/base_offset.html" %}
+{% block main_content %}
+<h1>All Pledges</h1>
+<p>This section of the site isn't live yet. A map showing the locations of pledges across Bristol will appear here soon.</p>
+<div class="row">
+<div class="col-md-10" id="map-canvas">
+</div>
+</div>
+
+<script type="text/javascript">
+    function getPledgeData() {
+        return {% autoescape off %}{{ pledges_with_postcodes }}{% endautoescape %};
+    }    
+</script>
+{% endblock main_content %}

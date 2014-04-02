@@ -93,22 +93,25 @@
                           <label for="interest_only">
                             Register interest only                 
                           </label>
-                          <input id="interest_only" type="checkbox" name="interest_only" >
+                          <input id="123-interest-only" type="checkbox" name="interest_only" onchange="updatePledgeForm(this)">
                         </div>
-
+                        <div id="pledge-form-elements">
                         <div class="form-group">
                       <label for="time_period">
-                      How long do you think it will take you to implement this measure?
+                      How long do you think this pledge will take?
                       </label>
                         <input name="time_period" with="100%" type="text" class="span2" value="4" id="pledge-slider" data-slider-min="0" data-slider-max="18" data-slider-step="1" data-slider-value="3" >
                         <span id="duration-text">3 months </span>
                         </div>
+                        <p class="help-block">Click and drag the blue slider to choose a time period</p>
 
                         <div class="checkbox">
                         <label for="receive_updates">
                         Tick this box to receive occasional updates and support about your pledge from us via email. <input type="checkbox" name="receive_updates">
-                        </label
->                        </div>
+                        </label>
+                        </div>
+                        </div>
+
                         <br>
                         <button type="submit" class="btn btn-primary">Pledge</button>
                       </form>

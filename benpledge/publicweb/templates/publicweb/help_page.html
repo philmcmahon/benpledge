@@ -6,7 +6,7 @@
 <div class="row">
   <div class="col-md-12">
     <div class="row">
-      <h3><a href="{{ o.website }}">{{ o.name }}</a></h3>
+      <h3><a href="{{ o.website }}" target="_blank">{{ o.name }}</a></h3>
     </div>
     <div class="row">
       <div class="col-md-4">
@@ -15,7 +15,7 @@
       <div class="col-md-8">
         {{ o.description }}
         <br>
-        <a href="{{ o.website }}">{{ o.website }}</a>
+        <a href="{{ o.website }}" target="_blank">{{ o.website }}</a>
       </div>
     </div>
   </div>
@@ -23,8 +23,8 @@
 {% endfor %}
 </div> 
 <div class="col-md-2">
-    Email: <input type="email">
-    Message: <input type="text">
-  </div>
+    <h3>Need more help?</h3>
+    <a href="{% url 'contact_form' %}" class="btn btn-success">Send us an email</a>
+
   </div>
 {% endblock main_content %}

@@ -17,6 +17,8 @@ $(document).ready(function(e) {
     //     fillColor: 'ff0000',
     //     fillOpacity: 0.5
     // });
+    google.maps.event.addDomListener(window, 'load', initialize);
+
 });
 
 var updateDurationText = function() {
@@ -31,16 +33,97 @@ var pledgeSlider = $('#pledge-slider').slider({
     .on('slide', updateDurationText)
     .data('slider');
 
-function updatePledgeForm() {
-    console.log("test");
-    if ($("interest-only").checked) {
-        console.log("checked");
+function updatePledgeForm(item) {
+    var x = $("#123-interest-only");
+    console.log(x.is(':checked'));
+    if ($("#123-interest-only").is(':checked')) {
+        $("#pledge-form-elements").slideUp();
     }
     else {
-        console.log("notchecked");
+        $("#pledge-form-elements").slideDown();
     }
 }
 
+
+var geocoder;
+var map;
+function initialize() {
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(51.4500388, -2.5588662);
+    var mapOptions = {
+        center: latlng,
+        zoom: 13
+    };
+    map = new google.maps.Map(document.getElementById("map-canvas"),
+        mapOptions);
+    // mapPledges();
+}
+
+
+/**
+This code doesn't work yet - too many requests.
+Should store latlng.
+*/
+function plotStreet(address_components) {
+    address = (address_components[1].long_name + ", " + 
+        address_components[2].long_name + ", Bristol, UK");
+    // console.log(address_components);
+    console.log(address);
+    geocoder.geocode( {'address':address}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+        var latlng = results[0].geometry.location;
+        marker = new google.maps.Marker({
+            position: latlng,
+            map: map
+        });
+    } else {
+        console.log('plotStreet Geocode was not successful for the following reason: ' + status);
+    }
+    });
+}
+
+function codeLatLng(latlng) {
+    geocoder.geocode({'latLng': latlng}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+        if (results[0]) {
+            // code below
+            plotStreet(results[0].address_components);
+        } else {
+            console.log('No results found');
+            }
+    } else {
+        console.log('codeLatlng Geocoder failed due to: ' + status);
+    }
+    });
+}
+
+function codePostcode(address) {
+    address += ", UK"
+    var latlng = null;
+    geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            codeLatLng(results[0].geometry.location);
+        } else {
+            console.log('codePostcode Geocode was not successful for the following reason: ' + status);
+        }
+    });
+}
+
+function mapPledges() {
+    var pledgeData = getPledgeData();
+    for (var pledge in pledgeData) {
+        codePostcode(pledgeData[pledge].postcode);
+    }
+}
+
+
+// map.setZoom(11);
+//         marker = new google.maps.Marker({
+//             position: latlng,
+//             map: map
+//         });
+//         infowindow.setContent(results[1].formatted_address);
+//         infowindow.open(map, marker);
 
 // $('area').each(function() {
 //     $(this).qtip({
