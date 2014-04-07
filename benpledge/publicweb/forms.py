@@ -27,7 +27,7 @@ class DwellingForm(ModelForm):
 class PledgeForm(ModelForm):
     class Meta:
         model = Pledge
-        fields = ['deadline']
+        fields = ['deadline', 'receive_updates']
 
 
 

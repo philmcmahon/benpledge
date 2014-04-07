@@ -2,8 +2,8 @@
 {% block main_content %}
 {% load publicweb_filters %}
 
-<div class="row clearfix">
-    <div class="col-md-12 column">
+<!-- <div class="row clearfix">
+    <div class="col-md-12 column"> -->
         <div class="row clearfix">
             <div class="col-md-10 column">
                 <h1>{{measure.name}}</h1>
@@ -69,7 +69,9 @@
                 {% endif %}
                 <h2>Measure Description</h2>
 
-                {{measure.description}}
+                {% autoescape off %}
+                {{description}}
+                {% endautoescape %}
 
                 {% if not pledge and user.is_authenticated %}
                 <div class="panel panel-primary">
@@ -120,11 +122,12 @@
                 {% elif pledge %}
                 <div class="panel panel-primary">
                   <div class="panel-heading">
-                    <h3 class="panel-title">Pledged!</h3>
+                  <!-- Pledge.PLEDGE = 1 Pledge.INTEREST_ONLY = 2 - see models.py -->
+                    <h3 class="panel-title">{% if pledge.pledge_type == 2 %}Pledged!{% else %}Interested{% endif %}</h3>
                   </div>
                   <div class="panel-body">
+                    {% if pledge.pledge_type == 2 %}
                     You've pledged to undertake this measure, brilliant! Please don't hesitate to get in touch if you need any advice on implementing this energy saving measure.
-
                     <table class="table table-bordered">
                   <tr>
                     <th>Date Made<br></th>
@@ -139,12 +142,17 @@
                     <td>{{ time_remaining }}</td>
                   </tr>
                  </table>
+                 {% elif pledge.pledge_type == 2 %}
+                  You've registered your interest in this measure.
+                 {% endif %}
                   </div>
                   <div class="panel-footer">
                     <div class="btn-group">
-                    <a href="{% url 'edit_pledge' pledge.id %}" class="btn btn-default">Edit pledge</a>
+                    {% if pledge.pledge_type == 2 %}
+                    <a href="{% url 'edit_pledge' pledge.id %}" class="btn btn-default"> Edit pledge</a>
+                    {% endif %}
                     <a href="{% url 'help_page' %}" class="btn btn-default">Get Help/Contact</a>
-                    <a href="{% url 'delete_pledge' pledge.id %}" class="btn btn-default">Cancel Pledge</a>
+                    <a href="{% url 'delete_pledge' pledge.id %}" class="btn btn-default">{% if pledge.pledge_type == 1 %}Remove{% else %}Cancel Pledge{% endif %}</a>
                     <br><br>
                 </div>
                   </div>
@@ -153,10 +161,14 @@
 
             </div>
             <div class="col-md-2 column">
-
+              <div class="btn-group-vertical">
+                <a href="{% url 'general_measures' %}" class="btn btn-success">Back to All Measures</a>
+                <a href="{% url 'profile' %}" class="btn btn-success">Back to Profile</a>
+              </div>
             </div>
+
         </div>
-    </div>
-</div>
+<!--     </div>
+</div> -->
 
 {% endblock main_content %}

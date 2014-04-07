@@ -90,7 +90,6 @@ ADMINS = (
 
 MANAGERS = (
     ('Philip McMahon', '13phil13+benpledgelink@gmail.com'),
-    ('p2', '13phil13@gmail.com')
 )
 
 # Internationalization

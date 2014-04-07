@@ -1,5 +1,7 @@
 {% extends "publicweb/base_offset.html" %}
 {% block main_content %}
+
+<div class="col-md-10">
 {% include "publicweb/pledge_progress_list.html" %}
 
 {% if consumption_data %}
@@ -12,5 +14,6 @@
     </tr>
 </table>
 {% endif %}
+</div>
 </div>
 {% endblock main_content %}

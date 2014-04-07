@@ -1,11 +1,12 @@
 {% extends "publicweb/base_offset.html" %}
 {% block main_content %}
 
-
+<div class="col-md-10">
 <h1>Measures List</h1>
 {% for m in measures %}
     <a href="{% url 'measure' m.id %}">{{ m.name }}</a>
     <br>
 {% endfor %}
+</div>
 
 {% endblock main_content %}

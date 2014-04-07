@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, timedelta, date
+import re
 
 from models import (Measure, Dwelling, UserProfile, HatMetaData,
     HouseIdLookup, HatResultsDatabase, Pledge, Area, PostcodeOaLookup,
@@ -88,9 +89,14 @@ def get_total_reduction(pledges_with_progress):
     """Returns the total carbon savings of all pledges in pledges_with_progress"""
     total_reduction = 0
     for k, p in pledges_with_progress.iteritems():
-        if p['pledge'].hat_results:
+        if p['pledge'].pledge_type == Pledge.PLEDGE and p['pledge'].hat_results:
             total_reduction += p['pledge'].hat_results.consumption_change
     return total_reduction
+
+
+def encode_string_with_links(unencoded_string):
+    """Adds HTML tag round urls in unencoded_string"""
+    return URL_REGEX.sub(r'<a href="\1">\1</a>', unencoded_string)
 
 def measure(request, measure_id):
     m = Measure.objects.get(id=measure_id)
@@ -103,6 +109,9 @@ def measure(request, measure_id):
                 m.hat_measure.measure_id)
     if hat_info:
         payback_time_estimate = get_payback_time(hat_info)
+
+    description =  encode_string_with_links(m.description)
+
 
     # pledge = Pledge.objects.get(user=request.user, measure=m)
     pledge = None
@@ -126,6 +135,7 @@ def measure(request, measure_id):
         'payback_time_estimate' : payback_time_estimate,
         'pledge' : pledge,
         'time_remaining': time_remaining,
+        'description': description,
     }
     return render(request, 'publicweb/measure.html', context)
 
@@ -184,7 +194,10 @@ def make_pledge(request):
         measure_id = request.POST['measure_id']
         measure = Measure.objects.get(id=measure_id)
         hat_results_id = request.POST['hat_results_id']
-        hat_results = HatResultsDatabase.objects.get(id=hat_results_id)
+        if hat_results_id:
+            hat_results = HatResultsDatabase.objects.get(id=hat_results_id)
+        else:
+            hat_results = None
 
         if request.POST.get('interest_only'):
             pledge_type = Pledge.INTEREST_ONLY
@@ -224,7 +237,7 @@ def pledges_for_area(request, postcode_district):
 
     short_postcode = postcode_district[:3]
     spaced_postcode = space_postcode(postcode_district)
-    
+    consumption_data = get_consumption_row_for_postcode(spaced_postcode)
 
     area = Area.objects.get(postcode_district=short_postcode)
     dwellings_in_area = Dwelling.objects.filter(area=area)
@@ -234,14 +247,6 @@ def pledges_for_area(request, postcode_district):
     pledge_progress = pledge_results_with_progress(pledges_in_area)
     total_reduction = get_total_reduction(pledge_progress)
 
-    # get_consumption_row_for_postcode("BS8  2DJ")
-    # print "BS8  2DJ"
-    # print spaced_postcode
-    consumption_data = get_consumption_row_for_postcode(spaced_postcode)
-
-
-    # print pledges_in_area
-    # print "printing area pledges"
     context = {
         'pledge_progress': pledge_results_with_progress(pledges_in_area),
         'area': area,
@@ -266,6 +271,17 @@ def all_pledges(request):
     }
     return render(request, 'publicweb/all_pledges.html', context)
 
+@login_required
+def my_pledges(request):
+    pledge_progress = get_pledges_with_progress(request.user)
+    total_reduction = get_total_reduction(pledge_progress)
+    context = {
+        'pledge_progress': pledge_progress,
+        'total_reduction': total_reduction,
+    }
+
+    return render(request, 'publicweb/my_pledges.html', context)
+
 def area_list(request):
     context = {
         'areas': Area.objects.all()
@@ -276,6 +292,7 @@ def area_list(request):
 
 ##### helper functions #####
 def get_measures_with_identifiers():
+    """ Returns dict of measure ids with name converted from Loft Insulation to loft_insulation"""
     measures = Measure.objects.all()
     measure_ids = {}
     for m in measures:
@@ -283,19 +300,23 @@ def get_measures_with_identifiers():
     return measure_ids
 
 def get_pledges_with_progress(user):
+    """ Returns dict with pledges and the time details needed to display progress bar"""
     pledge_progress = {}
     # get pledges    
-    user_pledges = Pledge.objects.filter(user=user, pledge_type = Pledge.PLEDGE)
+    user_pledges = Pledge.objects.filter(user=user)
     pledge_progress = pledge_results_with_progress(user_pledges)
     return pledge_progress
 
 def pledge_results_with_progress(pledges):
     pledge_progress = {}
     for p in pledges:
-        time_progress = Pledge.time_progress(p)
+        if p.pledge_type == Pledge.PLEDGE:
+            time_progress = Pledge.time_progress(p)
+        else:
+            time_progress = None
         pledge_progress[p.id] = {
             'pledge' : p,
-            'time_progress': Pledge.time_progress(p)
+            'time_progress': time_progress
         }
     return pledge_progress
 
@@ -394,3 +415,6 @@ def space_postcode(non_spaced_postcode_postcode):
                     spaced_postcode += " "
             spaced_postcode += c
     return spaced_postcode[::-1]
+
+# this is at the bottom to stop sublime text syntax highlighting everything
+URL_REGEX = re.compile(r'''((?:mailto:|ftp://|http://)[^ <>'"{}|\\^`[\]]*)''')

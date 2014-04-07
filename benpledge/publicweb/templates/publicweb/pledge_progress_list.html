@@ -11,20 +11,32 @@
   {% endif %}
 {% endif %}
 {% for k, p in pledge_progress.iteritems %}
-  {{ p.pledge.measure.name }} by {{p.pledge.deadline}} {% if area %} - {{p.pledge.user}} {% endif %} <span class="text-success">({{ p.pledge.hat_results.consumption_change }} kWh)</span>
+  <!-- INTEREST_ONLY = 1, PLEDGE = 2 - see models.py  -->
+  {% if p.pledge.pledge_type == 2 %}
+    {{ p.pledge.measure.name }} by {{p.pledge.deadline}} {% if area %} - {{p.pledge.user}} {% endif %} <span class="text-success">({{ p.pledge.hat_results.consumption_change }} kWh)</span>
+  {% elif p.pledge.pledge_type == 1 %}
+    You are interested in {{ p.pledge.measure.name }}
+    
+  {% endif %}
+  
   <div class="btn-group pledge-btn-group">
   <a href="{% url 'measure' p.pledge.measure.id %}" class="btn btn-default">View Measure</a>
   {% if not area %}
     <a href="{% url 'help_page' %}" class="btn btn-default">Get Help/Contact</a>
-    <a href="{% url 'delete_pledge' p.pledge.id %}" class="btn btn-default">Cancel Pledge</a>
+    <a href="{% url 'delete_pledge' p.pledge.id %}" class="btn btn-default">{% if p.pledge.pledge_type == 1 %}Remove{% else %}Cancel Pledge{% endif %}</a>
   {% endif %}
   </div>
   <br><br>
+  <!-- INTEREST_ONLY = 1, PLEDGE = 2 - see models.py  -->
+  {% if p.pledge.pledge_type == 2 %}
+  
   <div class="progress">
     <div class="progress-bar" role="progressbar" aria-valuenow="{{ p.time_progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{p.time_progress}}%;">
     <span></span>
     </div>
   </div>
+  {% endif %}
+  <hr>
 {% endfor %}
 
 
