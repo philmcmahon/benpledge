@@ -1,4 +1,5 @@
 from django import template
+import re
 register = template.Library()
 
 @register.filter
@@ -42,3 +43,11 @@ def required_for_hat(field_label):
         return field_label + '*'
     else:
         return field_label
+
+@register.filter
+def linkify_urls(text):
+    return URL_REGEX.sub(r'<a href="\1">\1</a>', text)
+
+# this is at the bottom to stop sublime text syntax highlighting everything
+# regex courtesy of stack overflow
+URL_REGEX = re.compile(r'''((?:mailto:|ftp://|http://|https://)[^ <>'"{}|\\^`[\]]*)''')

@@ -1,5 +1,7 @@
 {% extends "publicweb/base_offset.html" %}
 {% block main_content %}
+{% load publicweb_filters %}
+
 
 <div class="row">
   <div class="col-md-10">
@@ -11,7 +13,7 @@
     {% for t in top_tips %}
     <li class="list-group-item">
         <h4 class="list-group-item-heading"><li class="fa fa-sun-o"></li> {{ forloop.counter }} <li class="fa fa-sun-o"></li> {{ t.name }}</h4>
-        <p class="lis-group-item-text">{{ t.description }}</p>
+        <p class="lis-group-item-text">{% autoescape off %}{{ t.description|linkify_urls }}{% endautoescape %}</p>
     </li>
     {% endfor %}
     </ol>

@@ -70,7 +70,7 @@
                 <h2>Measure Description</h2>
 
                 {% autoescape off %}
-                {{description}}
+                {{measure.description|linkify_urls}}
                 {% endautoescape %}
 
                 {% if not pledge and user.is_authenticated %}
@@ -81,7 +81,9 @@
                   <div class="panel-body">
                     <p>If you think this is something that you might be able to do in your home then consider making a pledge. If you do so, we'll alert you to any help that might be available with this measure in your area, and (optionally) send you occasional emails to see how you're getting on with implementing it.</p>
 
-                    <p>Alternatively, you can register your interest in this measure. If several people in your area also register their interest then we will look into obtaining a bulk order discount for you.</p>
+                    <p>Alternatively, you can register your interest in this measure. If you do this then we will alert you via email of potentially useful information relating to this measure such as bulk order discounts and new funding opportunities.
+
+                    All communications will be kept to a minimum. </p>
                   </div>
                   <div class="panel-footer">
 
@@ -102,7 +104,7 @@
                       <label for="time_period">
                       How long do you think this pledge will take?
                       </label>
-                        <input name="time_period" with="100%" type="text" class="span2" value="4" id="pledge-slider" data-slider-min="0" data-slider-max="18" data-slider-step="1" data-slider-value="3" >
+                        <input name="time_period" with="100%" type="text" class="span2" value="4" id="pledge-slider" data-slider-id="pledge-slider-c" data-slider-min="0" data-slider-max="18" data-slider-step="1" data-slider-value="3" >
                         <span id="duration-text">3 months </span>
                         </div>
                         <p class="help-block">Click and drag the blue slider to choose a time period</p>
@@ -123,7 +125,7 @@
                 <div class="panel panel-primary">
                   <div class="panel-heading">
                   <!-- Pledge.PLEDGE = 1 Pledge.INTEREST_ONLY = 2 - see models.py -->
-                    <h3 class="panel-title">{% if pledge.pledge_type == 2 %}Pledged!{% else %}Interested{% endif %}</h3>
+                    <h3 class="panel-title">{% if pledge.pledge_type == 2 %}Pledged!{% else %}Interest registered{% endif %}</h3>
                   </div>
                   <div class="panel-body">
                     {% if pledge.pledge_type == 2 %}
@@ -142,8 +144,8 @@
                     <td>{{ time_remaining }}</td>
                   </tr>
                  </table>
-                 {% elif pledge.pledge_type == 2 %}
-                  You've registered your interest in this measure.
+                 {% elif pledge.pledge_type == 1 %}
+                  You've registered your interest in this measure. We may contact you via email with information that may be relevant to you.
                  {% endif %}
                   </div>
                   <div class="panel-footer">

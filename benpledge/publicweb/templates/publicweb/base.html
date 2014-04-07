@@ -15,9 +15,8 @@
     <link href="{% static "publicweb/css/bootstrap.min.css" %}" rel="stylesheet">
     <link href="{% static "publicweb/css/font-awesome.min.css" %}" rel="stylesheet">
 
-    <!-- Bootstrap core CSS 
-    <link href="../css/bootstrap.css" rel="stylesheet">
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">-->
+     <!-- Bootstrap core CSS  -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
     <!-- {% load bootstrap3 %} -->
     <!-- {% bootstrap_css %} -->
     <!-- {% bootstrap_messages %} -->
@@ -75,12 +74,13 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class={% active_page request "index" %}><a href="{% url 'index' %}">Home</a></li>
+            <li class={% active_page request "about" %}><a href="{% url 'about' %}">About</a></li>
             <li class={% active_page request "general_measures" %}><a href="{% url 'general_measures' %}">All Measures</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Pledges <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li class={% active_page request "all_pledges" %}><a href="{% url 'all_pledges' %}">All Pledges</a></li>
-                <li class={% active_page request "area_list" %}><a href="{% url 'my_pledges' %}">My Pledges</a></li>
+                <li class={% active_page request "my_pledges" %}><a href="{% url 'my_pledges' %}">My Pledges</a></li>
                 <li class={% active_page request "area_list" %}><a href="{% url 'area_list' %}">Pledges by Area</a></li>
               </ul>
             </li>

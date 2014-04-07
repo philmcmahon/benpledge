@@ -34,6 +34,9 @@ urlpatterns = patterns('',
 
     url(r'^accounts/profile/$', views.profile, name='profile'),
     url(r'^accounts/', include('registration.backends.default.urls')),
+
+    # about
+    url(r'^about/$', views.about, name='about'),
     # home page
     url(r'^$', views.index, name='index'),
 )

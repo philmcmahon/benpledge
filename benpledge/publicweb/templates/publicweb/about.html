@@ -1,0 +1,8 @@
+{% extends 'publicweb/base_offset.html'%}
+{% load publicweb_filters %}
+{% block main_content %}
+<div class="col-md-10">
+<h1> {{about.title}}. </h1>
+<p>{% autoescape off %}{{about.description|linkify_urls}}{% endautoescape %}</p>
+</div>
+{% endblock%}

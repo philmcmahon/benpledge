@@ -39,7 +39,9 @@ body {
     font-size:19px;
 }
 
-
+#pledge-slider-c .slider-selection {
+    background: #428BCA;
+  }
 
 #map-canvas {
     height: 400px;

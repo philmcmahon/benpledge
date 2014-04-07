@@ -10,7 +10,8 @@ import re
 
 from models import (Measure, Dwelling, UserProfile, HatMetaData,
     HouseIdLookup, HatResultsDatabase, Pledge, Area, PostcodeOaLookup,
-    LsoaDomesticEnergyConsumption, TopTip, Organisation, HomepageCheckList, EcoEligible)
+    LsoaDomesticEnergyConsumption, TopTip, Organisation, HomepageCheckList, EcoEligible,
+    AboutPage)
 from forms import DwellingForm, PledgeForm
 
 from postcode_parser import parse_uk_postcode
@@ -85,19 +86,6 @@ def profile(request):
     }
     return render(request, 'publicweb/base_profile.html', context) 
 
-def get_total_reduction(pledges_with_progress):
-    """Returns the total carbon savings of all pledges in pledges_with_progress"""
-    total_reduction = 0
-    for k, p in pledges_with_progress.iteritems():
-        if p['pledge'].pledge_type == Pledge.PLEDGE and p['pledge'].hat_results:
-            total_reduction += p['pledge'].hat_results.consumption_change
-    return total_reduction
-
-
-def encode_string_with_links(unencoded_string):
-    """Adds HTML tag round urls in unencoded_string"""
-    return URL_REGEX.sub(r'<a href="\1">\1</a>', unencoded_string)
-
 def measure(request, measure_id):
     m = Measure.objects.get(id=measure_id)
     hat_info = None
@@ -110,9 +98,6 @@ def measure(request, measure_id):
     if hat_info:
         payback_time_estimate = get_payback_time(hat_info)
 
-    description =  encode_string_with_links(m.description)
-
-
     # pledge = Pledge.objects.get(user=request.user, measure=m)
     pledge = None
     time_remaining = None
@@ -122,7 +107,7 @@ def measure(request, measure_id):
         except ObjectDoesNotExist:
             pledge = None
         time_remaining = None
-        if pledge:
+        if pledge and pledge.pledge_type == Pledge.PLEDGE:
             time_remaining = datetime.combine(pledge.deadline, datetime.min.time()) - datetime.now()
             time_remaining = time_remaining.days
             days_remaining = time_remaining % 30
@@ -135,7 +120,6 @@ def measure(request, measure_id):
         'payback_time_estimate' : payback_time_estimate,
         'pledge' : pledge,
         'time_remaining': time_remaining,
-        'description': description,
     }
     return render(request, 'publicweb/measure.html', context)
 
@@ -288,7 +272,13 @@ def area_list(request):
     }
     return render(request, 'publicweb/area_list.html', context)
 
-
+def about(request):
+    """Gets about page details from database, renders about page """
+    about = AboutPage.objects.all().first()
+    context = {
+        'about':about,
+    }
+    return render(request, 'publicweb/about.html', context)
 
 ##### helper functions #####
 def get_measures_with_identifiers():
@@ -416,5 +406,10 @@ def space_postcode(non_spaced_postcode_postcode):
             spaced_postcode += c
     return spaced_postcode[::-1]
 
-# this is at the bottom to stop sublime text syntax highlighting everything
-URL_REGEX = re.compile(r'''((?:mailto:|ftp://|http://)[^ <>'"{}|\\^`[\]]*)''')
+def get_total_reduction(pledges_with_progress):
+    """Returns the total carbon savings of all pledges in pledges_with_progress"""
+    total_reduction = 0
+    for k, p in pledges_with_progress.iteritems():
+        if p['pledge'].pledge_type == Pledge.PLEDGE and p['pledge'].hat_results:
+            total_reduction += p['pledge'].hat_results.consumption_change
+    return total_reduction

@@ -16,6 +16,13 @@ class Measure(models.Model):
     def __unicode__(self):
         return self.name
 
+class AboutPage(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField(default='No about text.')
+
+    def __unicode__(self):
+        return self.title
+
 class Organisation(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(default="No description available.")
@@ -74,6 +81,9 @@ class Pledge(models.Model):
     pledge_type = models.IntegerField(
         choices=PLEDGE_TYPE_CHOICES,
         default=PLEDGE)
+
+    def __unicode__(self):
+        return str(self.measure) + ' - ' + str(self.user)
 
 
     def time_progress(pledge):
