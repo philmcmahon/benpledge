@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ['95.85.39.60']
 # Application definition
 
 INSTALLED_APPS = (
+    'publicweb',
     # django default applications
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,8 +45,8 @@ INSTALLED_APPS = (
     'bootstrap3',
     'widget_tweaks',
     'contact_form',
+    'geoposition',
     # local applications
-    'publicweb',
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7

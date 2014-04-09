@@ -43,9 +43,8 @@
     <link href="{% static "publicweb/css/bootstrap-slider.css" %}" rel="stylesheet">
 
     <!-- Google Maps Javascript API -->
-     <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlIMywOUgEdjzEq09mdnb4mkmu6leFX6I&sensor=false">
-    </script>
+    {% block google_maps_api %}{% endblock %}
+     
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -137,6 +136,10 @@
             <img src="{% static "publicweb/img/cse_logo.gif" %}" class="img-responsive" alt="CSE Logo" width="40%">
           </div>
         </div>
+        <div class="row">
+        {% block license_text %}{% endblock %}
+        
+        </div> 
       </div>
     </div>
 
@@ -150,6 +153,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.0.4/jquery.imagesloaded.min.js"></script>
     <script type="text/javascript" src="{% static "publicweb/js/jquery.tablesorter.min.js" %}"></script>
     <script type="text/javascript" src="{% static "publicweb/js/bootstrap-slider.js" %}"></script>
+    <script type="text/javascript" src="{% static "publicweb/js/overlapping-marker-spiderfier.min.js" %}"></script>
 <!--     <script type="text/javascript" src="{% static "publicweb/js/jquery.imagemapster.js" %}"></script>
  -->    <script src="{% static "publicweb/js/publicweb_scripts.js" %}"></script>
 

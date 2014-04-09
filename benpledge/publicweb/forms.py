@@ -10,7 +10,7 @@ class DwellingForm(ModelForm):
 
     class Meta:
         model = Dwelling
-        exclude = ['house_id']
+        exclude = ['house_id', 'position']
 
     def clean_postcode(self):
         postcode = self.cleaned_data['postcode']

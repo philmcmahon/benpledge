@@ -26,7 +26,7 @@ p -->
               <th>Approximate installation costs</th>
               <th>Payback time (years)</th>
               <th>Green deal?</th>
-              <th>Eco Finance?</th>
+             <!--  <th>Eco Finance?</th> -->
             </tr>
             </thead>
             <tbody>
@@ -39,7 +39,7 @@ p -->
                 <td>£{{ m.hat_results.approximate_installation_costs|round_to_nearest_10 }}</td>
                 <td>{{ m.payback_time_estimate }}</td>
                 <td><span class="{{ m.hat_results.grean_deal|boolean_to_glyphicon }}"></span><p class="boolean-hidden-text">{{ m.hat_results.grean_deal}}</p></td>
-                <td><span class="{{ m.hat_results.eco_finance|boolean_to_glyphicon }}"></span><p class="boolean-hidden-text">{{ m.hat_results.eco_finance}}</p></td>
+                <!-- <td><span class="{{ m.hat_results.eco_finance|boolean_to_glyphicon }}"></span><p class="boolean-hidden-text">{{ m.hat_results.eco_finance}}</p></td> -->
               </tr>
             {% endif %}
             {% endfor %}

@@ -6,12 +6,15 @@ from datetime import datetime
 from PIL import Image
 
 from registration.signals import user_activated
+from geoposition.fields import GeopositionField
 
 class Measure(models.Model):
     name = models.CharField(max_length=75)
     description = models.TextField(default='No description available.')
     hat_measure = models.OneToOneField('HatMeasuresList', null=True, blank=True)
     measure_image_1 = models.ImageField(null=True, blank=True, upload_to='%Y/%m/%d')
+    estimated_annual_energy_savings_kwh = models.IntegerField(null=True, blank=True)
+    estimated_annual_cost_savings = models.FloatField(null=True, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -72,6 +75,7 @@ class Pledge(models.Model):
     date_made = models.DateTimeField(default=datetime.now())
     hat_results = models.ForeignKey('HatResultsDatabase', null=True, blank=True)
     receive_updates = models.BooleanField(default=False)
+
     INTEREST_ONLY = 1
     PLEDGE = 2
     PLEDGE_TYPE_CHOICES = (
@@ -110,6 +114,18 @@ class Dwelling(models.Model):
     approximate_spent_on_electricity_per_month = models.IntegerField(blank = True, null=True)
     gas_supplier = models.CharField(max_length=50, blank=True, null=True)
     electricity_supplier = models.CharField(max_length=50, blank=True, null=True)
+    ENERGY_EFFICIENCY_RATING_CHOICES = (
+        ('A', 'A'),
+        ('B', 'B'),
+        ('C', 'C'),
+        ('D', 'D'),
+        ('E', 'E'),
+        ('F', 'F'),
+        ('G', 'G'),
+        )
+
+    energy_efficiency_rating = models.CharField(choices=ENERGY_EFFICIENCY_RATING_CHOICES,
+        max_length=1, blank=True, null=True)
     # tenure
     OWN = 1
     PRIVATELY_RENTING = 2
@@ -157,13 +173,18 @@ class Dwelling(models.Model):
     wall_type = models.ForeignKey('HatMetaData',
      limit_choices_to={'variable': 'WallType'},
      related_name='hatmetadata_wall_type', null=True, blank=True)
-    house_id = models.IntegerField(default=0)
-    area = models.ForeignKey(Area, null=True, blank=True)
+
+    street_name = models.CharField(max_length=100, null=True, blank=True)
     postcode = models.CharField(max_length=8, null=True, blank=True)
+    area = models.ForeignKey(Area, null=True, blank=True)
+    house_id = models.IntegerField(default=0)
+    position = GeopositionField()
 
 
-    def __unicode__(self):
-        return str(self.id)
+
+
+    # def __unicode__(self):
+    #     return str(self.user)
 
 
 class UserProfile(models.Model):
