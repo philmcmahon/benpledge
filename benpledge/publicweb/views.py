@@ -146,8 +146,9 @@ def dwelling_form(request):
     dwelling = get_dwelling(request.user)
     current_user_profile = UserProfile.objects.get(user=request.user)
 
-    current_street_name = dwelling.street_name
-    current_area = dwelling.area
+    if dwelling:
+        current_street_name = dwelling.street_name
+        current_area = dwelling.area
     
     if request.method == 'POST':
         form = DwellingForm(request.POST, instance=dwelling)
