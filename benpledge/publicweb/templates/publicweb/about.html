@@ -4,5 +4,6 @@
 <div class="col-md-10">
 <h1> {{about.title}} </h1>
 <p>{% autoescape off %}{{about.description|linkify_urls}}{% endautoescape %}</p>
+<p>Want to get in touch? Please email us <a href="{% url 'contact_form' %}">here</a>.</p>
 </div>
 {% endblock%}
