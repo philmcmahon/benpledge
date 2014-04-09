@@ -83,14 +83,14 @@ function generateInfoWindowContent(title, dateMade, deadline, timeRemaining, sav
 
 
 
-var infoWindow = new google.maps.InfoWindow();
-
+var infoWindow;
 var marker, i;
 var oms;
 
 
 function mapPledges() {
     // setup oms
+    infoWindow = new google.maps.InfoWindow();
     oms = new OverlappingMarkerSpiderfier(map, {keepSpiderfied: true});
     oms.addListener('spiderfy', function(markers) {
       iw.close();
