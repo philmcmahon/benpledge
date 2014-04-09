@@ -124,9 +124,9 @@ def measure(request, measure_id):
 
 def geocode_address(address):
     url = "https://maps.googleapis.com/maps/api/geocode/json?address=%s,UK&sensor=false&key=%s" % (urllib.quote_plus(address), GOOGLE_API_KEY)
-    print url
+    # print url
     response = urllib.urlopen(url).read()
-    print response
+    # print response
     response_dict = json.loads(response)
     return response_dict['results'][0]['geometry']['location']
 
