@@ -1,8 +1,34 @@
-{% extends "publicweb/base_offset.html" %}
+{% extends "publicweb/base_pledges_page.html" %}
+{% load publicweb_filters %}
 {% block main_content %}
 
-<div class="col-md-10">
-{% include "publicweb/pledge_progress_list.html" %}
+<div class="row">
+
+<div class="col-md-9">
+<h1>{{ area }} pledges</h1>
+
+<ol class="list-group">
+    <li class="list-group-item">
+        <h4 class="list-group-item-heading"><li class="fa fa-star"></li> Total Pledges <li class="fa fa-star"></li> </h4>
+        <p class="lis-group-item-text">There have been {{ total_pledges }} pledges made in this area. If all these pledges are completed this will result in estimated energy savings of {{ total_reduction }} kWh per year.</p>
+    </li>
+    <li class="list-group-item">
+        <h4 class="list-group-item-heading"><li class="fa fa-users"></li> Most popular pledge <li class="fa fa-users"></li> </h4>
+        <p class="lis-group-item-text">{% if total_pledges %}The most popular pledge made in {{ area.postcode_district }} is <a href="{% url 'measure' measure_pledge_counts.0.id %}">{{ measure_pledge_counts.0 }}</a>.{% else %} There have been no pledges made in this area yet. {% endif %}</p>
+    </li>
+    <li class="list-group-item">
+        <h4 class="list-group-item-heading"><li class="fa fa-trophy"></li> Area Ranking <li class="fa fa-trophy"></li> </h4>
+        <p class="lis-group-item-text">With {{ total_pledges }} pledges, {{ area.postcode_district }} is {{ ranking_details.area_ranking|number_to_position}} in the pledge league table. {% if not ranking_details.top %} In order to move up a place, people living in {{ area.postcode_district }} need to make {{ ranking_details.pledge_difference_with_area_above }} more pledges. {% else %} Well done {{ area.postcode_district }}! {% endif %} The next best area is {{ ranking_details.area_below.postcode_district}} with {{ ranking_details.area_below.pledge_count }} pledges. </p>
+    </li>
+</ol>
+<h3>Pledges Map</h3>
+<p>The map below shows the pledges made in {{ area.postcode_district }}</p>
+<div id="map-canvas"></div>
+<br>
+
+{% include 'publicweb/pledge_progress_list.html' %}
+
+
 
 {% if consumption_data %}
 <div class="table-responsive">
@@ -13,7 +39,17 @@
         <td>{{ consumption_data.average_domestic_gas_consumption_kwh }} kWh</td>
     </tr>
 </table>
+</div>
 {% endif %}
+
+</div>
+
+
+<div class="col-md-3">
+<h3>Pledges made in {{ area.postcode_district }}:</h3>
+{% include "publicweb/pledge_totals_table.html" %}
+</div>
+
 </div>
 </div>
 {% endblock main_content %}

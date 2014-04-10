@@ -1,0 +1,24 @@
+{% extends "publicweb/base_offset.html" %}
+{% load staticfiles %}
+{% block google_maps_api %}
+<script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALEOA6yvsJ4_hnSRp0su5u8OHhqyM9Ccg&sensor=false">
+    </script>
+{% endblock %}
+{% block main_content %}
+{% endblock main_content %}
+
+{% block license_text %}<small>Tree icon created by <a href="http://pixelkit.com">PixelKit</a> under <a href="http://creativecommons.org/licenses/by/3.0/">CC Attribution 3.0</a></small>{% endblock %}
+{% block template_js %}
+<script type="text/javascript">
+    function getPledgeData() {
+        return {% autoescape off %}{{ pledges_with_positions }}{% endautoescape %};
+    }
+    function getIconLocation() {
+        return "{% static 'publicweb/img/tree-icon-48.png' %}";
+    }
+    function getMapInitial() {
+        return {% autoescape off %}{{ map_initial }}{% endautoescape %}
+    }
+</script>
+{% endblock %}

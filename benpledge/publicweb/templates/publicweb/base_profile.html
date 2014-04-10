@@ -12,7 +12,7 @@
 p -->            
 
             {% include "publicweb/pledge_progress_list.html" %}
-            <h2> Measures</h2>
+            <h2>Possible Measures</h2>
 
             {% if user_measures %}
             <h4>Information from CSE's Housing Assessment Tool</h4>
@@ -55,6 +55,8 @@ p -->
             <div class="btn-group-vertical">
             <a class="btn btn-success" href="{% url 'dwelling_form' %}">Update home</a>
             <a class="btn btn-success" href="{% url 'general_measures' %}">View all measures</a>
+            <a class="btn btn-success" href="{% url 'my_pledges' %}">My Pledges</a>
+            {% if dwelling and dwelling.area %}<a class="btn btn-success" href="{% url 'pledges_for_area' dwelling.area.postcode_district %}">My Area</a>{% endif %}
             <br>
 
             {% if eco_eligible %}

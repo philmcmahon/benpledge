@@ -1,5 +1,4 @@
-{% extends "publicweb/base_offset.html" %}
-{% load staticfiles %}
+{% extends "publicweb/base_pledges_page.html" %}
 {% block google_maps_api %}
 <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALEOA6yvsJ4_hnSRp0su5u8OHhqyM9Ccg&sensor=false">
@@ -7,35 +6,36 @@
 {% endblock %}
 {% block main_content %}
 
-<div class="col-md-10">
-    <div class="row">
-        <h1>All Pledges</h1>
-        <h3> Pledges Map </h3>
-        <p>Below you can see the different pledges made across Bristol. Click on a tree to view the details of a pledge.</p>
-    </div>
-    <div class="row">
-        <div id="map-canvas"></div>
-    </div>
-    <div class="row">
-        <br>
-        {% include "publicweb/pledge_progress_list.html" %}
-    </div>
+<div class="row">
+<div class="col-md-9">
+    <h1>All Pledges</h1>
+<ol class="list-group">
+    <li class="list-group-item">
+        <h4 class="list-group-item-heading"><li class="fa fa-star"></li> Total Pledges <li class="fa fa-star"></li> </h4>
+        <p class="lis-group-item-text">
+        Users of this application have made {{ total_pledges }} pledges. If all these pledges are completed this will result in estimated energy savings of {{ total_reduction }} kWh per year!
+        </p>
+    </li>
+    <li class="list-group-item">
+        <h4 class="list-group-item-heading"><li class="fa fa-users"></li> Most popular pledge <li class="fa fa-users"></li> </h4>
+        <p class="lis-group-item-text">
+        {% if total_pledges %}The most popular pledge is <a href="{% url 'measure' measure_pledge_counts.0.id %}">{{ measure_pledge_counts.0 }}</a>.{% else %} There have been no pledges made yet {% endif %}
+        </p>
+    </li>
+</ol>
+
+    <h3> Pledges Map </h3>
+    <p>Below you can see the different pledges made across Bristol. Click on a tree to view the details of a pledge.</p>
+    <div id="map-canvas"></div>
+
+    <br>
+    {% include "publicweb/pledge_progress_list.html" %}
+
+</div>
+<div class="col-md-3">
+    <h3>Popular pledges</h3>
+    {% include "publicweb/pledge_totals_table.html" %}
+</div>
 </div>
 
-
-<script type="text/javascript">
-    function getPledgeData() {
-        return {% autoescape off %}{{ pledges_with_positions }}{% endautoescape %};
-    }
-    function getIconLocation() {
-        return "{% static 'publicweb/img/tree-icon-48.png' %}";
-    }
-</script>
 {% endblock main_content %}
-{% block license_text %}<small>Tree icon created by <a href="http://pixelkit.com">PixelKit</a> under <a href="http://creativecommons.org/licenses/by/3.0/">CC Attribution 3.0</a></small>{% endblock %}
-
- <!-- <div class="progress">
-    <div class="progress-bar" role="progressbar" aria-valuenow="{{ p.time_progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{p.time_progress}}%;">
-    <span></span>
-    </div>
-  </div> -->

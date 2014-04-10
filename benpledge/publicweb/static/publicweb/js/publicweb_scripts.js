@@ -39,10 +39,12 @@ var geocoder;
 var map;
 function initialize() {
     geocoder = new google.maps.Geocoder();
-    var latlng = new google.maps.LatLng(51.4500388, -2.5588662);
+    var mapInitial = getMapInitial();
+    console.log(mapInitial);
+    var latlng = new google.maps.LatLng(mapInitial.latitude, mapInitial.longitude);
     var mapOptions = {
         center: latlng,
-        zoom: 13
+        zoom: mapInitial.zoom
     };
     map = new google.maps.Map(document.getElementById("map-canvas"),
         mapOptions);
@@ -93,7 +95,7 @@ function mapPledges() {
     infoWindow = new google.maps.InfoWindow();
     oms = new OverlappingMarkerSpiderfier(map, {keepSpiderfied: true});
     oms.addListener('spiderfy', function(markers) {
-      iw.close();
+      infoWindow.close();
     });
 
     oms.addListener('click', function(marker, event) {

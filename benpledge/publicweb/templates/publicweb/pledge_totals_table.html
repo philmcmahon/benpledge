@@ -1,0 +1,13 @@
+<div class="table-responsive">
+<table class="table">
+    <tr>
+        <th> Measure </th>
+        <th> Number of pledges </th>
+    </tr>
+    {% for measure in measure_pledge_counts %}
+    <tr>
+        <td><a href="{% url 'measure' measure.id %}">{{ measure }}</a></td>
+        <td>{{ measure.pledge_count }}</td>
+    </tr>
+    {% endfor %}
+</table>

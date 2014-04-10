@@ -5,9 +5,11 @@ from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from datetime import datetime, timedelta, date
+from django.db.models import Count
 
 import re, urllib, urllib2, json
+from datetime import datetime, timedelta, date
+from collections import defaultdict
 
 from models import (Measure, Dwelling, UserProfile, HatMetaData,
     HouseIdLookup, HatResultsDatabase, Pledge, Area, PostcodeOaLookup,
@@ -59,8 +61,8 @@ def profile(request):
 
     userprofile = UserProfile.objects.get(user=request.user)
 
-    if userprofile.dwelling:
-        user_measures = get_user_hat_results(request.user)
+    if userprofile.dwelling and userprofile.dwelling.house_id:
+        user_measures = get_dwelling_hat_results(userprofile.dwelling)
     else:
         user_measures = None
         return redirect('dwelling_form')
@@ -85,6 +87,7 @@ def profile(request):
         'page_type': 'profile',
         'total_reduction': total_reduction,
         'eco_eligible': eco_eligible,
+        'dwelling': userprofile.dwelling,
     }
     return render(request, 'publicweb/base_profile.html', context) 
 
@@ -155,7 +158,7 @@ def dwelling_form(request):
         if form.is_valid():
             updated_dwelling = form.save(commit=False)
             ##### MAKE NOT UPDATE IF UNCHANGED####
-            if (updated_dwelling.street_name or updated_dwelling.area and
+            if (updated_dwelling.street_name or updated_dwelling.area and not dwelling or
                 updated_dwelling.street_name != current_street_name or updated_dwelling.area != current_area):
                 address_string = get_address_from_street_name_or_area(updated_dwelling.street_name,
                     updated_dwelling.area)
@@ -165,6 +168,8 @@ def dwelling_form(request):
                 updated_dwelling.position.latitude = location['lat']
                 updated_dwelling.position.longitude = location['lng']
 
+            # check if the settings the user has provided have a match in the HAT
+            # if so update the house id
             updated_house_id = get_house_id(updated_dwelling)
             if updated_house_id:
                 updated_dwelling.house_id = updated_house_id
@@ -247,72 +252,122 @@ def delete_pledge(request, pledge_id):
     else:
         return render(request, 'publicweb/delete_pledge.html')
 
-def pledges_for_area(request, postcode_district):
+def get_areas_with_total_pledges():
+    return Area.objects.annotate(pledge_count=Count('dwelling__userprofile__user__pledge')).order_by('-pledge_count')
 
-    short_postcode = postcode_district[:3]
+def get_area_ranking(area, areas_with_total_pledges):
+    for i, a in enumerate(areas_with_total_pledges, start=1):
+        if a == area:
+            return i
+    return None
+
+def get_ranking_details(area, total_pledges):
+    area_pledge_counts = get_areas_with_total_pledges()
+    area_ranking = get_area_ranking(area, area_pledge_counts)
+    if area_ranking > 1:
+        area_above = area_pledge_counts[area_ranking-2]
+        pledge_difference_with_area_above = area_above.pledge_count - total_pledges
+        top = False
+    else:
+        area_above = None
+        pledge_difference_with_area_above = None
+        top = True
+    if area_ranking - 1 < len(area_pledge_counts):
+        area_below = area_pledge_counts[area_ranking]
+        pledge_difference_with_area_below = total_pledges - area_below.pledge_count
+        bottom = False
+    else:
+        area_below = None
+        pledge_difference_with_area_below = None
+        bottom = True
+    ranking_details = {
+        'area_pledge_counts':area_pledge_counts,
+        'area_ranking':area_ranking,
+        'area_above':area_above,
+        'pledge_difference_with_area_above':pledge_difference_with_area_above,
+        'area_below':area_below,
+        'pledge_difference_with_area_below':pledge_difference_with_area_below,
+        'top': top,
+        'bottom': bottom,
+    }
+    return ranking_details
+
+
+def pledges_for_area(request, postcode_district):
+    get_areas_with_total_pledges()
+
+    short_postcode = postcode_district[:4]
     spaced_postcode = space_postcode(postcode_district)
     consumption_data = get_consumption_row_for_postcode(spaced_postcode)
 
     area = Area.objects.get(postcode_district=short_postcode)
-    dwellings_in_area = Dwelling.objects.filter(area=area)
-    users_in_area = UserProfile.objects.filter(dwelling__in=dwellings_in_area)
-    users_in_area = User.objects.filter(userprofile__in=users_in_area)
-    pledges_in_area = Pledge.objects.filter(user__in=users_in_area, pledge_type = Pledge.PLEDGE)
+    pledges_in_area = Pledge.objects.filter(pledge_type = Pledge.PLEDGE, user__userprofile__dwelling__area=area)
+    total_pledges = pledges_in_area.count()
     pledge_progress = pledge_results_with_progress(pledges_in_area)
     total_reduction = get_total_reduction(pledge_progress)
 
+    measure_pledge_counts = Measure.objects.filter(pledge__in=pledges_in_area).annotate(pledge_count=Count('pledge')).order_by('-pledge_count')[:20]
+ 
+    ranking_details = get_ranking_details(area, total_pledges)
+    pledges_with_positions = get_pledges_with_positions(pledges_in_area)
     context = {
         'pledge_progress': pledge_progress,
         'area': area,
         'page_type': 'area',
-        'total_reduction':total_reduction,
         'consumption_data': consumption_data,
+        'pledges_with_positions': pledges_with_positions,
+
+        'total_reduction':total_reduction,
+        'total_pledges': total_pledges,
+        'measure_pledge_counts':measure_pledge_counts,
+        'ranking_details': ranking_details,
+        'map_initial': get_map_initial(area.position.latitude,
+            area.position.longitude),
     }
     return render(request, 'publicweb/area_pledge_page.html', context)
 
+
+
 def all_pledges(request):
     pledges = Pledge.objects.filter(pledge_type = Pledge.PLEDGE).order_by('date_made')
-
+    total_pledges = pledges.count()
     most_recent_10_pledges_with_progress = pledge_results_with_progress(pledges[:10])
-    pledges_with_positions = {}
-    for p in pledges:
-        if p.user.userprofile.dwelling and p.user.userprofile.dwelling.position.latitude != 0:
-            # pjson = Pledge.objects.get(id=p.id).value()
-            position = p.user.userprofile.dwelling.position
-            pledge_energy_savings = get_pledge_energy_savings(p)
-            if pledge_energy_savings:
-                savings = str(pledge_energy_savings)
-            else:
-                savings = 'unknown'
-            pledges_with_positions[str(p.id)] = ({
-                'pledge': {
-                    'measure': str(p.measure),
-                    'user':str(p.user),
-                    'date_made':str(p.date_made.date()),
-                    'deadline':str(p.deadline),
-                    'time_remaining':get_time_remaining(p.deadline),
-                    'savings': savings,
-                    },
-                'position': {
-                    'lat': str(position.latitude),
-                    'lng': str(position.longitude)
-                    }
-            })
+    total_reduction = get_total_reduction(pledge_results_with_progress(pledges))
+    pledges_with_positions = get_pledges_with_positions(pledges)
+    measure_pledge_counts = Measure.objects.filter(pledge__in=pledges).annotate(pledge_count=Count('pledge')).order_by('-pledge_count')[:20]
+
     context = {
         'pledges_with_positions':pledges_with_positions,
-        'pledge_progress':most_recent_10_pledges_with_progress,
+        'pledge_progress': most_recent_10_pledges_with_progress,
         'page_type': 'all_pledges',
+        'map_initial': get_map_initial(51.4500388,
+            -2.5588662),
+        'measure_pledge_counts':measure_pledge_counts,
+        'total_pledges': total_pledges,
+        'total_reduction':total_reduction,
     }
     return render(request, 'publicweb/all_pledges.html', context)
 
 @login_required
 def my_pledges(request):
+    pledges = Pledge.objects.filter(user=request.user)
+    pledges_with_positions = get_pledges_with_positions(pledges)
     pledge_progress = get_pledges_with_progress(request.user)
     total_reduction = get_total_reduction(pledge_progress)
+
+    user_dwelling = get_dwelling(request.user)
+    if user_dwelling and user_dwelling.position:
+        map_initial = get_map_initial(user_dwelling.position.latitude,
+            user_dwelling.position.longitude, 15)
+    else:
+        map_initial = get_map_initial(51.4500388, -2.5588662)
+
     context = {
         'pledge_progress': pledge_progress,
         'total_reduction': total_reduction,
         'page_type': 'profile',
+        'pledges_with_positions':pledges_with_positions,
+        'map_initial': map_initial,
     }
 
     return render(request, 'publicweb/my_pledges.html', context)
@@ -363,17 +418,17 @@ def pledge_results_with_progress(pledges):
         }
     return pledge_progress
 
-def get_user_hat_results(user):
-    """ Returns dictionary of suitable measures for user """
-    dwelling = get_dwelling(user)
+def get_dwelling_hat_results(dwelling):
+    """ Returns dictionary of suitable measures for dwelling """
+    # dwelling = get_dwelling(user)
     # houseid = get_house_id(dwelling)
-    if dwelling.house_id:
-        return {}
+    if not dwelling.house_id:
+        return None
     measures = Measure.objects.all()
     hat_results = {}
     for m in measures:
         if m.hat_measure:
-            hat_out = get_hat_results(houseid, m.hat_measure.measure_id)
+            hat_out = get_hat_results(dwelling.house_id, m.hat_measure.measure_id)
             if suitable_measure(hat_out, m, dwelling.window_type):
                 hat_results[m.id] = {
                 'hat_results' : hat_out,
@@ -488,3 +543,32 @@ def get_pledge_energy_savings(pledge):
         return pledge.measure.estimated_annual_energy_savings_kwh
     else:
         return None
+
+def get_map_initial(latitude, longitude, zoom=13):
+    return dict(latitude=str(latitude), longitude=str(longitude), zoom=zoom)
+
+def get_pledges_with_positions(pledges):
+    pledges_with_positions = {}
+    for p in pledges:
+        if p.user.userprofile.dwelling and p.user.userprofile.dwelling.position.latitude != 0:
+            position = p.user.userprofile.dwelling.position
+            pledge_energy_savings = get_pledge_energy_savings(p)
+            if pledge_energy_savings:
+                savings = str(pledge_energy_savings)
+            else:
+                savings = 'unknown'
+            pledges_with_positions[str(p.id)] = ({
+                'pledge': {
+                    'measure': str(p.measure),
+                    'user':str(p.user),
+                    'date_made':str(p.date_made.date()),
+                    'deadline':str(p.deadline),
+                    'time_remaining':get_time_remaining(p.deadline),
+                    'savings': savings,
+                    },
+                'position': {
+                    'lat': float(position.latitude),
+                    'lng': float(position.longitude)
+                    }
+            })
+    return pledges_with_positions

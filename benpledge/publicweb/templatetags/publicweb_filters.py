@@ -48,6 +48,26 @@ def required_for_hat(field_label):
 def linkify_urls(text):
     return URL_REGEX.sub(r'<a href="\1">\1</a>', text)
 
+@register.filter
+def name_from_identifier(value):
+    """Replaces underscores with whitespace, capitalises"""
+    value = value.replace('_', ' ').title()
+    return value
+
+@register.filter
+def number_to_position(value):
+    if value <= 0:
+        return str(value)
+    elif value > 9 and value < 21:
+        return str(value) + 'th'
+    elif value % 10 == 1:
+        return str(value) + 'st'
+    elif value % 10 == 2:
+        return str(value) + 'nd'
+    elif value % 10 == 3:
+        return str(value) + 'rd'
+    else:
+        return str(value) + 'th'
 
 # this is at the bottom to stop sublime text syntax highlighting everything
 # regex courtesy of stack overflow

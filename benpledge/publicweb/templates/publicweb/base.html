@@ -108,7 +108,7 @@
             {% else %}
             <li>
                 <form>
-                <a class="btn btn-primary navbar-btn" href="/accounts/login">Log In</a>
+                <a class="btn btn-primary navbar-btn" href="/accounts/login">Log In/Register</a>
                 </form>
             </li>
             <li>----  </li>
@@ -160,6 +160,9 @@
      <!-- jQuery datepicker? -->
      <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
      <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+     {% block template_js %}
+     {% endblock %}
 
     
 

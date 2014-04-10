@@ -70,7 +70,7 @@ class HomepageCheckList(models.Model):
 
 class Pledge(models.Model):
     measure = models.ForeignKey(Measure)
-    user = models.ForeignKey(User, related_name='user')
+    user = models.ForeignKey(User)#, related_name='pledge')
     deadline = models.DateField(null=True, blank=True)
     date_made = models.DateTimeField(default=datetime.now())
     hat_results = models.ForeignKey('HatResultsDatabase', null=True, blank=True)
@@ -103,6 +103,7 @@ class Pledge(models.Model):
 class Area(models.Model):
     postcode_district = models.CharField(max_length=4)
     area_name = models.CharField(max_length=100)
+    position = GeopositionField()
 
     def __unicode__(self):
         return self.postcode_district + " - " + self.area_name
