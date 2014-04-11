@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'contact_form',
     'geoposition',
+    'dbbackup',
     # local applications
 )
 

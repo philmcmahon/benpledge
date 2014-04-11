@@ -272,7 +272,9 @@ def get_ranking_details(area, total_pledges):
         area_above = None
         pledge_difference_with_area_above = None
         top = True
-    if area_ranking - 1 < len(area_pledge_counts):
+    print area_ranking
+    if area_ranking  < len(area_pledge_counts):
+        print area_pledge_counts[len(area_pledge_counts) -2]
         area_below = area_pledge_counts[area_ranking]
         pledge_difference_with_area_below = total_pledges - area_below.pledge_count
         bottom = False

@@ -18,7 +18,7 @@
     </li>
     <li class="list-group-item">
         <h4 class="list-group-item-heading"><li class="fa fa-trophy"></li> Area Ranking <li class="fa fa-trophy"></li> </h4>
-        <p class="lis-group-item-text">With {{ total_pledges }} pledges, {{ area.postcode_district }} is {{ ranking_details.area_ranking|number_to_position}} in the pledge league table. {% if not ranking_details.top %} In order to move up a place, people living in {{ area.postcode_district }} need to make {{ ranking_details.pledge_difference_with_area_above }} more pledges. {% else %} Well done {{ area.postcode_district }}! {% endif %} The next best area is {{ ranking_details.area_below.postcode_district}} with {{ ranking_details.area_below.pledge_count }} pledges. </p>
+        <p class="lis-group-item-text">With {{ total_pledges }} pledges, {{ area.postcode_district }} is {{ ranking_details.area_ranking|number_to_position}} in the pledge league table. {% if not ranking_details.top %} In order to move up a place, people living in {{ area.postcode_district }} need to make {{ ranking_details.pledge_difference_with_area_above }} more pledges. {% else %} Well done {{ area.postcode_district }}! {% endif %} {% if not ranking_details.bottom %} The next best area is {{ ranking_details.area_below.postcode_district}} with {{ ranking_details.area_below.pledge_count }} pledges. {% endif %} </p>
     </li>
 </ol>
 <h3>Pledges Map</h3>
@@ -46,8 +46,10 @@
 
 
 <div class="col-md-3">
+{% if measure_pledge_counts %}
 <h3>Pledges made in {{ area.postcode_district }}:</h3>
 {% include "publicweb/pledge_totals_table.html" %}
+{% endif %}
 </div>
 
 </div>
