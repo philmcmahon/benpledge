@@ -115,7 +115,7 @@ def measure(request, measure_id):
 
     # pledge = Pledge.objects.get(user=request.user, measure=m)
 
-    providers = Provider.objects.filter(measures=m, display_on_measure_pages=True).order_by('order')[3:]
+    providers = Provider.objects.filter(measures=m, display_on_measure_pages=True).order_by('order')[:3]
     pledge = None
     time_remaining = None
     if request.user.is_authenticated():
