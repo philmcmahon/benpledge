@@ -190,7 +190,7 @@ def dwelling_form(request):
                 updated_dwelling.house_id = updated_house_id
             # updated_dwelling.postcode = form.cleaned_data
             updated_dwelling.save()
-            print "saving la fucking dwelling"
+
             if dwelling == None:
                 print "updating dwelling"
                 current_user_profile.dwelling = updated_dwelling

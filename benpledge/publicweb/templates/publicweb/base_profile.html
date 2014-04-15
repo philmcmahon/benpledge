@@ -10,13 +10,16 @@
 <!--            <a href="{% url 'dwelling_form' %}">My Home</a> <br>
              <a href="{% url 'possible_measures' %}">Possible Measures</a>
 p -->            
-
+            <p>On this page you will find any pledges you have made, as well as a table showing some measures that might be suitable for your home.</p>
             {% include "publicweb/pledge_progress_list.html" %}
             <h2>Possible Measures</h2>
 
             {% if user_measures %}
             <h4>Information from CSE's Housing Assessment Tool</h4>
-            <h5>The table below shows estimated savings for a range of energy saving measures based on a tool made by the centre for sustainable energy. The figures information be used as a guideline to compare different measures. To view the full list of energy efficiency measures click <a href="{% url 'general_measures' %}">here</a>. </h5>
+            <p>The table below shows estimated savings for a range of energy saving measures based on a tool made by the centre for sustainable energy. The figures information be used as a guideline to compare different measures. To view the full list of energy efficiency measures click <a href="{% url 'general_measures' %}">here</a>. </p>
+            <p>
+              You can sort the table by clicking on the heading you want to sort it by. Click again to switch from ascending to descending order (or vice versa). To find out more about an energy saving measure in the table, click on its name in the left hand column.
+            </p>
             <table id="sortable-measures-table" class="table tablesorter">
             <thead>
             <tr>
