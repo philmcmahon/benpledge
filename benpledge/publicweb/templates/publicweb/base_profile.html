@@ -16,7 +16,7 @@ p -->
 
             {% if user_measures %}
             <h4>Information from CSE's Housing Assessment Tool</h4>
-            <p>The table below shows estimated savings for a range of energy saving measures based on a tool made by the centre for sustainable energy. The figures information be used as a guideline to compare different measures. To view the full list of energy efficiency measures click <a href="{% url 'general_measures' %}">here</a>. </p>
+            <p>The table below shows estimated savings for a range of energy saving measures based on a tool made by the centre for sustainable energy. The figures provided may be used as a guideline to compare different measures.To view the full list of energy efficiency measures click <a href="{% url 'general_measures' %}">here</a>. </p>
             <p>
               You can sort the table by clicking on the heading you want to sort it by. Click again to switch from ascending to descending order (or vice versa). To find out more about an energy saving measure in the table, click on its name in the left hand column.
             </p>
@@ -50,6 +50,9 @@ p -->
             {% endfor %}
             </tbody>
             </table>
+            <p><i>
+              Please note that the figures in this report are based on the Standard Assessment Procedure (SAP), which is the Government’s official standard for calculating the energy performance of a dwelling. SAP assumes that the living room is heated to 21°C and the rest of the house to 18°C for 9 hours during weekdays and for 16 hours at the weekend as defined by the Government as the amount of heating needed to maintain an adequate level of warmth in a home. This is an overestimation of actual heating use in most households, which means that savings figures may be lower and payback periods may be longer than shown for the various measures in this report. However, as SAP is used for both Energy Performance Certificates and Green Deal assessments the report should broadly reflect the recommendations from an Energy Performance Certificate or Green Deal report. This report is intended as an indicator of the sort of measures that would be suitable for your home and the likely benefits of installation and should not be considered a replacement for a more in depth assessment such as an Energy Performance Certificate or Green Deal report.
+            </i></p>
             
             {% else %}
             <p>We need some more information to calculate the effect of different retrofit measures. Click <a href="{% url 'dwelling_form' %}">here</a> to provide more information or <a href="{% url 'general_measures' %}">view all measures</a>. (If you are reading this and have alreaday filled out all fields marked with a <b>*</b> for your home then unfortunately we are not able to predict energy savings for your home.)</p>
