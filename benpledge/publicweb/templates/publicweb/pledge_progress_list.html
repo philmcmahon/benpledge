@@ -15,21 +15,26 @@
 {% for k, p in pledge_progress.iteritems %}
   <!-- INTEREST_ONLY = 1, PLEDGE = 2 - see models.py  -->
   {% if p.pledge.pledge_type == 2 %}
-    {{ p.pledge.measure.name }} by {{p.pledge.deadline}} {% if page_type = 'area' or page_type == 'all_pledges' %} - {{p.pledge.user}} {% endif %} <span class="text-success">({{ p.savings }} kWh)</span>
+    {{ p.pledge.measure.name }} by {{p.pledge.deadline}} {% if page_type = 'area' or page_type == 'all_pledges' %} - {{p.pledge.user}} {% endif %} <span class="text-success">({% if p.savings %}{{ p.savings }} {% else %} unknown {% endif %} kWh)</span> {% if p.pledge.complete %} <span class="text-success">- COMPLETED!</span>{% endif %}
   {% elif p.pledge.pledge_type == 1 %}
     You are interested in {{ p.pledge.measure.name }}
   {% endif %}
   
   <div class="btn-group pledge-btn-group">
   <a href="{% url 'measure' p.pledge.measure.id %}" class="btn btn-default">View Measure</a>
+  {% if not p.pledge.complete %}
   {% if page_type == 'profile' %}
     <a href="{% url 'help_page' %}" class="btn btn-default">Get Help/Contact</a>
     <a href="{% url 'delete_pledge' p.pledge.id %}" class="btn btn-default">{% if p.pledge.pledge_type == 1 %}Remove{% else %}Cancel Pledge{% endif %}</a>
+    {% if p.pledge.pledge_type == 2 %}
+    <a href="{% url 'pledge_complete' p.pledge.id %}" class="btn btn-success">Completed!</a>
+    {% endif %}
+  {% endif %}
   {% endif %}
   </div>
   <br><br>
   <!-- INTEREST_ONLY = 1, PLEDGE = 2 - see models.py  -->
-  {% if p.pledge.pledge_type == 2 %}
+  {% if not p.pledge.complete and p.pledge.pledge_type == 2 %}
   <div class="progress">
     <div class="progress-bar" role="progressbar" aria-valuenow="{{ p.time_progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{p.time_progress}}%;">
     <span></span>
@@ -43,7 +48,7 @@
 </div>
 {% if page_type != 'all_pledges' %}
 <div class="panel-footer">
-<h3> Total pledged reduction: {{ total_reduction }} kWh</h3>
+<h3> Total pledged reduction: {{ total_reduction }} kWh ----- Total completed reduction: {{ total_completed_reduction }} kWh</h3>
 </div>
 {% endif %}
 </div>

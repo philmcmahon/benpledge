@@ -1,16 +1,13 @@
 {% extends "publicweb/base_offset.html" %}
+{% load publicweb_filters %}
 {% block main_content %}
 <h1> Ways to save energy</h1>
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-9">
+        <div class="row">
         {% include "publicweb/measure_map.html" %}
-    </div>
-    <div class="col-md-2">
-        <a class="btn btn-success" href="{% url 'profile' %}">View personalised information</a>
-
-    </div>
-</div>
-<div class="row">
+        </div>
+        <div class="row">
     <h3>Energy Saving Measures</h3>
     <p> This is the full list of possible energy saving measures we have information about. Note that many of these are large project and you should seek some advice before attempting them.</p>
 
@@ -29,6 +26,27 @@
     </div>
     </div>
 
+    </div>
+    </div>
+    <div class="col-md-3">
+        <a class="btn btn-success" href="{% url 'profile' %}">View personalised information</a>
+        <hr>
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h4>Ways to pay for energy efficiency measures</h4>
+            </div>
+            <div class="panel-body">
+                {% for f in funding_options %}
+                    {% autoescape off %}
+                    <b>{{ f.name|linkify_urls }}</b>
+                    <p>{{f.description|linkify_urls}}</p>
+                    {% endautoescape %}
+                    <hr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
+
 
 {% endblock main_content %}

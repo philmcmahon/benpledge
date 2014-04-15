@@ -1,0 +1,16 @@
+{% extends "publicweb/base_offset.html" %}
+{% load widget_tweaks %}
+{% block main_content %}
+    <div class="col-md-10">
+        <h1>Congratulations!</h1>
+        <p>Well done for completing your pledge. If you have any feedback you'd like to share with others please enter it into the box below.</p>
+        <form class="form-horizontal" role="form" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+        {% render_field form.feedback class+="form-control" %}
+        </div>
+        <a href="{% url 'my_pledges' %}" class="btn btn-danger">Cancel</a>
+        <button type="submit" class="btn btn-primary">OK</button>
+        </form>
+    </div>
+{% endblock main_content %}

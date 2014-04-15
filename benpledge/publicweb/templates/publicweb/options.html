@@ -8,7 +8,6 @@
   <h1> Top tips for saving energy </h1>
   {% if top_tips %}
 
-  <div class="row">
   <ol class="list-group">
     {% for t in top_tips %}
     <li class="list-group-item">
@@ -17,7 +16,6 @@
     </li>
     {% endfor %}
     </ol>
-    </div>
   {% endif %}
 
     
@@ -26,10 +24,10 @@
 
 <div class="row">
 <div class="col-md-10">
-<p>You can either view a list of all the different energy saving measures available or provide some additional information so that we can advise as to the measures that might be most suitable for your home.</p>
+<p>To get started making pledges and to get some personalised information about suitable energy saving measures please <a href="/accounts/register">create an account</a> - it should only take a minute. Alternatively, you can view a list of all the different types of energy saving measures without creating an account. </p>
 
-<a class="btn btn-success btn-xlarge" href="{% url 'general_measures' %}">View full measures list</a>
-    <a class="btn btn-success btn-xlarge" href="{% url 'dwelling_form' %}">Provide further information</a>
+<a class="btn btn-success btn-xlarge" href="{% url 'general_measures' %}">View full list of Energy Efficiency measures</a>
+    <a class="btn btn-success btn-xlarge" href="{% url 'dwelling_form' %}">Provide further information about your home</a>
 </div>
 </div>
 {% endblock main_content %}

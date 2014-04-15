@@ -5,7 +5,7 @@
 <!-- <div class="row clearfix">
     <div class="col-md-12 column"> -->
         <div class="row clearfix">
-            <div class="col-md-10 column">
+            <div class="col-md-9 column">
                 <h1>{{measure.name}}</h1>
                 {% if measure.measure_image_1 %}
                     <img src="{{ measure.measure_image_1.url }}" alt="Image of {{measure.name}}" class="img-responsive">
@@ -162,11 +162,28 @@
                 {% endif %}
 
             </div>
-            <div class="col-md-2 column">
+            <div class="col-md-3 column">
               <div class="btn-group-vertical">
                 <a href="{% url 'general_measures' %}" class="btn btn-success">Back to All Measures</a>
                 <a href="{% url 'profile' %}" class="btn btn-success">Back to Profile</a>
               </div>
+              <hr>
+
+              {% for p in providers %}
+              <div class="panel panel-success">
+                <div class="panel-heading">
+                  <h4>{{ p.name }}</h4>
+                </div>
+                <div class="panel-body">
+                  <a href="{{ p.website }}"><img src="{{ p.logo.url }}" alt="{{p.name}} logo" class="img-responsive"></a>
+                  {% autoescape off %}
+                  <p>{{p.description|linkify_urls}}</p>
+                  {% endautoescape %}
+                  <p><a href="{{ p.website }}">{{ p.website }}</a></p>
+                </div>
+              </div>
+              <hr>
+              {% endfor %}
             </div>
 
         </div>

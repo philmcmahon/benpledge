@@ -40,7 +40,7 @@ var map;
 function initialize() {
     geocoder = new google.maps.Geocoder();
     var mapInitial = getMapInitial();
-    console.log(mapInitial);
+    
     var latlng = new google.maps.LatLng(mapInitial.latitude, mapInitial.longitude);
     var mapOptions = {
         center: latlng,
@@ -51,11 +51,12 @@ function initialize() {
     mapPledges();
 }
 
-function generateInfoWindowContent(title, dateMade, deadline, timeRemaining, savings) {
+function generateInfoWindowContent(title, dateMade, deadline, timeRemaining, savings, panelType) {
+    console.log(panelType)
     var panelContent= '<div id="content">' +
         '<div id="siteNotice">' +
         '</div>' +
-        '<div class="panel panel-primary">' +
+        '<div class="panel ' + panelType +'">' +
         '<div class="panel-heading">' +
         '<h3 class="panel-title">' + title + ' </h3>' +
         '</div>' +
@@ -112,8 +113,15 @@ function mapPledges() {
         pledge = pledgeData[p].pledge;
 
         latlng = new google.maps.LatLng(location.lat, location.lng);
-        title = pledge.measure + " pledged by " + pledge.user;
-        description = pledge
+        if (pledge['complete'] == "True") {
+            title = pledge.measure + " pledged and completed by " + pledge.user;  
+            panelType = "panel-success"; 
+        } else {
+            title = pledge.measure + " pledged by " + pledge.user;  
+            panelType = "panel-primary";
+        }
+        
+        //description = pledge
 
         marker = new google.maps.Marker({
             position: latlng,
@@ -122,7 +130,7 @@ function mapPledges() {
             title: title,
         });
         marker.desc = generateInfoWindowContent(title,
-                pledge.date_made, pledge.deadline, pledge.time_remaining, pledge.savings);
+                pledge.date_made, pledge.deadline, pledge.time_remaining, pledge.savings, panelType);
 
         oms.addMarker(marker);
 

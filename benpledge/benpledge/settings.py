@@ -46,11 +46,11 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'contact_form',
     'geoposition',
-    'dbbackup',
     # local applications
 )
 
 ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_OPEN = True
 SITE_ID = 1
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

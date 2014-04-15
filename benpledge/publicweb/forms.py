@@ -29,7 +29,10 @@ class PledgeForm(ModelForm):
         model = Pledge
         fields = ['deadline', 'receive_updates']
 
-
+class PledgeCompleteForm(ModelForm):
+    class Meta:
+        model = Pledge
+        fields = ['feedback']
 
 
 

@@ -9,9 +9,10 @@ urlpatterns = patterns('',
     # pledges pages
     url(r'^pledges/all/$', views.all_pledges, name='all_pledges'),
     url(r'^pledges/my_pledges/$', views.my_pledges, name='my_pledges' ),
-    url(r'^pledges/(?P<postcode_district>\w+)/$', views.pledges_for_area, name='pledges_for_area'),
+    url(r'^pledges/complete/(?P<pledge_id>\d+)/', views.pledge_complete, name='pledge_complete'),
     url(r'^pledges/edit/(?P<pledge_id>\d+)/', views.edit_pledge, name='edit_pledge'),
     url(r'^pledges/delete/(?P<pledge_id>\d+)/', views.delete_pledge, name='delete_pledge'),
+    url(r'^pledges/(?P<postcode_district>\w+)/$', views.pledges_for_area, name='pledges_for_area'),
 
     url(r'^areas/$', views.area_list, name='area_list'),
 
@@ -22,6 +23,9 @@ urlpatterns = patterns('',
     # Measures pages
     url(r'^measures/$', views.general_measures, name='general_measures'),
     url(r'^measures/(?P<measure_id>\d+)/', views.measure, name='measure'),
+    # profile
+    url(r'^users/(?P<username>\w+)/$', views.profile, name='profile_registration'),
+    url(r'^accounts/profile/$', views.profile, name='profile'),
     # django authentication
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page' : '/', 'redirect_field_name' : '/'}),
@@ -32,8 +36,8 @@ urlpatterns = patterns('',
     url(r'^accounts/password_change/$', 'django.contrib.auth.views.password_change', {'template_name': 'registration/password_templates/password_change_form.html'}, name='password_change'),
     url(r'^accounts/password_change_done/$', 'django.contrib.auth.views.password_change_done', {'template_name': 'registration/password_templates/password_change_done.html'}, name='password_change_done'),
 
-    url(r'^accounts/profile/$', views.profile, name='profile'),
-    url(r'^accounts/', include('registration.backends.default.urls')),
+    
+    url(r'^accounts/', include('registration.backends.simple.urls')),
 
     # about
     url(r'^about/$', views.about, name='about'),

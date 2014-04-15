@@ -79,7 +79,9 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Pledges <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li class={% active_page request "all_pledges" %}><a href="{% url 'all_pledges' %}">All Pledges</a></li>
+                {% if user.is_authenticated %}
                 <li class={% active_page request "my_pledges" %}><a href="{% url 'my_pledges' %}">My Pledges</a></li>
+                {% endif %}
                 <li class={% active_page request "area_list" %}><a href="{% url 'area_list' %}">Pledges by Area</a></li>
               </ul>
             </li>

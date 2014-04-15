@@ -11,16 +11,20 @@ import re, urllib, urllib2, json
 from datetime import datetime, timedelta, date
 from collections import defaultdict
 
+from registration.backends.simple.views import RegistrationView
 from models import (Measure, Dwelling, UserProfile, HatMetaData,
     HouseIdLookup, HatResultsDatabase, Pledge, Area, PostcodeOaLookup,
     LsoaDomesticEnergyConsumption, TopTip, Organisation, HomepageCheckList, EcoEligible,
-    AboutPage)
-from forms import DwellingForm, PledgeForm
+    AboutPage, FundingOption, Provider)
+from forms import DwellingForm, PledgeForm, PledgeCompleteForm
 
 from postcode_parser import parse_uk_postcode
 
 from benpledge_keys import GOOGLE_API_KEY
 
+class RegistrationView(RegistrationView):
+    def get_success_url(request, user):
+        return 'profile'
 
 def index(request):
     """Homepage"""
@@ -41,10 +45,13 @@ def general_measures(request):
     mid_id = int(Measure.objects.latest('id').id)/2
     measures1 = Measure.objects.filter(id__lte=mid_id)
     measures2 = Measure.objects.filter(id__gt=mid_id)
+
+    funding_options = FundingOption.objects.all()
     context = {
         'measure_ids': get_measures_with_identifiers(),
         'measures1': measures1,
         'measures2': measures2,
+        'funding_options': funding_options,
     }
     return render(request, 'publicweb/general_measures.html', context)
 
@@ -56,36 +63,38 @@ def help_page(request):
     return render(request, 'publicweb/help_page.html', context)
 
 @login_required
-def profile(request):
+def profile(request, username=None):
     measure_ids = get_measures_with_identifiers()
 
-    userprofile = UserProfile.objects.get(user=request.user)
+    userprofile = UserProfile.objects.filter(user=request.user).first()
+
+    # if the user hasn't got a dwelling yet, redirect to dwelling form
+    if not userprofile.dwelling:
+        return redirect('dwelling_form')
 
     if userprofile.dwelling and userprofile.dwelling.house_id:
         user_measures = get_dwelling_hat_results(userprofile.dwelling)
     else:
         user_measures = None
-        return redirect('dwelling_form')
 
-    pledge_progress = get_pledges_with_progress(request.user)
-    total_reduction = get_total_reduction(pledge_progress)
-    # if not pledge_progress:
-    #     pledge_progress = None
-
-    # user_pledges['time_progress'] = datetime.now() - user_pledges['date_made']
+    pledges = Pledge.objects.filter(user=request.user)
+    pledge_progress = pledge_results_with_progress(pledges)
+    total_reduction = get_total_reduction(pledges)
+    total_completed_reduction = get_total_reduction(pledges.filter(complete=True))
+    
 
     if userprofile.dwelling.postcode:
         eco_eligible =  get_eco_eligible(userprofile.dwelling.postcode)
     else:
-        eco_eligible = 'unknown'
+        eco_eligible = 'postcode_unknown'
 
-    # get_consumption_row_for_postcode("BS8  2DJ")
     context = {
         'measure_ids': measure_ids, 
         'user_measures': user_measures,
         'pledge_progress' : pledge_progress,
         'page_type': 'profile',
         'total_reduction': total_reduction,
+        'total_completed_reduction':total_completed_reduction,
         'eco_eligible': eco_eligible,
         'dwelling': userprofile.dwelling,
     }
@@ -105,6 +114,8 @@ def measure(request, measure_id):
         payback_time_estimate = get_payback_time(hat_info)
 
     # pledge = Pledge.objects.get(user=request.user, measure=m)
+
+    providers = Provider.objects.filter(measures=m, display_on_measure_pages=True).order_by('order')[3:]
     pledge = None
     time_remaining = None
     if request.user.is_authenticated():
@@ -122,6 +133,7 @@ def measure(request, measure_id):
         'payback_time_estimate' : payback_time_estimate,
         'pledge' : pledge,
         'time_remaining': time_remaining,
+        'providers':providers,
     }
     return render(request, 'publicweb/measure.html', context)
 
@@ -152,21 +164,24 @@ def dwelling_form(request):
     if dwelling:
         current_street_name = dwelling.street_name
         current_area = dwelling.area
+    else:
+        current_street_name = None
+        current_area = None
     
     if request.method == 'POST':
         form = DwellingForm(request.POST, instance=dwelling)
         if form.is_valid():
             updated_dwelling = form.save(commit=False)
-            ##### MAKE NOT UPDATE IF UNCHANGED####
-            if (updated_dwelling.street_name or updated_dwelling.area and not dwelling or
-                updated_dwelling.street_name != current_street_name or updated_dwelling.area != current_area):
-                address_string = get_address_from_street_name_or_area(updated_dwelling.street_name,
-                    updated_dwelling.area)
-                print address_string
-                location = geocode_address(address_string)
-                print location
-                updated_dwelling.position.latitude = location['lat']
-                updated_dwelling.position.longitude = location['lng']
+            # check if street name/area has changed, if so update position
+            if updated_dwelling.street_name or updated_dwelling.area:
+                if (updated_dwelling.street_name or updated_dwelling.area and not dwelling or
+                    updated_dwelling.street_name != current_street_name or updated_dwelling.area != current_area):
+                    address_string = get_address_from_street_name_or_area(updated_dwelling.street_name,
+                        updated_dwelling.area)
+
+                    location = geocode_address(address_string)
+                    updated_dwelling.position.latitude = location['lat']
+                    updated_dwelling.position.longitude = location['lng']
 
             # check if the settings the user has provided have a match in the HAT
             # if so update the house id
@@ -175,12 +190,14 @@ def dwelling_form(request):
                 updated_dwelling.house_id = updated_house_id
             # updated_dwelling.postcode = form.cleaned_data
             updated_dwelling.save()
+            print "saving la fucking dwelling"
             if dwelling == None:
+                print "updating dwelling"
                 current_user_profile.dwelling = updated_dwelling
                 current_user_profile.save()
             return redirect('profile')
         else:
-            print form.errors
+            # print form.errors
             return render(request, 'publicweb/dwelling_form.html', {'form': form})
     else:
         form=DwellingForm(instance=dwelling)
@@ -198,6 +215,20 @@ def edit_pledge(request, pledge_id):
     else:
         form = PledgeForm(instance=pledge)
         return render(request, 'publicweb/pledge_form.html', {'form': form})
+
+@login_required
+def pledge_complete(request, pledge_id):
+    pledge = Pledge.objects.get(id=pledge_id)
+    if request.method == 'POST':
+        form = PledgeCompleteForm(request.POST, instance=pledge)
+        if form.is_valid():
+            p = form.save()
+            p.complete = True
+            p.save()
+        return redirect('profile')
+    else:
+        form = PledgeCompleteForm(instance=pledge)
+        return render(request, 'publicweb/pledge_complete.html', {'form': form})
 
 def possible_measures(request):
     measures = Measure.objects.all()
@@ -304,7 +335,8 @@ def pledges_for_area(request, postcode_district):
     pledges_in_area = Pledge.objects.filter(pledge_type = Pledge.PLEDGE, user__userprofile__dwelling__area=area)
     total_pledges = pledges_in_area.count()
     pledge_progress = pledge_results_with_progress(pledges_in_area)
-    total_reduction = get_total_reduction(pledge_progress)
+    total_reduction = get_total_reduction(pledges_in_area)
+    total_completed_reduction = get_total_reduction(pledges_in_area.filter(complete=True))
 
     measure_pledge_counts = Measure.objects.filter(pledge__in=pledges_in_area).annotate(pledge_count=Count('pledge')).order_by('-pledge_count')[:20]
  
@@ -318,6 +350,7 @@ def pledges_for_area(request, postcode_district):
         'pledges_with_positions': pledges_with_positions,
 
         'total_reduction':total_reduction,
+        'total_completed_reduction':total_completed_reduction,
         'total_pledges': total_pledges,
         'measure_pledge_counts':measure_pledge_counts,
         'ranking_details': ranking_details,
@@ -332,7 +365,8 @@ def all_pledges(request):
     pledges = Pledge.objects.filter(pledge_type = Pledge.PLEDGE).order_by('date_made')
     total_pledges = pledges.count()
     most_recent_10_pledges_with_progress = pledge_results_with_progress(pledges[:10])
-    total_reduction = get_total_reduction(pledge_results_with_progress(pledges))
+    total_reduction = get_total_reduction(pledges)
+    total_completed_reduction = get_total_reduction(pledges.filter(complete=True))
     pledges_with_positions = get_pledges_with_positions(pledges)
     measure_pledge_counts = Measure.objects.filter(pledge__in=pledges).annotate(pledge_count=Count('pledge')).order_by('-pledge_count')[:20]
 
@@ -345,6 +379,7 @@ def all_pledges(request):
         'measure_pledge_counts':measure_pledge_counts,
         'total_pledges': total_pledges,
         'total_reduction':total_reduction,
+        'total_completed_reduction':total_completed_reduction,
     }
     return render(request, 'publicweb/all_pledges.html', context)
 
@@ -352,8 +387,10 @@ def all_pledges(request):
 def my_pledges(request):
     pledges = Pledge.objects.filter(user=request.user)
     pledges_with_positions = get_pledges_with_positions(pledges)
-    pledge_progress = get_pledges_with_progress(request.user)
-    total_reduction = get_total_reduction(pledge_progress)
+    pledge_progress = pledge_results_with_progress(pledges)
+    full_pledges = pledges.filter(pledge_type=Pledge.PLEDGE)
+    total_reduction = get_total_reduction(full_pledges)
+    total_completed_reduction = get_total_reduction(full_pledges.filter(complete=True))
 
     user_dwelling = get_dwelling(request.user)
     if user_dwelling and user_dwelling.position:
@@ -365,6 +402,7 @@ def my_pledges(request):
     context = {
         'pledge_progress': pledge_progress,
         'total_reduction': total_reduction,
+        'total_completed_reduction':total_completed_reduction,
         'page_type': 'profile',
         'pledges_with_positions':pledges_with_positions,
         'map_initial': map_initial,
@@ -395,13 +433,13 @@ def get_measures_with_identifiers():
         measure_ids[convert_name_to_identifier(m.name)] = m.id
     return measure_ids
 
-def get_pledges_with_progress(user):
-    """ Returns dict with pledges and the time details needed to display progress bar"""
-    pledge_progress = {}
-    # get pledges    
-    user_pledges = Pledge.objects.filter(user=user)
-    pledge_progress = pledge_results_with_progress(user_pledges)
-    return pledge_progress
+# def get_pledges_with_progress(user):
+#     """ Returns dict with pledges and the time details needed to display progress bar"""
+#     pledge_progress = {}
+#     # get pledges    
+#     user_pledges = Pledge.objects.filter(user=user)
+#     pledge_progress = pledge_results_with_progress(user_pledges)
+#     return pledge_progress
 
 def pledge_results_with_progress(pledges):
     """Takes a list of pledges and returns a dict containing progress details"""
@@ -419,9 +457,7 @@ def pledge_results_with_progress(pledges):
     return pledge_progress
 
 def get_dwelling_hat_results(dwelling):
-    """ Returns dictionary of suitable measures for dwelling """
-    # dwelling = get_dwelling(user)
-    # houseid = get_house_id(dwelling)
+    """ Returns dictionary of suitable measures for dwelling. """
     if not dwelling.house_id:
         return None
     measures = Measure.objects.all()
@@ -431,9 +467,10 @@ def get_dwelling_hat_results(dwelling):
             hat_out = get_hat_results(dwelling.house_id, m.hat_measure.measure_id)
             if suitable_measure(hat_out, m, dwelling.window_type):
                 hat_results[m.id] = {
-                'hat_results' : hat_out,
-                'measure_name' : m.name,
-                'payback_time_estimate': get_payback_time(hat_out),
+                    'hat_results' : hat_out,
+                    'measure_name' : m.name,
+                    'payback_time_estimate': get_payback_time(hat_out),
+                    'percentage_return_on_investment': get_percentage_return_on_investment(hat_out)
                 }
     return hat_results
 
@@ -443,6 +480,9 @@ def suitable_measure(hat_out, measure, window_type):
         return False
     if window_type == Dwelling.DOUBLE_GLAZING and measure.name in ["Secondary glazing", "Double Glazing"]:
         return False
+    # False if payback time greater than 50 years
+    if get_payback_time(hat_out) > 50:
+        return False
     return True
 
 def get_payback_time(hat_info):
@@ -451,6 +491,13 @@ def get_payback_time(hat_info):
             hat_info.annual_cost_reduction), 1)
     else:
         return None
+
+def get_percentage_return_on_investment(hat_info):
+    if hat_info:
+        return round((hat_info.annual_cost_reduction * 100 /
+            hat_info.approximate_installation_costs), 1) 
+    else:
+        return None    
 
 def get_house_id(dwelling):
     metadata_properties = ([dwelling.dwelling_type, dwelling.property_age,
@@ -477,8 +524,11 @@ def get_hat_results(houseid, measureid):
     return result
 
 def get_dwelling(user):
-    d = UserProfile.objects.get(user=user).dwelling
-    return d
+    up = UserProfile.objects.filter(user=user).first()
+    if up:
+        return up.dwelling
+    else:
+        return None
 
 def convert_name_to_identifier(name):
     """ Replaces whitespace with underscores, decapitalises"""
@@ -497,12 +547,15 @@ def get_consumption_row_for_postcode(postcode):
 
 def get_eco_eligible(postcode):
     """Returns true if postcode is eligible for ECO funding"""
-    postcode_lookup = PostcodeOaLookup.objects.get(postcode=space_postcode(postcode))
-    eco_eligible = EcoEligible.objects.filter(lsoa_code=postcode_lookup.lsoa_code).first()
-    if eco_eligible:
-        return True
+    postcode_lookup = PostcodeOaLookup.objects.filter(postcode=space_postcode(postcode)).first()
+    if postcode_lookup:
+        eco_eligible = EcoEligible.objects.filter(lsoa_code=postcode_lookup.lsoa_code).first()
+        if eco_eligible:
+            return True
+        else:
+            return False
     else:
-        return False
+        return 'unknown'
 
 def space_postcode(non_spaced_postcode_postcode):
     """Adds  correct spacing to separate outward, inward sections of postcode"""
@@ -517,15 +570,24 @@ def space_postcode(non_spaced_postcode_postcode):
             spaced_postcode += c
     return spaced_postcode[::-1]
 
-def get_total_reduction(pledges_with_progress):
-    """Returns the total carbon savings of all pledges in pledges_with_progress"""
+# def get_total_reduction_pledges(pledges_with_progress):
+#     """Returns the total carbon savings of all pledges in pledges_with_progress"""
+#     total_reduction = 0
+#     for k, p in pledges_with_progress.iteritems():
+#         if p['pledge'].pledge_type == Pledge.PLEDGE:
+#             pledge_energy_savings = get_pledge_energy_savings(p['pledge'])
+#             if pledge_energy_savings:
+#                 total_reduction += pledge_energy_savings
+#     return total_reduction
+
+def get_total_reduction(pledges):
     total_reduction = 0
-    for k, p in pledges_with_progress.iteritems():
-        if p['pledge'].pledge_type == Pledge.PLEDGE:
-            pledge_energy_savings = get_pledge_energy_savings(p['pledge'])
-            if pledge_energy_savings:
-                total_reduction += pledge_energy_savings
+    for p in pledges:
+        pledge_energy_savings = get_pledge_energy_savings(p)
+        if pledge_energy_savings:
+            total_reduction += pledge_energy_savings
     return total_reduction
+
 
 def get_time_remaining(deadline):
     """ Gives the time in months and days until deadline"""
@@ -565,6 +627,7 @@ def get_pledges_with_positions(pledges):
                     'deadline':str(p.deadline),
                     'time_remaining':get_time_remaining(p.deadline),
                     'savings': savings,
+                    'complete': str(p.complete),
                     },
                 'position': {
                     'lat': float(position.latitude),

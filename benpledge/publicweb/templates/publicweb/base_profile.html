@@ -16,7 +16,7 @@ p -->
 
             {% if user_measures %}
             <h4>Information from CSE's Housing Assessment Tool</h4>
-            <h5>(To be used as a guideline only)</h5>
+            <h5>The table below shows estimated savings for a range of energy saving measures based on a tool made by the centre for sustainable energy. The figures information be used as a guideline to compare different measures. To view the full list of energy efficiency measures click <a href="{% url 'general_measures' %}">here</a>. </h5>
             <table id="sortable-measures-table" class="table tablesorter">
             <thead>
             <tr>
@@ -25,6 +25,7 @@ p -->
               <th>Annual cost reduction</th>
               <th>Approximate installation costs</th>
               <th>Payback time (years)</th>
+              <th>Annual return on investment</th>
               <th>Green deal?</th>
              <!--  <th>Eco Finance?</th> -->
             </tr>
@@ -38,6 +39,7 @@ p -->
                 <td>£{{ m.hat_results.annual_cost_reduction|round_to_nearest_10 }}</td>
                 <td>£{{ m.hat_results.approximate_installation_costs|round_to_nearest_10 }}</td>
                 <td>{{ m.payback_time_estimate }}</td>
+                <td>{{ m.percentage_return_on_investment }}%</td>
                 <td><span class="{{ m.hat_results.grean_deal|boolean_to_glyphicon }}"></span><p class="boolean-hidden-text">{{ m.hat_results.grean_deal}}</p></td>
                 <!-- <td><span class="{{ m.hat_results.eco_finance|boolean_to_glyphicon }}"></span><p class="boolean-hidden-text">{{ m.hat_results.eco_finance}}</p></td> -->
               </tr>
@@ -58,14 +60,19 @@ p -->
             <a class="btn btn-success" href="{% url 'my_pledges' %}">My Pledges</a>
             {% if dwelling and dwelling.area %}<a class="btn btn-success" href="{% url 'pledges_for_area' dwelling.area.postcode_district %}">My Area</a>{% endif %}
             <br>
-
+            <p>
             {% if eco_eligible %}
-              {% if eco_eligible != 'unknown' %}
-                <p>Based on your postcode, it looks like you live in an area which is eligible for ECO (Energy Company Obligation) funding. </p>
-                {% endif %}
+              {% if eco_eligible == 'unknown' %}
+                We do not have any information on ECO funding for your postcode.
+              {% elif eco_eligible == 'postcode_unknown' %}
+                As you have not provided your postcode, we cannot check whether you live an area which is eligible for ECO funding.
+              {% else %}
+                Based on your postcode, it looks like you live in an area which is eligible for ECO (Energy Company Obligation) funding. 
+              {% endif %}
             {% else %}
-            <p>Based on your postcode, it does not look like you live in an area which is eligible for ECO (Energy Company Obligation) funding.</p>
+                Based on your postcode, it does not look like you live in an area which is eligible for ECO (Energy Company Obligation) funding.
             {% endif %}
+            </p>
             </div>
             </div>
         </div>

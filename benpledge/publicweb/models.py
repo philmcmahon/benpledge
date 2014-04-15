@@ -2,19 +2,37 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import Signal
 from django.dispatch import receiver
+from django.core.mail import send_mail
 from datetime import datetime
 from PIL import Image
 
-from registration.signals import user_activated
+from registration.signals import user_registered
 from geoposition.fields import GeopositionField
 
 class Measure(models.Model):
     name = models.CharField(max_length=75)
     description = models.TextField(default='No description available.')
     hat_measure = models.OneToOneField('HatMeasuresList', null=True, blank=True)
-    measure_image_1 = models.ImageField(null=True, blank=True, upload_to='%Y/%m/%d')
+    measure_image_1 = models.ImageField(null=True, blank=True, upload_to='measures_%Y/%m_%d')
     estimated_annual_energy_savings_kwh = models.IntegerField(null=True, blank=True)
     estimated_annual_cost_savings = models.FloatField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+class Provider(models.Model):
+    name = models.CharField(max_length=75)
+    description = models.TextField(default='No description available.')
+    website = models.URLField(blank=True, null=True)
+    measures = models.ManyToManyField(Measure, null=True, blank=True)
+    logo = models.ImageField(null=True, blank=True, upload_to='providers_%Y/%m%d')
+    ORDER_CHOICES = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+    )
+    order = models.IntegerField(choices=ORDER_CHOICES, default=1)
+    display_on_measure_pages = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.name
@@ -25,6 +43,13 @@ class AboutPage(models.Model):
 
     def __unicode__(self):
         return self.title
+
+class FundingOption(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(default='No description available.')
+
+    def __unicode__(self):
+        return self.name
 
 class Organisation(models.Model):
     name = models.CharField(max_length=100)
@@ -75,6 +100,8 @@ class Pledge(models.Model):
     date_made = models.DateTimeField(default=datetime.now())
     hat_results = models.ForeignKey('HatResultsDatabase', null=True, blank=True)
     receive_updates = models.BooleanField(default=False)
+    complete = models.BooleanField(default=False)
+    feedback = models.TextField(default='No feedback given.', blank=True, null=True)
 
     INTEREST_ONLY = 1
     PLEDGE = 2
@@ -87,7 +114,10 @@ class Pledge(models.Model):
         default=PLEDGE)
 
     def __unicode__(self):
-        return str(self.measure) + ' - ' + str(self.user)
+        stringrep = str(self.measure) + ' - ' + str(self.user)
+        if self.complete:
+            stringrep += " (complete)"
+        return stringrep
 
 
     def time_progress(pledge):
@@ -181,11 +211,16 @@ class Dwelling(models.Model):
     house_id = models.IntegerField(default=0)
     position = GeopositionField()
 
+    def __unicode__(self):
+        dwelling_string = ""
+        if self.street_name:
+            dwelling_string += self.street_name
+        if self.postcode:
+            dwelling_string += ' ' + self.postcode 
+        if self.area:
+            dwelling_string += ' ' + self.area.postcode_district
+        return dwelling_string
 
-
-
-    # def __unicode__(self):
-    #     return str(self.user)
 
 
 class UserProfile(models.Model):
@@ -195,13 +230,18 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return str(self.user) + ' profile'
 
-    @receiver(user_activated)
+    @receiver(user_registered)
     def link_profile_with_user(sender, **kwargs):
         profile = UserProfile(user=kwargs['user'])
         profile.save()
+        send_mail('BEN Pledge account created', 
+            "Your Bristol Energy Network pledge account has been created." + 
+            "You may now login using username " + str(kwargs['user']) + 
+            " and the password you chose when you registered.", 'benpledgehelp@gmail.com',
+            [kwargs['user'].email], fail_silently=False)
 
-user_activated.connect(UserProfile.link_profile_with_user, sender=None, weak=True,
-    dispatch_uid="account_activate_signal")
+user_registered.connect(UserProfile.link_profile_with_user, sender=None, weak=True,
+    dispatch_uid="account_registered_signal")
 
 # CSE DATA
 class HatResultsDatabase(models.Model):
