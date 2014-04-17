@@ -17,9 +17,7 @@
 
      <!-- Bootstrap core CSS  -->
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-    <!-- {% load bootstrap3 %} -->
-    <!-- {% bootstrap_css %} -->
-    <!-- {% bootstrap_messages %} -->
+
     {% load publicweb_filters %}
 
     <!-- Fontawesome icons -->
@@ -28,7 +26,10 @@
     <!-- qtip css -->
     <link href="//cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.css" rel="stylesheet">
 
-    
+    <link rel="icon" 
+      type="image/png" 
+      href="{% static "publicweb/img/favicon.png" %}">
+
     <!-- Custom styles for this template -->
     <link href="{% static "publicweb/css/style.css" %}" rel="stylesheet">
 
@@ -130,14 +131,8 @@
     <!-- Footer -->
     <div id="footer">
       <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <img src="{% static "publicweb/img/ben_logo.png" %}" class="img-responsive" alt="BEN Logo" >
-        </div>
-          <div class="col-md-6">
-            <img src="{% static "publicweb/img/cse_logo.gif" %}" class="img-responsive" alt="CSE Logo" width="40%">
-          </div>
-        </div>
+            <img src="{% static "publicweb/img/ben_cse_logos.png" %}" class="img-responsive" alt="CSE Logo" >
+      </div>
         <div class="row">
         {% block license_text %}{% endblock %}
         
