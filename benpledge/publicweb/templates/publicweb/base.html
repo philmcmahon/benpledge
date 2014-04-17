@@ -26,9 +26,9 @@
     <!-- qtip css -->
     <link href="//cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.css" rel="stylesheet">
 
-    <link rel="icon" 
-      type="image/png" 
-      href="{% static "publicweb/img/favicon.png" %}">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static "publicweb/img/favicon.png" %}">
+    <link rel="icon" type="image/png" href="http://i.imgur.com/w48uR0Z.png">
 
     <!-- Custom styles for this template -->
     <link href="{% static "publicweb/css/style.css" %}" rel="stylesheet">
@@ -75,6 +75,7 @@
           <ul class="nav navbar-nav">
             <li class={% active_page request "index" %}><a href="{% url 'index' %}">Home</a></li>
             <li class={% active_page request "about" %}><a href="{% url 'about' %}">About</a></li>
+            <li class={% active_page request "help_page" %}><a href="{% url 'help_page' %}">Bristol Groups</a></li>
             <li class={% active_page request "general_measures" %}><a href="{% url 'general_measures' %}">All Measures</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Pledges <b class="caret"></b></a>

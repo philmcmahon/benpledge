@@ -42,7 +42,6 @@ INSTALLED_APPS = (
     # third party applications
     'south',
     'registration',
-    'bootstrap3',
     'widget_tweaks',
     'contact_form',
     'geoposition',
@@ -129,5 +128,11 @@ EMAIL_SUBJECT_PREFIX = 'benpledge - '
 try:
     from local_settings import *
 except ImportError:
-    print "local settings not found"
-    pass
+    print "Local settings not found."
+
+import sys
+if 'test' in sys.argv or 'test_coverage' in sys.argv:
+    try:
+        from test_settings import *
+    except ImportError:
+        print "Test settings not found."

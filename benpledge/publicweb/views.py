@@ -515,7 +515,6 @@ def get_house_id(dwelling):
     else:
         return None
 
-
 def get_hat_results(houseid, measureid):
     if not houseid or not measureid:
         return None
@@ -531,9 +530,15 @@ def get_dwelling(user):
         return None
 
 def convert_name_to_identifier(name):
-    """ Replaces whitespace with underscores, decapitalises"""
+    """ Converts name into a valid identifier"""
     name = name.lower()
+    # remove whitespace
     name = name.replace(' ', '_')
+    # remove invalid characters
+    name = re.sub('[^0-9a-zA-Z_]', '', name)
+    # remove leading numbers
+    # regex from http://stackoverflow.com/questions/3303312/how-do-i-convert-a-string-to-a-valid-variable-name-in-python
+    name = re.sub('^[^a-zA-Z_]+', '', name)
     return name
 
 def get_consumption_row_for_postcode(postcode):
@@ -591,6 +596,8 @@ def get_total_reduction(pledges):
 
 def get_time_remaining(deadline):
     """ Gives the time in months and days until deadline"""
+    if datetime.combine(deadline, datetime.min.time()) < datetime.now():
+        return "Deadline has been passed."
     time_remaining = datetime.combine(deadline, datetime.min.time()) - datetime.now()
     time_remaining = time_remaining.days
     days_remaining = time_remaining % 30
