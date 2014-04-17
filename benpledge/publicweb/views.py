@@ -596,14 +596,18 @@ def get_total_reduction(pledges):
 
 def get_time_remaining(deadline):
     """ Gives the time in months and days until deadline"""
-    if datetime.combine(deadline, datetime.min.time()) < datetime.now():
-        return "Deadline has been passed."
-    time_remaining = datetime.combine(deadline, datetime.min.time()) - datetime.now()
-    time_remaining = time_remaining.days
-    days_remaining = time_remaining % 30
-    months_remaining = time_remaining/30
-    time_remaining = str(months_remaining) + " months, " + str(days_remaining) + " days" 
-    return time_remaining
+    if deadline:
+        if datetime.combine(deadline, datetime.min.time()) < datetime.now():
+            return "Deadline has been passed."
+        time_remaining = datetime.combine(deadline, datetime.min.time()) - datetime.now()
+        time_remaining = time_remaining.days
+        days_remaining = time_remaining % 30
+        months_remaining = time_remaining/30
+        time_remaining = str(months_remaining) + " months, " + str(days_remaining) + " days" 
+        return time_remaining
+    else:
+        return None
+
 
 def get_pledge_energy_savings(pledge):
     if pledge.hat_results:

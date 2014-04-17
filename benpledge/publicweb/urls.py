@@ -21,8 +21,8 @@ urlpatterns = patterns('',
     url(r'^accounts/makepledge/$', views.make_pledge, name='make_pledge'),
 
     # Measures pages
-    url(r'^measures/$', views.general_measures, name='general_measures'),
-    url(r'^measures/(?P<measure_id>\d+)/', views.measure, name='measure'),
+    url(r'^all_measures/$', views.general_measures, name='general_measures'),
+    url(r'^measures/(?P<measure_id>\d+)/$', views.measure, name='measure'),
     # profile
     url(r'^users/(?P<username>\w+)/$', views.profile, name='profile_registration'),
     url(r'^accounts/profile/$', views.profile, name='profile'),
@@ -35,7 +35,6 @@ urlpatterns = patterns('',
     url(r'^accounts/password_reset_complete/$', 'django.contrib.auth.views.password_reset_complete', {'template_name': 'registration/password_templates/password_reset_complete.html'}, name='password_reset_complete'),
     url(r'^accounts/password_change/$', 'django.contrib.auth.views.password_change', {'template_name': 'registration/password_templates/password_change_form.html'}, name='password_change'),
     url(r'^accounts/password_change_done/$', 'django.contrib.auth.views.password_change_done', {'template_name': 'registration/password_templates/password_change_done.html'}, name='password_change_done'),
-
     
     url(r'^accounts/', include('registration.backends.simple.urls')),
 
