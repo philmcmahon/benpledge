@@ -1,0 +1,43 @@
+{% extends "publicweb/base_offset.html" %}
+{% load publicweb_filters %}
+{% block main_content %}
+<div class="col-md-10">
+<h1>Pledges Overview</h1>
+{% if pledges %}
+<div class="table-responsive">
+<table id="sortable-pledges-table" class="table tablesorter table-bordered">
+<thead>
+<tr>
+    <th>Measure</th>
+    <th>User</th>
+    <th>User Email</th>
+    <th>User Area</th>
+    <th>Deadline</th>
+    <th>Date Made</th>
+    <th>Type</th>
+    <th>Happy to receive updates</th>
+    <th>Completed?</th>
+    <th>Feedback</th>
+</tr>
+</thead>
+<tbody>
+{% for p in pledges %}
+<tr>
+    <td>{{ p.measure }}</td>
+    <td>{{ p.user }} </td>
+    <td><a href="mailto:{{ p.user.email }}">{{p.user.email}}</a></td>
+    <td>{{ p.user.userprofile.dwelling.area }}</td>
+    <td>{{ p.deadline }}</td>
+    <td>{{ p.date_made }}</td>
+    <td>{% if p.pledge_type == 1 %}Interest Only{% else %}Pledge{% endif %}</td>
+    <td><span class="{{ p.receive_updates|boolean_to_glyphicon }}"></span><p class="boolean-hidden-text">{{ p.receive_updates }}</p> </td>
+    <td><span class="{{ p.complete|boolean_to_glyphicon }}"></span><p class="boolean-hidden-text">{{ p.complete }}</p> </td>
+    <td>{{ p.feedback }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table></div>
+{% endif %}
+</div>
+
+{% endblock main_content %}

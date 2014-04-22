@@ -12,12 +12,12 @@ urlpatterns = patterns('',
     url(r'^pledges/complete/(?P<pledge_id>\d+)/', views.pledge_complete, name='pledge_complete'),
     url(r'^pledges/edit/(?P<pledge_id>\d+)/', views.edit_pledge, name='edit_pledge'),
     url(r'^pledges/delete/(?P<pledge_id>\d+)/', views.delete_pledge, name='delete_pledge'),
-    url(r'^pledges/(?P<postcode_district>\w+)/$', views.pledges_for_area, name='pledges_for_area'),
 
     url(r'^areas/$', views.area_list, name='area_list'),
+    url(r'^areas/(?P<postcode_district>\w+)/$', views.pledges_for_area, name='pledges_for_area'),
 
     url(r'^accounts/myhome/$', views.dwelling_form, name='dwelling_form'),
-    url(r'^accounts/possible_measures/$', views.possible_measures, name='possible_measures'),
+    # url(r'^accounts/possible_measures/$', views.possible_measures, name='possible_measures'),
     url(r'^accounts/makepledge/$', views.make_pledge, name='make_pledge'),
 
     # Measures pages
@@ -36,8 +36,12 @@ urlpatterns = patterns('',
     url(r'^accounts/password_change/$', 'django.contrib.auth.views.password_change', {'template_name': 'registration/password_templates/password_change_form.html'}, name='password_change'),
     url(r'^accounts/password_change_done/$', 'django.contrib.auth.views.password_change_done', {'template_name': 'registration/password_templates/password_change_done.html'}, name='password_change_done'),
     
+    # admin overview pages
+    url(r'^pledge_overview/$', views.pledge_admin_overview, name='pledge_admin_overview'),
+    url(r'^user_overview/$', views.user_admin_overview, name='user_admin_overview'),
     url(r'^accounts/', include('registration.backends.simple.urls')),
-
+    # access denied
+    url(r'^access_denied/', views.access_denied, name='access_denied'),
     # about
     url(r'^about/$', views.about, name='about'),
     # home page

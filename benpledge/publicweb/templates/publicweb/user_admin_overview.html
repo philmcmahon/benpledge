@@ -1,0 +1,62 @@
+{% extends "publicweb/base_offset.html" %}
+{% load publicweb_filters %}
+{% block main_content %}
+<div class="col-md-12">
+<h1>Users Overview</h1>
+{% if users %}
+<div class="table-responsive">
+<table id="sortable-users-table" class="table tablesorter table-bordered">
+<thead>
+<tr>
+    <th>Username</th>
+    <th>Email</th>
+    <th>Date Joined</th>
+    <th>Dwelling Type</th>
+    <th>Property Age</th>
+    <th>Number of Bedrooms</th>
+    <th>Heating Fuel</th>
+    <th>Heating Type</th>
+    <th>Loft Insulation</th>
+    <th>Wall Type</th>
+    <th>Street Name</th>
+    <th>Postcode</th>
+    <th>Area</th>
+    <th>Number of Inhabitants</th>
+    <th>Approx. Spent on Gas Monthly</th>
+    <th>Approx. Spent on Electricity Monthly</th>
+    <th>Gas Supplier</th>
+    <th>Electricity Supplier</th>
+    <th>EPC Rating</th>
+</tr>
+</thead>
+<tbody>
+{% for u in users %}
+<tr>
+    <td>{{u}}</td>
+    <td>{{u.email}}</td>
+    <td></td>
+    <td>{{u.userprofile.dwelling.dwelling_type}}</td>
+    <td>{{u.userprofile.dwelling.property_age}}</td>
+    <td>{{u.userprofile.dwelling.number_of_bedrooms}}</td>
+    <td>{{u.userprofile.dwelling.heating_fuel}}</td>
+    <td>{{u.userprofile.dwelling.heating_type}}</td>
+    <td>{{u.userprofile.dwelling.loft_insulation}}</td>
+    <td>{{u.userprofile.dwelling.wall_type}}</td>
+    <td>{{u.userprofile.dwelling.street_name}}</td>
+    <td>{{u.userprofile.dwelling.postcode}}</td>
+    <td>{{u.userprofile.dwelling.area}}</td>
+    <td>{{u.userprofile.dwelling.number_of_inhabitants}}</td>
+    <td>{{u.userprofile.dwelling.aprroximate_spent_on_gas_per_month}}</td>
+    <td>{{u.userprofile.dwelling.approximate_spent_on_electricity_per_month}}</td>
+    <td>{{u.userprofile.dwelling.gas_supplier}}</td>
+    <td>{{u.userprofile.dwelling.electricity_supplier}}</td>
+    <td>{{u.userprofile.dwelling.energy_efficiency_rating}}</td>
+
+</tr>
+{% endfor %}
+</tbody>
+</table></div>
+{% endif %}
+</div>
+
+{% endblock main_content %}

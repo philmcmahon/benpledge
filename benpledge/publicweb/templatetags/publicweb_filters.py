@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django import template
 import re
 register = template.Library()
@@ -35,14 +36,27 @@ def active_page(request, view_name):
         return ""
 
 @register.filter
-def required_for_hat(field_label):
+def update_field_label(field_label):
     labels_required_for_hat = (['Dwelling type', 'Property age',
         'Number of bedrooms', 'Heating fuel', 'Heating type', 'Loft insulation',
         'Wall type'])
+    currency_labels = (['Approximate spent on electricity per month',
+        'Aprroximate spent on gas per month' ])
     if field_label in labels_required_for_hat:
         return field_label + '*'
+    elif field_label in currency_labels:
+        return field_label + u' (£)'
     else:
         return field_label
+
+@register.filter
+def get_field_prefix(field_label):
+    if (field_label == "" or 
+        field_label == ""):
+        return u'£'
+    else:
+        return ""
+
 
 @register.filter
 def linkify_urls(text):

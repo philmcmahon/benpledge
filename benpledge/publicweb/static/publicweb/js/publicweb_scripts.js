@@ -147,6 +147,8 @@ function mapPledges() {
 
 $(document).ready(function(e) {
     $("#sortable-measures-table").tablesorter();
+    $("#sortable-pledges-table").tablesorter();
+    $("#sortable-users-table").tablesorter();
     $('img[usemap]').rwdImageMaps();
     $("#id_deadline").datepicker();
     // $('#house_map').mapster({

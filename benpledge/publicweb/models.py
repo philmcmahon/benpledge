@@ -140,23 +140,6 @@ class Area(models.Model):
 
 class Dwelling(models.Model):
 
-    number_of_inhabitants = models.IntegerField(blank=True, null=True)
-    aprroximate_spent_on_gas_per_month = models.IntegerField(blank = True, null=True)
-    approximate_spent_on_electricity_per_month = models.IntegerField(blank = True, null=True)
-    gas_supplier = models.CharField(max_length=50, blank=True, null=True)
-    electricity_supplier = models.CharField(max_length=50, blank=True, null=True)
-    ENERGY_EFFICIENCY_RATING_CHOICES = (
-        ('A', 'A'),
-        ('B', 'B'),
-        ('C', 'C'),
-        ('D', 'D'),
-        ('E', 'E'),
-        ('F', 'F'),
-        ('G', 'G'),
-        )
-
-    energy_efficiency_rating = models.CharField(choices=ENERGY_EFFICIENCY_RATING_CHOICES,
-        max_length=1, blank=True, null=True)
     # tenure
     OWN = 1
     PRIVATELY_RENTING = 2
@@ -210,6 +193,25 @@ class Dwelling(models.Model):
     area = models.ForeignKey(Area, null=True, blank=True)
     house_id = models.IntegerField(default=0)
     position = GeopositionField()
+
+
+    number_of_inhabitants = models.IntegerField(blank=True, null=True)
+    aprroximate_spent_on_gas_per_month = models.IntegerField(blank = True, null=True)
+    approximate_spent_on_electricity_per_month = models.IntegerField(blank = True, null=True)
+    gas_supplier = models.CharField(max_length=50, blank=True, null=True)
+    electricity_supplier = models.CharField(max_length=50, blank=True, null=True)
+    ENERGY_EFFICIENCY_RATING_CHOICES = (
+        ('A', 'A'),
+        ('B', 'B'),
+        ('C', 'C'),
+        ('D', 'D'),
+        ('E', 'E'),
+        ('F', 'F'),
+        ('G', 'G'),
+        )
+
+    energy_efficiency_rating = models.CharField(choices=ENERGY_EFFICIENCY_RATING_CHOICES,
+        max_length=1, blank=True, null=True)
 
     def __unicode__(self):
         dwelling_string = ""

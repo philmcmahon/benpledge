@@ -7,16 +7,16 @@
         <div class="row clearfix">
             <div class="col-md-10">
             <h1>Welcome {{user}}</h1>
-<!--            <a href="{% url 'dwelling_form' %}">My Home</a> <br>
-             <a href="{% url 'possible_measures' %}">Possible Measures</a>
-p -->            
+          
             <p>On this page you will find any pledges you have made, as well as a table showing some measures that might be suitable for your home.</p>
             {% include "publicweb/pledge_progress_list.html" %}
+
+            <p>To make a pledge, first select a measure that you are interested in. You can either do this by clicking on a measure name in the far left column of the Housing Assessment Tool table below, or by choosing any measure from <a class="btn btn-default" href="{% url 'general_measures' %}">All Measures.</a></p>
             <h2>Possible Measures</h2>
 
             {% if user_measures %}
             <h4>Information from CSE's Housing Assessment Tool</h4>
-            <p>The table below shows estimated savings for a range of energy saving measures based on a tool made by the centre for sustainable energy. The figures provided may be used as a guideline to compare different measures.To view the full list of energy efficiency measures click <a href="{% url 'general_measures' %}">here</a>. </p>
+            <p>The table below shows estimated savings for a range of energy saving measures based on a tool made by the Centre for Sustainable Energy. The figures provided may be used as a guideline to compare different measures.To view the full list of energy efficiency measures click <a href="{% url 'general_measures' %}">here</a>. </p>
             <p>
               You can sort the table by clicking on the heading you want to sort it by. Click again to switch from ascending to descending order (or vice versa). To find out more about an energy saving measure in the table, click on its name in the left hand column.
             </p>
@@ -67,6 +67,7 @@ p -->
             {% if dwelling and dwelling.area %}<a class="btn btn-success" href="{% url 'pledges_for_area' dwelling.area.postcode_district %}">My Area</a>{% endif %}
             <br>
             <p>
+            <h4>Energy Company Obligation funding eligibility{% if dwelling.postcode %} - {{ dwelling.postcode }} {%endif%}</h4>
             {% if eco_eligible %}
               {% if eco_eligible == 'unknown' %}
                 We do not have any information on ECO funding for your postcode.

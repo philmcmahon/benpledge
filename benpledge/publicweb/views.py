@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.views.generic.base import View
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
@@ -22,9 +23,17 @@ from postcode_parser import parse_uk_postcode
 
 from benpledge_keys import GOOGLE_API_KEY
 
-class RegistrationView(RegistrationView):
-    def get_success_url(request, user):
-        return 'profile'
+# class RegistrationView(RegistrationView):
+#     def get_success_url(request, user):
+#         return 'profile'
+
+def access_denied(request):
+    context = {
+        'error_heading': "Access Denied",
+        'error_message': "Sorry, you do not have permission to access this page.",
+    }
+
+    return render(request, 'publicweb/error_page.html', context)
 
 def index(request):
     """Homepage"""
@@ -62,27 +71,45 @@ def help_page(request):
     }
     return render(request, 'publicweb/help_page.html', context)
 
+@staff_member_required
+def pledge_admin_overview(request):
+    pledges = Pledge.objects.all().order_by('user')
+    context = {
+        'pledges': pledges
+    }
+    return render(request, 'publicweb/pledge_admin_overview.html', context)
+
+@staff_member_required
+def user_admin_overview(request):
+    users = User.objects.all()
+    context = {
+        'users': users
+    }
+    return render(request, 'publicweb/user_admin_overview.html', context)
+
 @login_required
 def profile(request, username=None):
     measure_ids = get_measures_with_identifiers()
 
     userprofile = UserProfile.objects.filter(user=request.user).first()
 
-    # if the user hasn't got a dwelling yet, redirect to dwelling form
+    # if the user object has no dwelling, redirect to dwelling form
     if not userprofile.dwelling:
         return redirect('dwelling_form')
 
+    # if the dwelling has a house id, fetch the HAT results for it
     if userprofile.dwelling and userprofile.dwelling.house_id:
         user_measures = get_dwelling_hat_results(userprofile.dwelling)
     else:
         user_measures = None
 
+    # fetch context data required for pledges list
     pledges = Pledge.objects.filter(user=request.user)
     pledge_progress = pledge_results_with_progress(pledges)
     total_reduction = get_total_reduction(pledges)
     total_completed_reduction = get_total_reduction(pledges.filter(complete=True))
     
-
+    # if a postcode has been supplied, check to see if it's ECO eligible
     if userprofile.dwelling.postcode:
         eco_eligible =  get_eco_eligible(userprofile.dwelling.postcode)
     else:
@@ -205,7 +232,12 @@ def dwelling_form(request):
 
 @login_required
 def edit_pledge(request, pledge_id):
-    pledge = Pledge.objects.get(id=pledge_id)
+    pledge = Pledge.objects.filter(id=pledge_id).first()
+    if not pledge:
+        return redirect('profile')
+
+    if pledge.user != request.user:
+        return redirect('access_denied')
     if request.method == 'POST':
         form = PledgeForm(request.POST, instance=pledge)
 
@@ -218,7 +250,12 @@ def edit_pledge(request, pledge_id):
 
 @login_required
 def pledge_complete(request, pledge_id):
-    pledge = Pledge.objects.get(id=pledge_id)
+    pledge = Pledge.objects.filter(id=pledge_id).first()
+    if not pledge:
+        return redirect('profile')
+
+    if pledge.user != request.user:
+        return redirect('access_denied')
     if request.method == 'POST':
         form = PledgeCompleteForm(request.POST, instance=pledge)
         if form.is_valid():
@@ -230,12 +267,27 @@ def pledge_complete(request, pledge_id):
         form = PledgeCompleteForm(instance=pledge)
         return render(request, 'publicweb/pledge_complete.html', {'form': form})
 
-def possible_measures(request):
-    measures = Measure.objects.all()
-    context = {
-        'measures': measures, 
-    }
-    return render(request, 'publicweb/measures_list.html', context)
+@login_required
+def delete_pledge(request, pledge_id):
+    pledge = Pledge.objects.filter(id=pledge_id).first()
+    if not pledge:
+        return redirect('profile')
+    if pledge.user != request.user:
+        return redirect('access_denied')
+
+    if request.method == 'POST':
+
+        pledge.delete()
+        return redirect('profile')
+    else:
+        return render(request, 'publicweb/delete_pledge.html')
+
+# def possible_measures(request):
+#     measures = Measure.objects.all()
+#     context = {
+#         'measures': measures, 
+#     }
+#     return render(request, 'publicweb/measures_list.html', context)
 
 @login_required
 def make_pledge(request):
@@ -274,14 +326,7 @@ def make_pledge(request):
     else:
         print "Not a POST request"
 
-@login_required
-def delete_pledge(request, pledge_id):
-    if request.method == 'POST':
-        p = Pledge.objects.get(id=pledge_id)
-        p.delete()
-        return redirect('profile')
-    else:
-        return render(request, 'publicweb/delete_pledge.html')
+
 
 def get_areas_with_total_pledges():
     return Area.objects.annotate(pledge_count=Count('dwelling__userprofile__user__pledge')).order_by('-pledge_count')
@@ -500,6 +545,7 @@ def get_percentage_return_on_investment(hat_info):
         return None    
 
 def get_house_id(dwelling):
+    """ Takes the HAT details of a dwelling and converts them into a houseid"""
     metadata_properties = ([dwelling.dwelling_type, dwelling.property_age,
         dwelling.number_of_bedrooms, dwelling.heating_fuel,
         dwelling.heating_type, dwelling.loft_insulation, dwelling.wall_type])

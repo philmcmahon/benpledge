@@ -1,0 +1,7 @@
+{% extends "publicweb/base_offset.html" %}
+{% block main_content %}
+<div class="col-md-10">
+<h1>{{ error_heading }}</h1>
+<p> {{ error_message }} <a href="{% url 'profile' %}">Return to Profile</a></p>
+</div>
+{% endblock main_content %}

@@ -1,11 +1,17 @@
 {% extends "publicweb/form_base.html" %}
+{% load publicweb_filters %}
 
 {% block header %} Your Home {% endblock %}
-{% block helptext %}<p class="help-block">Please fill in as much of this form as you can. All fields are optional so if you're not sure of a value then just leave it blank for now.</p>{% endblock helptext %}
+{% block helptext %}<p class="help-block">Please fill in as much of this form as you can. All fields are optional so if you're not sure of a value then just leave it blank for now.</p><h3>House Details</h3><p class="help-block">
+The fields below will help us try and predict the effect of different energy saving measures. <b>*</b> indicates a field required for us to make a prediction.{% endblock helptext %}
 {% block form_error_message %}Sorry, something went wrong{% endblock %}
-{% block field_logic %}
-{% if field.label == "Electricity supplier" %}
 
+{% block field_logic %}
+{% if field.label == "Area" %}
+<div class="row"><div class="col-sm-offset-3 col-sm-6">
+<h3>Your energy bills</h3><p class="help-block">
+These fields are for data collection purposes only and will not effect the information provided to you by the application. Feel free to leave them blank.
+</p></div></div>
 {% elif field.label == 'Postcode' %}
 <div class="row"><div class="col-sm-offset-3 col-sm-6"><p class="help-block">
 We will use your postcode to determine whether you are eligible for ECO funding. At no point will it be made publicly available.
@@ -17,9 +23,6 @@ We will use your postcode to determine whether you are eligible for ECO funding.
 {% elif field.label == 'Energy efficiency rating' %}
 <div class="row"><div class="col-sm-offset-3 col-sm-6"><p class="help-block">
 Your home's energy efficiency rating is a letter from A to G. You can find out the energy efficiency rating from your enegy performance certificate. You can download your energy performance certificate from <a href="https://www.epcregister.com/reportSearchAddressTerms.html" target="_blank">here</a> by providing your address (link opens in new tab/window). Note that the information contained in the energy performance certificate may be out of date. This field is optional.</p>
-
-<h3>House Details</h3><p class="help-block">
-The fields below will help us try and predict the effect of different energy saving measures. <b>*</b> indicates a field required for us to make a prediction.
 </div></div>
 {% elif field.label == 'Street name' %}
 <div class="row"><div class="col-sm-offset-3 col-sm-6"><p class="help-block">

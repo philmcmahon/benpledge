@@ -32,11 +32,11 @@
       {% else %}
         <div class="form-group">
       {% endif %}
-        <label class="col-sm-3 control-label" for="{{field.auto_id}}">{{field.label|required_for_hat}}</label>
+        <label class="col-sm-3 control-label" for="{{field.auto_id}}">{{field.label|update_field_label}}</label>
         <div class="col-sm-4">
           {% render_field field class+="form-control" %}
           {% for error in field.errors %}
-          <p class="text-warning">{{error}}</p>
+            <p class="text-warning">{{error}}</p>
           {% endfor %}
         </div>
       </div>

@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['95.85.39.60']
 
 INSTALLED_APPS = (
     'publicweb',
+    # 'grappelli',
     # django default applications
     'django.contrib.admin',
     'django.contrib.auth',
@@ -68,6 +69,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   'django.contrib.auth.context_processors.auth',
   'django.core.context_processors.request',
 )
+
 
 ROOT_URLCONF = 'benpledge.urls'
 
