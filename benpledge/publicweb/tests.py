@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.test.client import Client
 from views import *
+from utils import *
 from models import Pledge
 
 from datetime import datetime, timedelta, date
