@@ -10,7 +10,6 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'benpledge.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-     (r'^grappelli/', include('grappelli.urls')), # grappelli URLS
     url(r'^admin/', include(admin.site.urls)),
     (r'^contact/', include('contact_form.urls')),
     url(r'', include('publicweb.urls')),

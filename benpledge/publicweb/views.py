@@ -140,7 +140,7 @@ def measure(request, measure_id):
     payback_time_estimate = None
     if m.hat_measure and request.user.is_authenticated():
         dwelling = get_dwelling(request.user)
-        if dwelling.house_id:
+        if dwelling and dwelling.house_id:
             hat_info = get_hat_results(dwelling.house_id,
                 m.hat_measure.measure_id)
     if hat_info:
