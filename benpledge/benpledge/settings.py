@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+SESSION_COOKIE_SECURE=True
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -114,10 +115,10 @@ LOGIN_URL = '/accounts/login'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_ROOT = '/opt/benpledge/static/'
-STATIC_URL = 'http://benpledge.philipmcmahon.co.uk/static/'
+STATIC_URL = 'https://benpledge.philipmcmahon.co.uk/static/'
 
 MEDIA_ROOT = '/opt/benpledge/static/media/'
-MEDIA_URL = 'http://benpledge.philipmcmahon.co.uk/static/media/'
+MEDIA_URL = 'https://benpledge.philipmcmahon.co.uk/static/media/'
 
 # Email settings
 EMAIL_HOST = 'smtp.gmail.com'
