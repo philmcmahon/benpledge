@@ -10,17 +10,23 @@ from registration.signals import user_registered
 from geoposition.fields import GeopositionField
 
 class Measure(models.Model):
+    """A retrofit measure. If no HAT information is available the
+        values in this model are used to calculate energy savings. """
     name = models.CharField(max_length=75)
     description = models.TextField(default='No description available.')
-    hat_measure = models.OneToOneField('HatMeasuresList', null=True, blank=True)
-    measure_image_1 = models.ImageField(null=True, blank=True, upload_to='measures_%Y/%m_%d')
-    estimated_annual_energy_savings_kwh = models.IntegerField(null=True, blank=True)
+    hat_measure = models.OneToOneField('HatMeasuresList', null=True,
+        blank=True)
+    measure_image_1 = models.ImageField(null=True, blank=True,
+        upload_to='measures_%Y/%m_%d')
+    estimated_annual_energy_savings_kwh = models.IntegerField(null=True,
+        blank=True)
     estimated_annual_cost_savings = models.FloatField(null=True, blank=True)
 
     def __unicode__(self):
         return self.name
 
 class Provider(models.Model):
+    """Displayed as an advert next to measure pages"""
     name = models.CharField(max_length=75)
     description = models.TextField(default='No description available.')
     website = models.URLField(blank=True, null=True)
@@ -38,6 +44,7 @@ class Provider(models.Model):
         return self.name
 
 class AboutPage(models.Model):
+    """Title and text of /about/ """
     title = models.CharField(max_length=100)
     description = models.TextField(default='No about text.')
 
@@ -45,6 +52,7 @@ class AboutPage(models.Model):
         return self.title
 
 class FundingOption(models.Model):
+    """Details are displayed on the right of the 'All Measures' page"""
     name = models.CharField(max_length=100)
     description = models.TextField(default='No description available.')
 
@@ -52,6 +60,7 @@ class FundingOption(models.Model):
         return self.name
 
 class Organisation(models.Model):
+    """For /help/ - local energy groups """
     name = models.CharField(max_length=100)
     description = models.TextField(default="No description available.")
     website = models.URLField()
@@ -71,6 +80,7 @@ class Organisation(models.Model):
         return self.name
 
 class TopTip(models.Model):
+    """TopTips are displayed after people click 'get started'"""
     name = models.CharField(max_length=100)
     description = models.TextField(default='No description available.', null=True, blank=True)
     measure_id = models.ForeignKey(Measure, null=True, blank=True)
@@ -80,6 +90,7 @@ class TopTip(models.Model):
         return self.name
 
 class HomepageCheckList(models.Model):
+    """Entries appear in 'Are you...' list one homepage"""
     ORDER_CHOICES = (
         (1, '1'),
         (2, '2'),
@@ -102,6 +113,7 @@ class Pledge(models.Model):
     receive_updates = models.BooleanField(default=False)
     complete = models.BooleanField(default=False)
     feedback = models.TextField(default='No feedback given.', blank=True, null=True)
+    display_feedback_on_measure_page = models.BooleanField(default=False)
 
     INTEREST_ONLY = 1
     PLEDGE = 2
@@ -139,7 +151,7 @@ class Area(models.Model):
         return self.postcode_district + " - " + self.area_name
 
 class Dwelling(models.Model):
-
+    """Information about a dwelling provided by a User"""
     # tenure
     OWN = 1
     PRIVATELY_RENTING = 2
@@ -226,6 +238,7 @@ class Dwelling(models.Model):
 
 
 class UserProfile(models.Model):
+    """Model links Users with Dwellings """
     user = models.OneToOneField(User)
     dwelling = models.ForeignKey(Dwelling, null=True, blank=True)
 
@@ -234,6 +247,8 @@ class UserProfile(models.Model):
 
     @receiver(user_registered)
     def link_profile_with_user(sender, **kwargs):
+        """Associates new Users with a UserProfile
+            - Method called by signal from django-registration"""
         profile = UserProfile(user=kwargs['user'])
         profile.save()
         send_mail('BEN Pledge account created', 
@@ -242,14 +257,17 @@ class UserProfile(models.Model):
             " and the password you chose when you registered.", 'benpledgehelp@gmail.com',
             [kwargs['user'].email], fail_silently=False)
 
+# Link django-registration 'user registered' signal with link_profile_with_user method
 user_registered.connect(UserProfile.link_profile_with_user, sender=None, weak=True,
     dispatch_uid="account_registered_signal")
 
 # CSE DATA
+# These Models relate directly to tables in the original Housing Assessment Tool
 class HatResultsDatabase(models.Model):
+    """The largest table, links a house id and measure with measure information"""
     index = models.BigIntegerField(db_index=True)
     house_id = models.IntegerField()
-    m1 = models.IntegerField()
+    m1 = models.IntegerField() # this field is unnecessary
     current_sap_rating = models.FloatField()
     post_measure_sap_rating = models.FloatField()
     sap_change = models.FloatField()
@@ -270,6 +288,7 @@ class HatResultsDatabase(models.Model):
         return str(self.index)
 
 class HouseIdLookup(models.Model):
+    """Table used to convert information on a house into an ID"""
     dwelling_type = models.IntegerField()
     property_age = models.IntegerField()
     number_of_bedrooms = models.IntegerField()
@@ -284,6 +303,7 @@ class HouseIdLookup(models.Model):
         return str(self.house_id)
 
 class HatMeasuresList(models.Model):
+    """Measures covered by HAT """
     measure_id = models.IntegerField()
     measure_name = models.CharField(max_length=8)
     measure_description = models.CharField(max_length=50)
@@ -295,6 +315,10 @@ class HatMeasuresList(models.Model):
         return self.measure_description
 
 class HatMetaData(models.Model):
+    """Model contains options used in `My Home' form
+         - Options available as input to HAT tool such as
+           age range, fuel type, number of bedrooms
+     """
     variable = models.CharField(max_length=17)
     value = models.IntegerField()
     label = models.CharField(max_length=50)
@@ -303,6 +327,7 @@ class HatMetaData(models.Model):
         return self.label
 
 class LsoaDomesticEnergyConsumption(models.Model):
+    """DECC energy consumption by lower super output area"""
     year = models.CharField(max_length=4)
     la_code = models.CharField(max_length=9)
     msoa_code = models.CharField(max_length=9)
@@ -321,6 +346,7 @@ class LsoaDomesticEnergyConsumption(models.Model):
     average_domestic_gas_consumption_kwh = models.IntegerField()
 
 class PostcodeOaLookup(models.Model):
+    """Postcode lookup to get output area codes"""
     postcode = models.CharField(max_length=8)
     oa_code = models.CharField(max_length=9)
     lsoa_code = models.CharField(max_length=9)
@@ -329,5 +355,6 @@ class PostcodeOaLookup(models.Model):
     la_code = models.CharField(max_length=9)
 
 class EcoEligible(models.Model):
+    """Lower super output areas eligible for ECO funding"""
     lsoa_code = models.CharField(max_length=9)
 

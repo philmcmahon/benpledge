@@ -26,9 +26,9 @@
 <div class="col-md-10">
 <p>To get started making pledges and to get some personalised information about suitable energy saving measures please <a href="/accounts/register">create an account</a> - it should only take a minute. Alternatively, you can view a list of all the different types of energy saving measures without creating an account. </p>
 
-<a class="btn btn-success btn-xlarge" href="{% url 'general_measures' %}">View full list of Energy Efficiency measures</a>
+<a class="btn btn-success btn-xlarge" href="{% url 'general_measures' %}">What the energy saving home looks like</a>
   {% if user.is_authenticated %}
-    <a class="btn btn-success btn-xlarge" href="{% url 'profile' %}">View personalised measures</a>
+    <a class="btn btn-success btn-xlarge" href="{% url 'profile' %}">Personalised measures <p class="personalised-button-help-text">Based on the description of my home</p> </a>
   {% else %}
     <a class="btn btn-success btn-xlarge" href="/accounts/register/">Create Account</a>
   {% endif %}

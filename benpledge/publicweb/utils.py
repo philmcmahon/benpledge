@@ -1,4 +1,4 @@
-import re
+import re, urllib, urllib2, json
 from datetime import datetime
 
 from django.db.models import Count
@@ -6,6 +6,8 @@ from django.db.models import Count
 from models import (Pledge, Measure, Dwelling, HouseIdLookup,
     HatResultsDatabase, PostcodeOaLookup, LsoaDomesticEnergyConsumption,
     EcoEligible, UserProfile, Area)
+
+from benpledge_keys import GOOGLE_API_KEY
 
 ##### helper functions #####
 def get_measures_with_identifiers():
@@ -15,14 +17,6 @@ def get_measures_with_identifiers():
     for m in measures:
         measure_ids[convert_name_to_identifier(m.name)] = m.id
     return measure_ids
-
-# def get_pledges_with_progress(user):
-#     """ Returns dict with pledges and the time details needed to display progress bar"""
-#     pledge_progress = {}
-#     # get pledges    
-#     user_pledges = Pledge.objects.filter(user=user)
-#     pledge_progress = pledge_results_with_progress(user_pledges)
-#     return pledge_progress
 
 def pledge_results_with_progress(pledges):
     """Takes a list of pledges and returns a dict containing progress details"""
@@ -201,6 +195,12 @@ def get_pledge_energy_savings(pledge):
     else:
         return None
 
+def get_pledge_financial_savings(pledge):
+    if pledge.hat_results:
+        return pledge.hat_results.post_measure_energy_costs
+    else:
+        return None
+
 def get_map_initial(latitude, longitude, zoom=13):
     return dict(latitude=str(latitude), longitude=str(longitude), zoom=zoom)
 
@@ -214,6 +214,12 @@ def get_pledges_with_positions(pledges):
                 savings = str(pledge_energy_savings)
             else:
                 savings = 'unknown'
+
+            pledge_money_savings = get_pledge_financial_savings(p)
+            if pledge_money_savings:
+                money_savings = str(pledge_money_savings)
+            else:
+                money_savings = 'unknown'
             pledges_with_positions[str(p.id)] = ({
                 'pledge': {
                     'measure': str(p.measure),
@@ -235,6 +241,7 @@ def get_pledges_with_positions(pledges):
 def get_areas_with_total_pledges():
     return Area.objects.annotate(pledge_count=Count('dwelling__userprofile__user__pledge')).order_by('-pledge_count')
 
+
 def get_area_ranking(area, areas_with_total_pledges):
     for i, a in enumerate(areas_with_total_pledges, start=1):
         if a == area:
@@ -247,6 +254,8 @@ def get_ranking_details(area, total_pledges):
     if area_ranking > 1:
         area_above = area_pledge_counts[area_ranking-2]
         pledge_difference_with_area_above = area_above.pledge_count - total_pledges
+        if pledge_difference_with_area_above == 0:
+            pledge_difference_with_area_above = 1
         top = False
     else:
         area_above = None
@@ -255,6 +264,8 @@ def get_ranking_details(area, total_pledges):
     if area_ranking  < len(area_pledge_counts):
         area_below = area_pledge_counts[area_ranking]
         pledge_difference_with_area_below = total_pledges - area_below.pledge_count
+        if pledge_difference_with_area_below == 0:
+            pledge_difference_with_area_below = 1
         bottom = False
     else:
         area_below = None
@@ -271,3 +282,21 @@ def get_ranking_details(area, total_pledges):
         'bottom': bottom,
     }
     return ranking_details
+
+def geocode_address(address):
+    url = "https://maps.googleapis.com/maps/api/geocode/json?address=%s,UK&sensor=false&key=%s" % (urllib.quote_plus(address), GOOGLE_API_KEY)
+    # print url
+    response = urllib.urlopen(url).read()
+    # print response
+    response_dict = json.loads(response)
+    return response_dict['results'][0]['geometry']['location']
+
+def get_address_from_street_name_or_area(street_name, area):
+    if street_name:
+        if area:
+            address_string = street_name + ', ' + area.postcode_district
+        else:
+            address_string = street_name + ', Bristol'
+    else:
+        address_string = area.postcode_district
+    return address_string

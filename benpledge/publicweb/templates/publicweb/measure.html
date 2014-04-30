@@ -73,6 +73,13 @@
                 {{measure.description|linkify_urls}}
                 {% endautoescape %}
 
+                {% if feedback_pledges %}
+                <h2>Feedback from others who have installed this measure</h2>
+                {% for p in feedback_pledges %}
+                <p><i>"{{p.feedback}}"</i></p>
+                {% endfor %}
+                {% endif %}
+
                 {% if not pledge and user.is_authenticated %}
                 <div class="panel panel-primary">
                   <div class="panel-heading">
@@ -91,7 +98,6 @@
                       {% csrf_token %}
                         <input type="hidden" name="measure_id" value="{{ measure.id }}">
                         <input type="hidden" name="hat_results_id" value="{{ hat_info.id }}">
-
 
                         <div class="checkbox">
                           <label for="interest_only">
@@ -150,11 +156,12 @@
                   </div>
                   <div class="panel-footer">
                     <div class="btn-group">
-                    {% if pledge.pledge_type == 2 %}
-                    <a href="{% url 'edit_pledge' pledge.id %}" class="btn btn-default"> Edit pledge</a>
-                    {% endif %}
                     <a href="{% url 'help_page' %}" class="btn btn-default">Get Help/Contact</a>
                     <a href="{% url 'delete_pledge' pledge.id %}" class="btn btn-default">{% if pledge.pledge_type == 1 %}Remove{% else %}Cancel Pledge{% endif %}</a>
+                    {% if pledge.pledge_type == 2 %}
+                    <a href="{% url 'edit_pledge' pledge.id %}" class="btn btn-default"> Edit pledge</a>
+                    <a href="{% url 'pledge_complete' pledge.id %}" class="btn btn-success">Completed!</a>
+                    {% endif %}
                     <br><br>
                 </div>
                   </div>

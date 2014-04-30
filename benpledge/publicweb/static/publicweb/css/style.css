@@ -16,6 +16,9 @@ body {
     padding-top: 50px;
 }
 
+.personalised-button-help-text {
+    font-size:12px;
+}
 
 .contentoffset {
     padding-top: 10px;

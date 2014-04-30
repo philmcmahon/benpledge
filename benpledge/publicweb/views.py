@@ -14,7 +14,7 @@ from django.db.models import Count
 
 
 from registration.backends.simple.views import RegistrationView
-from models import (Measure, Dwelling, UserProfile, HatMetaData,
+from models import (Measure, Dwelling, UserProfile,
     HouseIdLookup, HatResultsDatabase, Pledge, Area, PostcodeOaLookup,
     LsoaDomesticEnergyConsumption, TopTip, Organisation, HomepageCheckList, EcoEligible,
     AboutPage, FundingOption, Provider)
@@ -22,8 +22,6 @@ from forms import DwellingForm, PledgeForm, PledgeCompleteForm
 from utils import *
 
 from postcode_parser import parse_uk_postcode
-
-from benpledge_keys import GOOGLE_API_KEY
 
 def access_denied(request):
     context = {
@@ -49,7 +47,7 @@ def get_started(request):
     return render(request, 'publicweb/options.html', context)
 
 def about(request):
-    """Gets about page details from database, renders about page """
+    """View for about page """
     about = AboutPage.objects.all().first()
     context = {
         'about':about,
@@ -57,6 +55,7 @@ def about(request):
     return render(request, 'publicweb/about.html', context)
 
 def general_measures(request):
+    """ All Measures page"""
     mid_id = int(Measure.objects.latest('id').id)/2
     measures1 = Measure.objects.filter(id__lte=mid_id)
     measures2 = Measure.objects.filter(id__gt=mid_id)
@@ -95,10 +94,8 @@ def user_admin_overview(request):
 
 @login_required
 def profile(request, username=None):
-    measure_ids = get_measures_with_identifiers()
 
     userprofile = UserProfile.objects.filter(user=request.user).first()
-
     # if the user object has no dwelling, redirect to dwelling form
     if not userprofile.dwelling:
         return redirect('dwelling_form')
@@ -122,20 +119,25 @@ def profile(request, username=None):
         eco_eligible = 'postcode_unknown'
 
     context = {
-        'measure_ids': measure_ids, 
         'user_measures': user_measures,
+        'eco_eligible': eco_eligible,
+        'dwelling': userprofile.dwelling,
+        # context for pledge_progress_list.html
         'pledge_progress' : pledge_progress,
         'page_type': 'profile',
         'total_reduction': total_reduction,
         'total_completed_reduction':total_completed_reduction,
-        'eco_eligible': eco_eligible,
-        'dwelling': userprofile.dwelling,
     }
     return render(request, 'publicweb/base_profile.html', context) 
 
 
 def measure(request, measure_id):
-    m = Measure.objects.get(id=measure_id)
+    m = Measure.objects.filter(id=measure_id).first()
+    # check that the measure exists
+    if not m:
+        return redirect('general_measures')
+    # If a user is logged in and has a dwelling with a house id
+    # fetch the HAT results for that house 
     hat_info = None
     payback_time_estimate = None
     if m.hat_measure and request.user.is_authenticated():
@@ -146,9 +148,11 @@ def measure(request, measure_id):
     if hat_info:
         payback_time_estimate = get_payback_time(hat_info)
 
-    # pledge = Pledge.objects.get(user=request.user, measure=m)
-
+    # Get feedback on this measure
+    feedback_pledges = Pledge.objects.filter(measure=m, complete=True, display_feedback_on_measure_page=True)
+    # Get top 3 providers for this measure
     providers = Provider.objects.filter(measures=m, display_on_measure_pages=True).order_by('order')[:3]
+
     pledge = None
     time_remaining = None
     if request.user.is_authenticated():
@@ -167,27 +171,9 @@ def measure(request, measure_id):
         'pledge' : pledge,
         'time_remaining': time_remaining,
         'providers':providers,
+        'feedback_pledges':feedback_pledges,
     }
     return render(request, 'publicweb/measure.html', context)
-
-def geocode_address(address):
-    url = "https://maps.googleapis.com/maps/api/geocode/json?address=%s,UK&sensor=false&key=%s" % (urllib.quote_plus(address), GOOGLE_API_KEY)
-    # print url
-    response = urllib.urlopen(url).read()
-    # print response
-    response_dict = json.loads(response)
-    return response_dict['results'][0]['geometry']['location']
-
-def get_address_from_street_name_or_area(street_name, area):
-    if street_name:
-        if area:
-            address_string = street_name + ', ' + area.postcode_district
-        else:
-            address_string = street_name + ', Bristol'
-    else:
-        address_string = area.postcode_district
-    return address_string
-
 
 @login_required
 def dwelling_form(request):
@@ -221,7 +207,7 @@ def dwelling_form(request):
             updated_house_id = get_house_id(updated_dwelling)
             if updated_house_id:
                 updated_dwelling.house_id = updated_house_id
-            # updated_dwelling.postcode = form.cleaned_data
+
             updated_dwelling.save()
 
             if dwelling == None:
@@ -230,7 +216,6 @@ def dwelling_form(request):
                 current_user_profile.save()
             return redirect('profile')
         else:
-            # print form.errors
             return render(request, 'publicweb/dwelling_form.html', {'form': form})
     else:
         form=DwellingForm(instance=dwelling)
@@ -346,7 +331,7 @@ def pledges_for_area(request, postcode_district):
     total_reduction = get_total_reduction(pledges_in_area)
     total_completed_reduction = get_total_reduction(pledges_in_area.filter(complete=True))
 
-    measure_pledge_counts = Measure.objects.filter(pledge__in=pledges_in_area).annotate(pledge_count=Count('pledge')).order_by('-pledge_count')[:20]
+    measure_pledge_counts = Measure.objects.filter(pledge__in=pledges_in_area).annotate(pledge_count=Count('pledge')).order_by('-pledge_count')[:10]
  
     ranking_details = get_ranking_details(area, total_pledges)
     pledges_with_positions = get_pledges_with_positions(pledges_in_area)
@@ -374,7 +359,7 @@ def all_pledges(request):
     total_reduction = get_total_reduction(pledges)
     total_completed_reduction = get_total_reduction(pledges.filter(complete=True))
     pledges_with_positions = get_pledges_with_positions(pledges)
-    measure_pledge_counts = Measure.objects.filter(pledge__in=pledges).annotate(pledge_count=Count('pledge')).order_by('-pledge_count')[:20]
+    measure_pledge_counts = Measure.objects.filter(pledge__in=pledges).annotate(pledge_count=Count('pledge')).order_by('-pledge_count')[:10]
 
     context = {
         'pledges_with_positions':pledges_with_positions,

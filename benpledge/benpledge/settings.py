@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 SESSION_COOKIE_SECURE=True
+CSRF_COOKIE_SECURE=True
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -123,7 +124,6 @@ MEDIA_URL = 'https://benpledge.philipmcmahon.co.uk/static/media/'
 # Email settings
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'benpledgehelp'
-EMAIL_HOST_PASSWORD = 'retrofit123'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_SUBJECT_PREFIX = 'benpledge - '
