@@ -128,14 +128,20 @@
                   </div>
                 </div>
                 {% elif pledge %}
+                {% if pledge.complete %}
+                <div class="panel panel-success">
+                {% else %}
                 <div class="panel panel-primary">
+                {% endif %}
                   <div class="panel-heading">
                   <!-- Pledge.PLEDGE = 1 Pledge.INTEREST_ONLY = 2 - see models.py -->
-                    <h3 class="panel-title">{% if pledge.pledge_type == 2 %}Pledged!{% else %}Interest registered{% endif %}</h3>
+                    <h3 class="panel-title">{% if pledge.complete %}Pledge completed! {% elif pledge.pledge_type == 2 %}Pledged!{% else %}Interest registered{% endif %}</h3>
                   </div>
                   <div class="panel-body">
-                    {% if pledge.pledge_type == 2 %}
-                    You've pledged to undertake this measure, brilliant! Please don't hesitate to get in touch if you need any advice on implementing this energy saving measure.
+                    {% if pledge.complete %}
+                    Congratulations!
+                    {% elif pledge.pledge_type == 2 %}
+                    <p>You've pledged to undertake this measure, brilliant! Please don't hesitate to get in touch if you need any advice on implementing this energy saving measure.</p>
                     <table class="table table-bordered">
                   <tr>
                     <th>Date Made<br></th>
@@ -151,9 +157,10 @@
                   </tr>
                  </table>
                  {% elif pledge.pledge_type == 1 %}
-                  You've registered your interest in this measure. We may contact you via email with information that may be relevant to you.
+                  <p>You've registered your interest in this measure. We may contact you via email with information that may be relevant to you.</p>
                  {% endif %}
                   </div>
+                  {% if not pledge.complete %}
                   <div class="panel-footer">
                     <div class="btn-group">
                     <a href="{% url 'help_page' %}" class="btn btn-default">Get Help/Contact</a>
@@ -162,9 +169,11 @@
                     <a href="{% url 'edit_pledge' pledge.id %}" class="btn btn-default"> Edit pledge</a>
                     <a href="{% url 'pledge_complete' pledge.id %}" class="btn btn-success">Completed!</a>
                     {% endif %}
+                    
                     <br><br>
-                </div>
+                    </div>
                   </div>
+                  {% endif %}
                 </div>
                 {% endif %}
 
