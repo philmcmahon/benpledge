@@ -21,6 +21,15 @@ class Measure(models.Model):
     estimated_annual_energy_savings_kwh = models.IntegerField(null=True,
         blank=True)
     estimated_annual_cost_savings = models.FloatField(null=True, blank=True)
+    SMALL = 1
+    MEDIUM = 2
+    LARGE = 3
+    SIZE_CHOICES = (
+        (SMALL, 'Small'),
+        (MEDIUM, 'Medium'),
+        (LARGE, 'Large'),
+        )
+    size = models.IntegerField(choices=SIZE_CHOICES, default = 1)
 
     def __unicode__(self):
         return self.name

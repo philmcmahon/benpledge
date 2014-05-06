@@ -34,22 +34,3 @@ class PledgeCompleteForm(ModelForm):
         model = Pledge
         fields = ['feedback']
 
-
-
-# replaced by clean_postcode
-    # def is_valid(self):
-    #     valid = super(DwellingForm, self).is_valid()
-
-    #     if not valid:
-    #         return valid
-    #     try:
-    #         parse_uk_postcode(self.cleaned_data['postcode'])
-    #     except ValueError:
-    #         if len(self.cleaned_data['postcode']) == 0:
-    #             self.null_postcode = True
-    #             return True
-    #         else:
-    #             self.null_postcode = False
-    #             self._errors['postcode'].append(_(u'Please enter a valid postcode.'))
-    #             return False
-    #     return True

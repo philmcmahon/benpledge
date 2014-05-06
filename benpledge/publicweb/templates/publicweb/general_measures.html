@@ -1,4 +1,5 @@
 {% extends "publicweb/base_offset.html" %}
+{% block title %}All Measures{% endblock %}
 {% load publicweb_filters %}
 {% block main_content %}
 <h1> Ways to save energy</h1>
@@ -12,18 +13,40 @@
     <p> This is the full list of possible energy saving measures we have information about. Note that many of these are large project and you should seek some advice before attempting them.</p>
 
     <div class="col-md-6">
-    <div class="list-group">
-        {% for m in measures1 %}
-            <a href="{% url 'measure' m.id %}" class="list-group-item">{{ m.name }}</a>
-        {% endfor %}
-    </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">Small Measures</div>
+            <div class="panel-body">
+                <div class="list-group">
+                {% for m in small_measures %}
+                    <a href="{% url 'measure' m.id %}" class="list-group-item">{{ m.name }}</a>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
     <div class="col-md-6">
-    <div class="list-group">
-        {% for m in measures2 %}
-            <a href="{% url 'measure' m.id %}" class="list-group-item">{{ m.name }}</a>
-        {% endfor %}
+        <div class="panel panel-success">
+            <div class="panel-heading">Medium Measures</div>
+            <div class="panel-body">
+                <div class="list-group">
+                {% for m in medium_measures %}
+                    <a href="{% url 'measure' m.id %}" class="list-group-item">{{ m.name }}</a>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="col-md-12">
+        <div class="panel panel-warning">
+            <div class="panel-heading">Large Measures</div>
+            <div class="panel-body">
+                <div class="list-group">
+                {% for m in large_measures %}
+                    <a href="{% url 'measure' m.id %}" class="list-group-item">{{ m.name }}</a>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 
     </div>

@@ -1,4 +1,5 @@
 {% extends "publicweb/base_offset.html" %}
+{% block title %}{{measure.name}}{% endblock %}
 {% block main_content %}
 {% load publicweb_filters %}
 
@@ -100,7 +101,7 @@
                         <input type="hidden" name="hat_results_id" value="{{ hat_info.id }}">
 
                         <div class="checkbox">
-                          <label for="interest_only">
+                          <label for="123-interest-only">
                             Register interest only                 
                           </label>
                           <input id="123-interest-only" type="checkbox" name="interest_only" onchange="updatePledgeForm(this)">
@@ -117,7 +118,7 @@
 
                         <div class="checkbox">
                         <label for="receive_updates">
-                        Tick this box to receive occasional updates and support about your pledge from us via email. <input type="checkbox" name="receive_updates">
+                        Tick this box to receive occasional updates and support about your pledge from us via email. <input type="checkbox" id="receive_updates" name="receive_updates">
                         </label>
                         </div>
                         </div>

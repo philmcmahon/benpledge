@@ -34,11 +34,15 @@ class BaseTestCase(TestCase):
         self.date_one_week_today = (datetime.now() + timedelta(days=7)).date()
         self.date_ten_days_time = (datetime.now() + timedelta(days=10)).date()
 
+        self.date2020 = date(2020, 1, 1)
+
+
+
         # pledges
         self.pledge_1 = Pledge(id=1, measure=self.loft_insulation, user=self.phil, deadline=self.date_one_week_today)
         self.pledge_1.save()
         self.pledge_2 = Pledge(id=2, measure=self.solar_panel_1kw, user=self.phil, deadline=self.date_ten_days_time)
-        self.pledge_3 = Pledge(id=3, measure=self.loft_insulation, user=self.test99, deadline=self.date_ten_days_time)
+        self.pledge_3 = Pledge(id=3, measure=self.loft_insulation, user=self.test99, deadline=self.date2020)
         self.pledge_3.save()
         self.pledges = [self.pledge_1, self.pledge_2, self.pledge_3]
 
@@ -86,7 +90,7 @@ class PublicwebIntegrationTests(BaseTestCase):
     def test_pledge_appears_on_profile(self):
         resp = self.c.get(reverse('profile'))
         # print resp
-        self.assertContains(resp, "Loft Insulation Topup by May 10, 2014  <span class=\"text-success\">( unknown  kWh)")
+        self.assertContains(resp, "Loft Insulation Topup by Jan. 1, 2020  <span class=\"text-success\">( unknown  kWh)")
 
     def test_cannot_modify_other_pledges(self):
         resp = self.c.get('/pledges/edit/1/')
@@ -133,7 +137,7 @@ class PublicwebHelperFunctions(BaseTestCase):
     def test_get_pledges_with_positions(self):
         pledges_with_positions = get_pledges_with_positions(self.pledges)
         self.assertEqual(pledges_with_positions[str(self.pledge_1.id)]['position']['lat'], 51.4622043)
-        self.assertEqual(pledges_with_positions[str(self.pledge_3.id)]['pledge']['deadline'], str(self.date_ten_days_time))
+        self.assertEqual(pledges_with_positions[str(self.pledge_3.id)]['pledge']['deadline'], str(self.date2020))
 
     def test_get_hat_results(self):
         # randomly selected entry from hatresults fixture

@@ -1,4 +1,5 @@
 {% extends "publicweb/base_pledges_page.html" %}
+{% block title %}{{area}}{% endblock %}
 {% load publicweb_filters %}
 {% block main_content %}
 
@@ -6,6 +7,9 @@
 
 <div class="col-md-9">
 <h1>{{ area }} pledges</h1>
+<hr>
+<h3>{{ area.postcode_district }} has <span class="label label-success">{{ ranking_details.area_points }}</span> pledge points</h3>
+<hr>
 
 <ol class="list-group">
     <li class="list-group-item">
@@ -46,6 +50,7 @@
 
 
 <div class="col-md-3">
+
 {% if measure_pledge_counts %}
 <h3>Pledges made in {{ area.postcode_district }}:</h3>
 {% include "publicweb/pledge_totals_table.html" %}

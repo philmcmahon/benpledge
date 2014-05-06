@@ -23,12 +23,13 @@ from utils import *
 
 from postcode_parser import parse_uk_postcode
 
+""" Each method in this file renders a page of the application"""
+
 def access_denied(request):
     context = {
         'error_heading': "Access Denied",
         'error_message': "Sorry, you do not have permission to access this page.",
     }
-
     return render(request, 'publicweb/error_page.html', context)
 
 def index(request):
@@ -60,12 +61,20 @@ def general_measures(request):
     measures1 = Measure.objects.filter(id__lte=mid_id)
     measures2 = Measure.objects.filter(id__gt=mid_id)
 
+    small_measures = Measure.objects.filter(size=Measure.SMALL)
+    medium_measures = Measure.objects.filter(size=Measure.MEDIUM)
+    large_measures = Measure.objects.filter(size=Measure.LARGE)
+
+
     funding_options = FundingOption.objects.all()
     context = {
         'measure_ids': get_measures_with_identifiers(),
-        'measures1': measures1,
-        'measures2': measures2,
+        # 'measures1': measures1,
+        # 'measures2': measures2,
         'funding_options': funding_options,
+        'small_measures':small_measures,
+        'medium_measures': medium_measures,
+        'large_measures':large_measures,
     }
     return render(request, 'publicweb/general_measures.html', context)
 
@@ -168,10 +177,10 @@ def measure(request, measure_id):
         'measure': m,
         'hat_info': hat_info,
         'payback_time_estimate' : payback_time_estimate,
-        'pledge' : pledge,
-        'time_remaining': time_remaining,
         'providers':providers,
         'feedback_pledges':feedback_pledges,
+        'pledge' : pledge,
+        'time_remaining': time_remaining,
     }
     return render(request, 'publicweb/measure.html', context)
 
@@ -204,9 +213,9 @@ def dwelling_form(request):
 
             # check if the settings the user has provided have a match in the HAT
             # if so update the house id
-            updated_house_id = get_house_id(updated_dwelling)
-            if updated_house_id:
-                updated_dwelling.house_id = updated_house_id
+            # updated_house_id = get_house_id(updated_dwelling)
+            # updated_dwelling.house_id = updated_house_id
+            updated_dwelling.house_id = get_house_id(updated_dwelling)
 
             updated_dwelling.save()
 
@@ -273,13 +282,6 @@ def delete_pledge(request, pledge_id):
     else:
         return render(request, 'publicweb/delete_pledge.html')
 
-# def possible_measures(request):
-#     measures = Measure.objects.all()
-#     context = {
-#         'measures': measures, 
-#     }
-#     return render(request, 'publicweb/measures_list.html', context)
-
 @login_required
 def make_pledge(request):
     if request.method == 'POST':
@@ -316,6 +318,12 @@ def make_pledge(request):
         return redirect('profile')
     else:
         print "Not a POST request"
+
+def area_list(request):
+    context = {
+        'areas': Area.objects.all()
+    }
+    return render(request, 'publicweb/area_list.html', context)
 
 def pledges_for_area(request, postcode_district):
     get_areas_with_total_pledges()
@@ -401,9 +409,5 @@ def my_pledges(request):
 
     return render(request, 'publicweb/my_pledges.html', context)
 
-def area_list(request):
-    context = {
-        'areas': Area.objects.all()
-    }
-    return render(request, 'publicweb/area_list.html', context)
+
 

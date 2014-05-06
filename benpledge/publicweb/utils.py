@@ -108,7 +108,8 @@ def get_dwelling(user):
         return None
 
 def convert_name_to_identifier(name):
-    """ Converts name into a valid identifier"""
+    """ Converts name into a valid identifier
+        (removes whitespace and leading numerals)"""
     name = name.lower()
     # remove whitespace
     name = name.replace(' ', '_')
@@ -197,29 +198,39 @@ def get_pledge_energy_savings(pledge):
 
 def get_pledge_financial_savings(pledge):
     if pledge.hat_results:
-        return pledge.hat_results.post_measure_energy_costs
+        return pledge.hat_results.annual_cost_reduction
     else:
         return None
 
 def get_map_initial(latitude, longitude, zoom=13):
     return dict(latitude=str(latitude), longitude=str(longitude), zoom=zoom)
 
+
 def get_pledges_with_positions(pledges):
+    """Produces context data for plotting pledges
+        Returns a JSON object which is passed directly to the javascript
+        code which plots the pledges.
+     """
     pledges_with_positions = {}
     for p in pledges:
+        # check that the user has a dwelling and that the dwelling has a location
         if p.user.userprofile.dwelling and p.user.userprofile.dwelling.position.latitude != 0:
+            # get position of dwelling
             position = p.user.userprofile.dwelling.position
+            # get energy savings of the pledge 
             pledge_energy_savings = get_pledge_energy_savings(p)
             if pledge_energy_savings:
                 savings = str(pledge_energy_savings)
             else:
                 savings = 'unknown'
 
+            # get financial savings of the pledge (currently unused)
             pledge_money_savings = get_pledge_financial_savings(p)
             if pledge_money_savings:
                 money_savings = str(pledge_money_savings)
             else:
                 money_savings = 'unknown'
+                
             pledges_with_positions[str(p.id)] = ({
                 'pledge': {
                     'measure': str(p.measure),
@@ -241,49 +252,88 @@ def get_pledges_with_positions(pledges):
 def get_areas_with_total_pledges():
     return Area.objects.annotate(pledge_count=Count('dwelling__userprofile__user__pledge')).order_by('-pledge_count')
 
+def get_areas_with_total_completed_pledges():
+    return Area.objects.filter(dwelling__userprofile__user__pledge__complete = True).annotate(
+        completed_pledge_count=Count('dwelling__userprofile__user__pledge')).order_by('-completed_pledge_count')
+
+def get_areas_with_pledge_points():
+    """Returns a list of all areas together with pledge points """
+    areas_with_points = {}
+    areas_with_total_pledges = get_areas_with_total_pledges()
+    areas_with_total_completed_pledges = get_areas_with_total_completed_pledges()
+
+    for a in areas_with_total_pledges:
+        areas_with_points[a.pk] = a.pledge_count
+    for a in areas_with_total_completed_pledges:
+        areas_with_points[a.pk] = areas_with_points.setdefault(a.pk, 0) + a.completed_pledge_count * 4
+    return areas_with_points
+
+
 
 def get_area_ranking(area, areas_with_total_pledges):
+    """ Returns the position of area in areas_with_total_pledges"""
     for i, a in enumerate(areas_with_total_pledges, start=1):
         if a == area:
             return i
     return None
 
 def get_ranking_details(area, total_pledges):
+    """Produces the context used on area pages"""
+
+    # get area points
+    area_points = get_areas_with_pledge_points()
+    area_points = area_points[area.pk]
+    # completed = get_areas_with_total_completed_pledges()
+    # for a in completed:
+    #     print a.completed_pledge_count
+    # print "completed" + str(completed)
+
+    # get area ranking
     area_pledge_counts = get_areas_with_total_pledges()
     area_ranking = get_area_ranking(area, area_pledge_counts)
+    # if not first then calculate difference with area above
     if area_ranking > 1:
         area_above = area_pledge_counts[area_ranking-2]
         pledge_difference_with_area_above = area_above.pledge_count - total_pledges
         if pledge_difference_with_area_above == 0:
             pledge_difference_with_area_above = 1
         top = False
+    # if first then set top to true
     else:
         area_above = None
         pledge_difference_with_area_above = None
         top = True
+    # if not last then calculate difference with area below
     if area_ranking  < len(area_pledge_counts):
         area_below = area_pledge_counts[area_ranking]
         pledge_difference_with_area_below = total_pledges - area_below.pledge_count
         if pledge_difference_with_area_below == 0:
             pledge_difference_with_area_below = 1
         bottom = False
+    # if last then set bottom to true
     else:
         area_below = None
         pledge_difference_with_area_below = None
         bottom = True
     ranking_details = {
-        'area_pledge_counts':area_pledge_counts,
-        'area_ranking':area_ranking,
-        'area_above':area_above,
-        'pledge_difference_with_area_above':pledge_difference_with_area_above,
-        'area_below':area_below,
-        'pledge_difference_with_area_below':pledge_difference_with_area_below,
+        'area_pledge_counts': area_pledge_counts,
+        'area_ranking': area_ranking,
+        'area_above': area_above,
+        'pledge_difference_with_area_above': pledge_difference_with_area_above,
+        'area_below': area_below,
+        'pledge_difference_with_area_below': pledge_difference_with_area_below,
         'top': top,
         'bottom': bottom,
+        'area_points': area_points,
     }
     return ranking_details
 
 def geocode_address(address):
+    """Gets the geolocation of address 
+        The Google Maps API returns a list of results, this method
+        simply takes the first in the list so it is important to
+        provide as specific an address as possible
+     """
     url = "https://maps.googleapis.com/maps/api/geocode/json?address=%s,UK&sensor=false&key=%s" % (urllib.quote_plus(address), GOOGLE_API_KEY)
     # print url
     response = urllib.urlopen(url).read()
@@ -292,6 +342,7 @@ def geocode_address(address):
     return response_dict['results'][0]['geometry']['location']
 
 def get_address_from_street_name_or_area(street_name, area):
+    """Combines street_name and area into an address string """
     if street_name:
         if area:
             address_string = street_name + ', ' + area.postcode_district
