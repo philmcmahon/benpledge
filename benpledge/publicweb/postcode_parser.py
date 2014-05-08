@@ -1,4 +1,5 @@
 # taken from http://code.activestate.com/recipes/279004-parsing-a-uk-postcode/
+# licensed under PSF License: http://opensource.org/licenses/Python-2.0
 import re
 
 # Build up the regex patterns piece by piece
