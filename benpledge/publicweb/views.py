@@ -113,10 +113,7 @@ def hat_filter(request):
         user_measures = None
         form = HatFilterForm(request.POST)
         if form.is_valid():
-            print form
-            # for i, f in form.cleaned_data.iteritems():
-            #     print i
-            #     print f
+            # print form
             user_measures = get_dwelling_hat_results(dwelling, form.cleaned_data)
     else:
         form = HatFilterForm()
