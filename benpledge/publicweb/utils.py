@@ -33,7 +33,7 @@ def pledge_results_with_progress(pledges):
         }
     return pledge_progress
 
-def get_dwelling_hat_results(dwelling):
+def get_dwelling_hat_results(dwelling, filter_values=None):
     """ Returns dictionary of suitable measures for dwelling. """
     if not dwelling.house_id:
         return None
@@ -42,7 +42,7 @@ def get_dwelling_hat_results(dwelling):
     for m in measures:
         if m.hat_measure:
             hat_out = get_hat_results(dwelling.house_id, m.hat_measure.measure_id)
-            if suitable_measure(hat_out, m, dwelling.window_type):
+            if suitable_measure(hat_out, m, dwelling.window_type, filter_values):
                 hat_results[m.id] = {
                     'hat_results' : hat_out,
                     'measure_name' : m.name,
@@ -51,7 +51,7 @@ def get_dwelling_hat_results(dwelling):
                 }
     return hat_results
 
-def suitable_measure(hat_out, measure, window_type):
+def suitable_measure(hat_out, measure, window_type, filter_values):
     """ Returns False if negative energy savings or measure otherwise unsuitable"""
     if not hat_out or hat_out.consumption_change <= 0 or hat_out.annual_cost_reduction <= 0:
         return False
@@ -60,6 +60,28 @@ def suitable_measure(hat_out, measure, window_type):
     # False if payback time greater than 50 years
     if get_payback_time(hat_out) > 50:
         return False
+
+    if filter_values:
+        if hat_out.consumption_change < filter_values.get('minimum_consumption_reduction', 0):
+            return False
+        if hat_out.annual_cost_reduction < filter_values.get('minimum_annual_cost_reduction', 0):
+            return False
+        if get_percentage_return_on_investment(hat_out) < filter_values.get('minimum_annual_return_on_investment', 0):
+            return False
+        maximum_payback_time = filter_values.get('maximum_payback_time', 50)
+        if not maximum_payback_time:
+            maximum_payback_time = 50
+        if get_payback_time(hat_out) > maximum_payback_time:
+            return False
+        maximum_installation_costs = filter_values.get('maximum_installation_costs', 20000)
+        if not maximum_installation_costs:
+            maximum_installation_costs = 20000
+        if hat_out.approximate_installation_costs > maximum_installation_costs:
+            print filter_values.get('maximum_installation_costs', 20000)
+            return False
+        if not hat_out.grean_deal and filter_values.get('green_deal_eligible'):
+            return False
+
     return True
 
 def get_payback_time(hat_info):
@@ -116,8 +138,7 @@ def convert_name_to_identifier(name):
     # remove invalid characters
     name = re.sub('[^0-9a-zA-Z_]', '', name)
     # remove leading numbers
-    # regex from http://stackoverflow.com/questions/3303312/how-do-i-convert-a-string-to-a-valid-variable-name-in-python
-    name = re.sub('^[^a-zA-Z_]+', '', name)
+    name = re.sub('^[^A-Za-z_]+', '', name)
     return name
 
 def get_consumption_row_for_postcode(postcode):
@@ -335,9 +356,9 @@ def geocode_address(address):
         provide as specific an address as possible
      """
     url = "https://maps.googleapis.com/maps/api/geocode/json?address=%s,UK&sensor=false&key=%s" % (urllib.quote_plus(address), GOOGLE_API_KEY)
-    # print url
+
     response = urllib.urlopen(url).read()
-    # print response
+
     response_dict = json.loads(response)
     return response_dict['results'][0]['geometry']['location']
 

@@ -34,3 +34,10 @@ class PledgeCompleteForm(ModelForm):
         model = Pledge
         fields = ['feedback']
 
+class HatFilterForm(forms.Form):
+    minimum_consumption_reduction = forms.IntegerField(required=False)
+    minimum_annual_cost_reduction = forms.IntegerField(required=False)
+    maximum_installation_costs = forms.IntegerField(required=False)
+    maximum_payback_time = forms.IntegerField(required=False)
+    minimum_annual_return_on_investment = forms.IntegerField(required=False)
+    green_deal_eligible = forms.BooleanField(required=False)

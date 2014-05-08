@@ -1,0 +1,31 @@
+{% load publicweb_filters %}
+<table id="sortable-measures-table" class="table tablesorter">
+<thead>
+<tr>
+  <th> Measure</th>
+  <th>Energy Consumption Reduction (kWh)</th>
+  <th>Annual cost reduction</th>
+  <th>Approximate installation costs</th>
+  <th>Payback time (years)</th>
+  <th>Annual return on investment</th>
+  <th>Green deal?</th>
+ <!--  <th>Eco Finance?</th> -->
+</tr>
+</thead>
+<tbody>
+{% for k, m in user_measures.iteritems %}
+{% if m.hat_results %}
+  <tr>
+    <td><a href="{% url 'measure' k %}">{{ m.measure_name }}</a></td>
+    <td>{{ m.hat_results.consumption_change|round_to_nearest_10 }}</td>
+    <td>£{{ m.hat_results.annual_cost_reduction|round_to_nearest_10 }}</td>
+    <td>£{{ m.hat_results.approximate_installation_costs|round_to_nearest_10 }}</td>
+    <td>{{ m.payback_time_estimate }}</td>
+    <td>{{ m.percentage_return_on_investment }}%</td>
+    <td><span class="{{ m.hat_results.grean_deal|boolean_to_glyphicon }}"></span><p class="boolean-hidden-text">{{ m.hat_results.grean_deal}}</p></td>
+    <!-- <td><span class="{{ m.hat_results.eco_finance|boolean_to_glyphicon }}"></span><p class="boolean-hidden-text">{{ m.hat_results.eco_finance}}</p></td> -->
+  </tr>
+{% endif %}
+{% endfor %}
+</tbody>
+</table>

@@ -9,7 +9,8 @@
 
 
     <title>{% block title %}BENpledge{% endblock %}</title>
-{% load staticfiles %}
+    <!-- Static files must be loaded on every template they are used -->
+  {% load staticfiles %}
 
     <!-- Backup CSS -->
     <link href="{% static "publicweb/css/bootstrap.min.css" %}" rel="stylesheet">
@@ -17,7 +18,7 @@
 
      <!-- Bootstrap core CSS  -->
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-
+    {# Load templatetags #}
     {% load publicweb_filters %}
 
     <!-- Fontawesome icons -->
@@ -146,7 +147,7 @@
     <script type="text/javascript" src="{% static "publicweb/js/overlapping-marker-spiderfier.min.js" %}"></script>
     <script src="{% static "publicweb/js/publicweb_scripts.js" %}"></script>
 
-     <!-- jQuery datepicker? -->
+     <!-- jQuery datepicker -->
      <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
      <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 

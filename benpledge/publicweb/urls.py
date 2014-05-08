@@ -26,6 +26,8 @@ urlpatterns = patterns('',
     # profile
     url(r'^users/(?P<username>\w+)/$', views.profile, name='profile_registration'),
     url(r'^accounts/profile/$', views.profile, name='profile'),
+    # hat filter
+    url(r'^hat_filter/$', views.hat_filter, name='hat_filter'),
     # django authentication
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page' : '/', 'redirect_field_name' : '/'}),

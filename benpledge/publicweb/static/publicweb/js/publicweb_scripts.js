@@ -12,11 +12,14 @@
 
 
 /* Publicweb Scripts */
+
+// when slider moved, update text next to form element
 var updateDurationText = function() {
     var slider_value = pledgeSlider.getValue();
     $("#duration-text").html(slider_value + ' months');
 };
 
+// setup slider form element on plege form
 var pledgeSlider = $('#pledge-slider').slider({
         formater: function(value) {
             return value + ' months';
@@ -25,6 +28,7 @@ var pledgeSlider = $('#pledge-slider').slider({
     .on('slide', updateDurationText)
     .data('slider');
 
+// hides pledge form elements when 'interest only' checked
 function updatePledgeForm(item) {
     var x = $("#123-interest-only");
     console.log(x.is(':checked'));
@@ -42,7 +46,7 @@ var map;
 function initialize() {
     geocoder = new google.maps.Geocoder();
     var mapInitial = getMapInitial();
-    
+    // initialise map with default location and zoom
     var latlng = new google.maps.LatLng(mapInitial.latitude, mapInitial.longitude);
     var mapOptions = {
         center: latlng,
@@ -53,6 +57,7 @@ function initialize() {
     mapPledges();
 }
 
+// content for marker info window
 function generateInfoWindowContent(title, dateMade, deadline, timeRemaining, savings, panelType) {
     console.log(panelType)
     var panelContent= '<div id="content">' +
@@ -97,24 +102,30 @@ function mapPledges() {
     // setup oms
     infoWindow = new google.maps.InfoWindow();
     oms = new OverlappingMarkerSpiderfier(map, {keepSpiderfied: true});
+    // when 'spiderfied' (collapsed) marker clicked
+    // close the info window
     oms.addListener('spiderfy', function(markers) {
       infoWindow.close();
     });
-
+    // when marker clicked, open info window 
     oms.addListener('click', function(marker, event) {
         infoWindow.setContent(marker.desc);
         infoWindow.open(map, marker);
     });
 
+    // get pledge data from template
     var pledgeData = getPledgeData();
     var image = getIconLocation();
+
     var latlng, title, pledge, location;
     i = 0;
+    // loop through pledges, plot on map
     for (var p in pledgeData) {
         location = pledgeData[p].position;
         pledge = pledgeData[p].pledge;
-
+        // create LatLng object
         latlng = new google.maps.LatLng(location.lat, location.lng);
+        // set colour of info window, marker title
         if (pledge['complete'] == "True") {
             title = pledge.measure + " pledged and completed by " + pledge.user;  
             panelType = "panel-success"; 
@@ -123,118 +134,33 @@ function mapPledges() {
             panelType = "panel-primary";
         }
         
-        //description = pledge
-
+        // create marker object
         marker = new google.maps.Marker({
             position: latlng,
             map: map,
             icon: image,
             title: title,
         });
+        // pass pledge details to generateInfoWindowContent
         marker.desc = generateInfoWindowContent(title,
                 pledge.date_made, pledge.deadline, pledge.time_remaining, pledge.savings, panelType);
-
+        // add the marker to the map
         oms.addMarker(marker);
-
-        // google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        //     return function() {
-        //         infoWindow.setContent(generateInfoWindowContent(title,
-        //             pledge.date_made, pledge.deadline, pledge.time_remaining, pledge.savings));
-        //         infoWindow.open(map, marker);
-        //     }
-        // })(marker, i));
         i++;
     }
 }
 
 $(document).ready(function(e) {
+    // setup sortable tables
     $("#sortable-measures-table").tablesorter();
     $("#sortable-pledges-table").tablesorter();
     $("#sortable-users-table").tablesorter();
+    // for image map on general_measures
     $('img[usemap]').rwdImageMaps();
+    // for edit_pledge form
     $("#id_deadline").datepicker();
-    // $('#house_map').mapster({
-    //     fillColor: 'ff0000',
-    //     fillOpacity: 0.5
-    // });
+    // when page has loaded, initialise the map
     google.maps.event.addDomListener(window, 'load', initialize);
 });
 
 
-// map.setZoom(11);
-//         marker = new google.maps.Marker({
-//             position: latlng,
-//             map: map
-//         });
-//         infowindow.setContent(results[1].formatted_address);
-//         infowindow.open(map, marker);
-
-// $('area').each(function() {
-//     $(this).qtip({
-//         content: {
-//             text: $(this).title
-//         },
-//         position: {
-//             target : 'mouse',
-//             adjust: {
-//                 // Use initial position rather than continually following the mouse
-//                 //mouse: false
-//             }
-//         },
-//         // style: {
-//         //     tip: {
-//         //         corner: 'left bottom'
-//         //     }
-//         // }
-//     });
-// });
-
-/**
-This code doesn't work yet - too many requests.
-*/
-
-
-// function codeLatLng(latlng) {
-//     geocoder.geocode({'latLng': latlng}, function(results, status) {
-//     if (status == google.maps.GeocoderStatus.OK) {
-//         if (results[0]) {
-//             // code below
-//             plotStreet(results[0].address_components);
-//         } else {
-//             console.log('No results found');
-//             }
-//     } else {
-//         console.log('codeLatlng Geocoder failed due to: ' + status);
-//     }
-//     });
-// }
-
-// function codePostcode(address) {
-//     address += ", UK"
-//     var latlng = null;
-//     geocoder.geocode( { 'address': address}, function(results, status) {
-//         if (status == google.maps.GeocoderStatus.OK) {
-//             codeLatLng(results[0].geometry.location);
-//         } else {
-//             console.log('codePostcode Geocode was not successful for the following reason: ' + status);
-//         }
-//     });
-// }
-
-// function plotStreet(address_components) {
-//     address = (address_components[1].long_name + ", " + 
-//         address_components[2].long_name + ", Bristol, UK");
-//     // console.log(address_components);
-//     console.log(address);
-//     geocoder.geocode( {'address':address}, function(results, status) {
-//     if (status == google.maps.GeocoderStatus.OK) {
-//         var latlng = results[0].geometry.location;
-//         marker = new google.maps.Marker({
-//             position: latlng,
-//             map: map
-//         });
-//     } else {
-//         console.log('plotStreet Geocode was not successful for the following reason: ' + status);
-//     }
-//     });
-// }

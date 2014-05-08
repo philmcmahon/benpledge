@@ -24,7 +24,7 @@ def round_to_nearest_10(value):
     value = round(float(value))
     return int(value - value % 10)
 
-# courtesy of http://stackoverflow.com/questions/19268727/django-how-to-get-the-name-of-the-template-being-rendered
+# from http://stackoverflow.com/questions/19268727/django-how-to-get-the-name-of-the-template-being-rendered
 @register.simple_tag
 def active_page(request, view_name):
     from django.core.urlresolvers import resolve, Resolver404
@@ -85,4 +85,4 @@ def number_to_position(value):
 
 # this is at the bottom to stop sublime text syntax highlighting everything
 # regex courtesy of stack overflow
-URL_REGEX = re.compile(r'''((?:mailto:|ftp://|http://|https://)[^ <>'"{}|\\^`[\]]*)''')
+URL_REGEX = re.compile(r'''((?:mailto:|http://|https://)[^ <>'"{}|\\^`[\]]*)''')

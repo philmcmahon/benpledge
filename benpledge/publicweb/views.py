@@ -18,7 +18,7 @@ from models import (Measure, Dwelling, UserProfile,
     HouseIdLookup, HatResultsDatabase, Pledge, Area, PostcodeOaLookup,
     LsoaDomesticEnergyConsumption, TopTip, Organisation, HomepageCheckList, EcoEligible,
     AboutPage, FundingOption, Provider)
-from forms import DwellingForm, PledgeForm, PledgeCompleteForm
+from forms import DwellingForm, PledgeForm, PledgeCompleteForm, HatFilterForm
 from utils import *
 
 from postcode_parser import parse_uk_postcode
@@ -100,6 +100,35 @@ def user_admin_overview(request):
         'users': users
     }
     return render(request, 'publicweb/user_admin_overview.html', context)
+
+@login_required
+def hat_filter(request):
+    dwelling = Dwelling.objects.filter(userprofile__user=request.user).first()
+    if not dwelling:
+        return redirect('profile')
+    if not dwelling.house_id:
+        return redirect('profile')
+
+    if request.method == 'POST':
+        user_measures = None
+        form = HatFilterForm(request.POST)
+        if form.is_valid():
+            print form
+            # for i, f in form.cleaned_data.iteritems():
+            #     print i
+            #     print f
+            user_measures = get_dwelling_hat_results(dwelling, form.cleaned_data)
+    else:
+        form = HatFilterForm()
+        user_measures = get_dwelling_hat_results(dwelling)
+
+    context = {
+        'form':form,
+        'user_measures': user_measures,
+    }
+    return render(request, 'publicweb/hat_filter.html', context)
+
+
 
 @login_required
 def profile(request, username=None):

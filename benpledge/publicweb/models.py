@@ -114,6 +114,10 @@ class HomepageCheckList(models.Model):
         return str(self.order) + ' - ' + self.text
 
 class Pledge(models.Model):
+    """Holds pledges and pledge feedback
+        hat_results is set to the HAT results for the pledge
+        of this measure at the time of pledging
+    """
     measure = models.ForeignKey(Measure)
     user = models.ForeignKey(User)#, related_name='pledge')
     deadline = models.DateField(null=True, blank=True)
@@ -356,7 +360,7 @@ class LsoaDomesticEnergyConsumption(models.Model):
 
 class PostcodeOaLookup(models.Model):
     """Postcode lookup to get output area codes"""
-    postcode = models.CharField(max_length=8)
+    postcode = models.CharField(db_index=True, max_length=8)
     oa_code = models.CharField(max_length=9)
     lsoa_code = models.CharField(max_length=9)
     lsoa_name = models.CharField(max_length=20)

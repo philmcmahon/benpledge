@@ -1,0 +1,13 @@
+{% extends "publicweb/form_base.html" %}
+{% block title %}Filter Results{% endblock %}
+{% block header %}Filter Results{% endblock %}
+{% block cancel_button %}<a class="btn btn-success" href="{% url 'profile' %}">Back to Profile</a> {% endblock %}
+{% block submit_text %}Filter Results{% endblock %}
+{% block content_below_form %}
+<div class="container">
+<div class="col-md-10">
+  {% include 'publicweb/hat_results.html' %}
+</div>
+
+</div>
+{% endblock content_below_form %}
