@@ -84,7 +84,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS' : {
-            'read_default_file': '/opt/benpledge/dbconfig.cnf',
+            'read_default_file': 'bpdbconfig.cnf',
         },
     }
 }

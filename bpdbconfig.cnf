@@ -1,0 +1,6 @@
+[client]
+database = db_benpledge
+user = benpledge
+password = password
+host = localhost
+default-character-set = utf8
