@@ -9,7 +9,8 @@
 {% if user_measures %}
   {% include 'publicweb/hat_results.html' %}
 {% else %}
-<p>No results found. Maybe widen your search or have a look at <a href="{% url 'general_measures %}">other measures</a>.</p>
+<p>No results found. Maybe widen your search or have a look at <a href="{% url 'general_measures' %}">other measures</a>.</p>
+{% endif %}
 </div>
 
 </div>

@@ -41,11 +41,17 @@ def update_field_label(field_label):
         'Number of bedrooms', 'Heating fuel', 'Heating type', 'Loft insulation',
         'Wall type'])
     currency_labels = (['Approximate spent on electricity per month',
-        'Aprroximate spent on gas per month' ])
+        'Aprroximate spent on gas per month',  'Minimum consumption reduction',
+        'Minimum annual cost reduction', 'Maximum installation costs'])
+
     if field_label in labels_required_for_hat:
         return field_label + '*'
     elif field_label in currency_labels:
         return field_label + u' (£)'
+    elif field_label == 'Maximum payback time':
+        return field_label + ' (years)'
+    elif field_label == 'Minimum annual return on investment':
+        return field_label + ' (%)'
     else:
         return field_label
 
