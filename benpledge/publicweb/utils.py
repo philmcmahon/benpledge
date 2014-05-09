@@ -7,6 +7,7 @@ from models import (Pledge, Measure, Dwelling, HouseIdLookup,
     HatResultsDatabase, PostcodeOaLookup, LsoaDomesticEnergyConsumption,
     EcoEligible, UserProfile, Area)
 
+# import google maps API key
 try:
     from benpledge_keys import GOOGLE_API_KEY
 except ImportError:
@@ -55,15 +56,22 @@ def get_dwelling_hat_results(dwelling, filter_values=None):
     return hat_results
 
 def suitable_measure(hat_out, measure, window_type, filter_values):
-    """ Returns False if negative energy savings or measure otherwise unsuitable"""
+    """ Returns False if negative energy savings or measure otherwise unsuitable
+        Args:
+            hat_out : hat results
+            window_type : single/double glazing - used to discard unsuitable window measures
+            filter_values : contains input into HAT filter form
+    """
+    # if negative energy savings return false
     if not hat_out or hat_out.consumption_change <= 0 or hat_out.annual_cost_reduction <= 0:
         return False
+    # if dwelling has double glazing, discard window measures
     if window_type == Dwelling.DOUBLE_GLAZING and measure.name in ["Secondary glazing", "Double Glazing"]:
         return False
     # False if payback time greater than 50 years
     if get_payback_time(hat_out) > 50:
         return False
-
+    # filter based on input to HAT filter form
     if filter_values:
         if hat_out.consumption_change < filter_values.get('minimum_consumption_reduction', 0):
             return False
@@ -88,6 +96,7 @@ def suitable_measure(hat_out, measure, window_type, filter_values):
     return True
 
 def get_payback_time(hat_info):
+    """Returns payback time in years based on hat_info"""
     if hat_info:
         return round((hat_info.approximate_installation_costs /
             hat_info.annual_cost_reduction), 1)
@@ -95,6 +104,7 @@ def get_payback_time(hat_info):
         return None
 
 def get_percentage_return_on_investment(hat_info):
+    """Returns yearly percentage return on investment"""
     if hat_info:
         return round((hat_info.annual_cost_reduction * 100 /
             hat_info.approximate_installation_costs), 1) 
@@ -107,7 +117,9 @@ def get_house_id(dwelling):
         dwelling.number_of_bedrooms, dwelling.heating_fuel,
         dwelling.heating_type, dwelling.loft_insulation, dwelling.wall_type])
     combined_info = ''
+
     for field in metadata_properties:
+        # if a field hasn't been filled in, results lookup fails
         if not field:
             return 0
         else:
@@ -119,6 +131,8 @@ def get_house_id(dwelling):
         return None
 
 def get_hat_results(houseid, measureid):
+    """Combines houseid and measureid to get an index
+        value for fetching results from HatResultsDatabase"""
     if not houseid or not measureid:
         return None
     hat_index = str(houseid) + "0000" + str(measureid)
@@ -292,8 +306,6 @@ def get_areas_with_pledge_points():
         areas_with_points[a.pk] = areas_with_points.setdefault(a.pk, 0) + a.completed_pledge_count * 4
     return areas_with_points
 
-
-
 def get_area_ranking(area, areas_with_total_pledges):
     """ Returns the position of area in areas_with_total_pledges"""
     for i, a in enumerate(areas_with_total_pledges, start=1):
@@ -307,6 +319,8 @@ def get_ranking_details(area, total_pledges):
     # get area points
     area_points = get_areas_with_pledge_points()
     area_points = area_points[area.pk]
+
+    # unused code for counting completed pledges
     # completed = get_areas_with_total_completed_pledges()
     # for a in completed:
     #     print a.completed_pledge_count

@@ -207,6 +207,5 @@ class PublicwebViewsTestCase(BaseTestCase):
         self.response_test('/pledges/my_pledges/', 200, c)
         self.response_test('/accounts/myhome/', 200, c)
         self.response_test('/users/test99/', 200, c)
-        # self.response_test('/pledge_overview/', 302)
 
    

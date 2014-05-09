@@ -26,6 +26,8 @@ from postcode_parser import parse_uk_postcode
 """ Each method in this file renders a page of the application"""
 
 def access_denied(request):
+    """Curently, this page is used when a user tries to delete, edit or complete
+        a pledge not belonging to them """
     context = {
         'error_heading': "Access Denied",
         'error_message': "Sorry, you do not have permission to access this page.",
@@ -57,21 +59,18 @@ def about(request):
 
 def general_measures(request):
     """ All Measures page"""
-    # mid_id = int(Measure.objects.latest('id').id)/2
-    # measures1 = Measure.objects.filter(id__lte=mid_id)
-    # measures2 = Measure.objects.filter(id__gt=mid_id)
 
     small_measures = Measure.objects.filter(size=Measure.SMALL)
     medium_measures = Measure.objects.filter(size=Measure.MEDIUM)
     large_measures = Measure.objects.filter(size=Measure.LARGE)
-
-
     funding_options = FundingOption.objects.all()
+
     context = {
+        # context for the image map on this page
         'measure_ids': get_measures_with_identifiers(),
-        # 'measures1': measures1,
-        # 'measures2': measures2,
+        # funding information for side bar
         'funding_options': funding_options,
+        # measure list context
         'small_measures':small_measures,
         'medium_measures': medium_measures,
         'large_measures':large_measures,
@@ -103,6 +102,8 @@ def user_admin_overview(request):
 
 @login_required
 def hat_filter(request):
+    """ View for the HAT filter page """
+    # verify user has a dwelling and the dwelling has HAT results
     dwelling = Dwelling.objects.filter(userprofile__user=request.user).first()
     if not dwelling:
         return redirect('profile')
@@ -112,8 +113,8 @@ def hat_filter(request):
     if request.method == 'POST':
         user_measures = None
         form = HatFilterForm(request.POST)
+        # if form is valid, update HAT results table
         if form.is_valid():
-            # print form
             user_measures = get_dwelling_hat_results(dwelling, form.cleaned_data)
     else:
         form = HatFilterForm()
@@ -129,7 +130,6 @@ def hat_filter(request):
 
 @login_required
 def profile(request, username=None):
-
     userprofile = UserProfile.objects.filter(user=request.user).first()
     # if the user object has no dwelling, redirect to dwelling form
     if not userprofile.dwelling:
@@ -204,7 +204,9 @@ def measure(request, measure_id):
         'hat_info': hat_info,
         'payback_time_estimate' : payback_time_estimate,
         'providers':providers,
+        # pledge feedback
         'feedback_pledges':feedback_pledges,
+        # context if pledge has already been made
         'pledge' : pledge,
         'time_remaining': time_remaining,
     }
@@ -215,6 +217,7 @@ def dwelling_form(request):
     dwelling = get_dwelling(request.user)
     current_user_profile = UserProfile.objects.get(user=request.user)
 
+    # save these values to avoid unnecessary API requests
     if dwelling:
         current_street_name = dwelling.street_name
         current_area = dwelling.area
@@ -238,9 +241,7 @@ def dwelling_form(request):
                     updated_dwelling.position.longitude = location['lng']
 
             # check if the settings the user has provided have a match in the HAT
-            # if so update the house id
-            # updated_house_id = get_house_id(updated_dwelling)
-            # updated_dwelling.house_id = updated_house_id
+            # if so, update the house id
             updated_dwelling.house_id = get_house_id(updated_dwelling)
 
             updated_dwelling.save()
@@ -259,11 +260,13 @@ def dwelling_form(request):
 @login_required
 def edit_pledge(request, pledge_id):
     pledge = Pledge.objects.filter(id=pledge_id).first()
+    # verify pledge exists
     if not pledge:
         return redirect('profile')
-
+    # verify pledge belongs to user
     if pledge.user != request.user:
         return redirect('access_denied')
+    # update pledge
     if request.method == 'POST':
         form = PledgeForm(request.POST, instance=pledge)
 
@@ -277,9 +280,10 @@ def edit_pledge(request, pledge_id):
 @login_required
 def pledge_complete(request, pledge_id):
     pledge = Pledge.objects.filter(id=pledge_id).first()
+    # verify pledge exists
     if not pledge:
         return redirect('profile')
-
+    # verify pledge belongs to user
     if pledge.user != request.user:
         return redirect('access_denied')
     if request.method == 'POST':
@@ -296,13 +300,14 @@ def pledge_complete(request, pledge_id):
 @login_required
 def delete_pledge(request, pledge_id):
     pledge = Pledge.objects.filter(id=pledge_id).first()
+    # verify pledge exists
     if not pledge:
         return redirect('profile')
+    # verify pledge belongs to user
     if pledge.user != request.user:
         return redirect('access_denied')
 
     if request.method == 'POST':
-
         pledge.delete()
         return redirect('profile')
     else:
@@ -311,21 +316,27 @@ def delete_pledge(request, pledge_id):
 @login_required
 def make_pledge(request):
     if request.method == 'POST':
+        # get hidden fields from the form
         time_period = int(request.POST['time_period'])
         measure_id = request.POST['measure_id']
-        measure = Measure.objects.get(id=measure_id)
         hat_results_id = request.POST['hat_results_id']
+        # fetch measure from the database
+        measure = Measure.objects.get(id=measure_id)
+
+        # if hat results available for pledge, store them
         if hat_results_id:
             hat_results = HatResultsDatabase.objects.get(id=hat_results_id)
         else:
             hat_results = None
 
+        # check pledge type
         if request.POST.get('interest_only'):
             pledge_type = Pledge.INTEREST_ONLY
         else:
             pledge_type = Pledge.PLEDGE
 
-        # print Pledge.objects.filter(measure=measure, user=request.user)
+        # if the pledge has not already been made by this user for this measure
+        # save the pledge
         if len(Pledge.objects.filter(measure=measure, user=request.user)) == 0:
             if pledge_type == Pledge.PLEDGE:
                 now = datetime.now()
@@ -333,6 +344,7 @@ def make_pledge(request):
                 deadline = now + timedelta(days=duration)
             else:
                 deadline = None
+            # create pledge
             pledge = Pledge(measure=measure, user=request.user, deadline=deadline,
                 hat_results=hat_results, receive_updates=request.POST.get('receive_updates', False),
                 pledge_type=pledge_type)
@@ -340,12 +352,13 @@ def make_pledge(request):
         else:
             # if pledge has already been made for that measure...
             pass
-        # this needs to ultimately redirect to a 'my pledges' page
         return redirect('profile')
     else:
         print "Not a POST request"
+        return redirect('profile')
 
 def area_list(request):
+    """List of areas page"""
     context = {
         'areas': Area.objects.all()
     }
@@ -355,68 +368,83 @@ def pledges_for_area(request, postcode_district):
     get_areas_with_total_pledges()
 
     short_postcode = postcode_district[:4]
+    # for fetching lsoa energy consumption
     spaced_postcode = space_postcode(postcode_district)
     consumption_data = get_consumption_row_for_postcode(spaced_postcode)
 
+    # collect pledge information for this area
     area = Area.objects.get(postcode_district=short_postcode)
     pledges_in_area = Pledge.objects.filter(pledge_type = Pledge.PLEDGE, user__userprofile__dwelling__area=area)
     total_pledges = pledges_in_area.count()
     pledge_progress = pledge_results_with_progress(pledges_in_area)
     total_reduction = get_total_reduction(pledges_in_area)
     total_completed_reduction = get_total_reduction(pledges_in_area.filter(complete=True))
-
+    ranking_details = get_ranking_details(area, total_pledges)
     measure_pledge_counts = Measure.objects.filter(pledge__in=pledges_in_area).annotate(pledge_count=Count('pledge')).order_by('-pledge_count')[:10]
  
-    ranking_details = get_ranking_details(area, total_pledges)
+    # get_pledges_with_positions returns all pledges
     pledges_with_positions = get_pledges_with_positions(pledges_in_area)
     context = {
+        # context for pledge list
         'pledge_progress': pledge_progress,
-        'area': area,
         'page_type': 'area',
-        'consumption_data': consumption_data,
-        'pledges_with_positions': pledges_with_positions,
-
         'total_reduction':total_reduction,
         'total_completed_reduction':total_completed_reduction,
+        # area context
+        'area': area,
+        # this context is currently unused - lsoa details
+        # 'consumption_data': consumption_data,
+        
+        # context for the pledge map
+        'pledges_with_positions': pledges_with_positions,
+        'map_initial': get_map_initial(area.position.latitude,
+            area.position.longitude),
+        # area pledge details
         'total_pledges': total_pledges,
         'measure_pledge_counts':measure_pledge_counts,
         'ranking_details': ranking_details,
-        'map_initial': get_map_initial(area.position.latitude,
-            area.position.longitude),
     }
     return render(request, 'publicweb/area_pledge_page.html', context)
 
 def all_pledges(request):
+    # get all pledges, generate pledge statistics and counts
     pledges = Pledge.objects.filter(pledge_type = Pledge.PLEDGE).order_by('date_made')
     total_pledges = pledges.count()
     most_recent_10_pledges_with_progress = pledge_results_with_progress(pledges[:10])
     total_reduction = get_total_reduction(pledges)
     total_completed_reduction = get_total_reduction(pledges.filter(complete=True))
-    pledges_with_positions = get_pledges_with_positions(pledges)
     measure_pledge_counts = Measure.objects.filter(pledge__in=pledges).annotate(pledge_count=Count('pledge')).order_by('-pledge_count')[:10]
-
+    # info for map
+    pledges_with_positions = get_pledges_with_positions(pledges)
     context = {
-        'pledges_with_positions':pledges_with_positions,
+        # pledge list context
         'pledge_progress': most_recent_10_pledges_with_progress,
         'page_type': 'all_pledges',
-        'map_initial': get_map_initial(51.4500388,
-            -2.5588662),
-        'measure_pledge_counts':measure_pledge_counts,
-        'total_pledges': total_pledges,
         'total_reduction':total_reduction,
         'total_completed_reduction':total_completed_reduction,
+        # map context
+        'pledges_with_positions':pledges_with_positions,
+        'map_initial': get_map_initial(51.4500388,
+            -2.5588662),
+        # pledge counts and statistics
+        'measure_pledge_counts':measure_pledge_counts,
+        'total_pledges': total_pledges,
     }
     return render(request, 'publicweb/all_pledges.html', context)
 
 @login_required
 def my_pledges(request):
+    # fetch pledges for the current user
     pledges = Pledge.objects.filter(user=request.user)
+    # get context for plotting pledges
     pledges_with_positions = get_pledges_with_positions(pledges)
+    # information for pledge list
     pledge_progress = pledge_results_with_progress(pledges)
     full_pledges = pledges.filter(pledge_type=Pledge.PLEDGE)
     total_reduction = get_total_reduction(full_pledges)
     total_completed_reduction = get_total_reduction(full_pledges.filter(complete=True))
 
+    # set initial map location to the location of the users' dwelling
     user_dwelling = get_dwelling(request.user)
     if user_dwelling and user_dwelling.position:
         map_initial = get_map_initial(user_dwelling.position.latitude,
@@ -425,10 +453,12 @@ def my_pledges(request):
         map_initial = get_map_initial(51.4500388, -2.5588662)
 
     context = {
+        # pledge list context
         'pledge_progress': pledge_progress,
+        'page_type': 'profile',
         'total_reduction': total_reduction,
         'total_completed_reduction':total_completed_reduction,
-        'page_type': 'profile',
+        # map context
         'pledges_with_positions':pledges_with_positions,
         'map_initial': map_initial,
     }
