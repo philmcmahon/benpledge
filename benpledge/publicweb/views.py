@@ -57,9 +57,9 @@ def about(request):
 
 def general_measures(request):
     """ All Measures page"""
-    mid_id = int(Measure.objects.latest('id').id)/2
-    measures1 = Measure.objects.filter(id__lte=mid_id)
-    measures2 = Measure.objects.filter(id__gt=mid_id)
+    # mid_id = int(Measure.objects.latest('id').id)/2
+    # measures1 = Measure.objects.filter(id__lte=mid_id)
+    # measures2 = Measure.objects.filter(id__gt=mid_id)
 
     small_measures = Measure.objects.filter(size=Measure.SMALL)
     medium_measures = Measure.objects.filter(size=Measure.MEDIUM)
