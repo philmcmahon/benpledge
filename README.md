@@ -48,10 +48,12 @@ You should now be able to run:
 
 If you wish to use the account you made when running syncdb with the application you'll need to add a UserProfile for it. You can do this using the admin interface at  http://127.0.0.1:8000/admin/ 
 
-You will now need to load some data into the database in order for the application to function properly. If you have been provided with the necessary data, you can load it into the database like this:
+You will now need to load some data into the database in order for the application to function properly. Some of the required data is included in the repository but the HAT and DECC data will need to be obtained by contacting me. To load the provided data:
 
-    python manage.py loaddata datafile.json
-    
+    python manage.py loaddata /publicweb/fixtures/benpledge_publicweb_data.json
+
+If you have been provided with the HAT data and DECC datasets, you can load them into the database by placing the .csv files in benpledge/publicweb/sql/ and executing the SQL commands in load_hat_data_sql.
+
 Finally, in order to make requests to the Google Maps API, you will need an API key for the Google Maps Geolocation API. You can get an API key from the [Google APIs console]. Create a Python file in the /benpledge/publicweb/ directory called benpledge_keys.py and add the following line to it:
 
     GOOGLE_API_KEY = your_api_key
