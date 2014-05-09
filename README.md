@@ -77,6 +77,22 @@ Database migrations in the application are handled using django-south. After you
     python manage.py schemamigration publicweb --auto
     python manage.py migrate publicweb
     
+Testing 
+--------
+In order to run the tests included with the application (and to write more), you will need to create fixtures to be used in the test database. You can do so using the publicwebdatadump.sh script in /benpledge/scripts/ - this script creates fixtures from the first 50 rows of the larger tables, and dumps the smaller tables in their entirity. For more information on Django test fixtures see the [django testing documentation].
+
+    ./scripts/publicwebdatadump.sh
+    
+The included tests rely on the user test99 existing in the database. Either create this user (with password test99) or change tests.py to use a different user. Then, you can run the tests using the following command:
+
+    // run all tests
+    python manage.py test publicweb
+    // run all tets in TestCase
+    python manage.py test publicweb.tests.TestCase
+    // run test_method
+    python manage.py test publicweb.tests.TestCase.test_method
+
+    
 Templates
 ---------
 Django provides a powerful templating system which supports template inheritance. You can find out which template is used for a page by looking at the return value of the view which renders the page.
@@ -96,3 +112,4 @@ In benpledge/publicweb/static/publicweb you will find the static files used in t
 [pip]:https://pypi.python.org/pypi/pip
 [Google APIs console]: https://code.google.com/apis/console/
 [Django tutorial]:https://docs.djangoproject.com/en/dev/intro/tutorial01/
+[django testing documentation]: https://docs.djangoproject.com/en/1.6/topics/testing/
