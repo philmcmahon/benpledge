@@ -1,0 +1,13 @@
+mysql -D benpledge_db -u admin -pfestivalgargoyle -e "SELECT * from publicweb_measure" > /home/phil/mysql_copies/publicweb_measure.txt
+mysql -D benpledge_db -u admin -pfestivalgargoyle -e "SELECT * from publicweb_area" > /home/phil/mysql_copies/publicweb_area.txt
+mysql -D benpledge_db -u admin -pfestivalgargoyle -e "SELECT * from publicweb_dwelling" > /home/phil/mysql_copies/publicweb_dwelling.txt
+mysql -D benpledge_db -u admin -pfestivalgargoyle -e "SELECT * from publicweb_ecoeligible" > /home/phil/mysql_copies/publicweb_ecoeligible.txt
+mysql -D benpledge_db -u admin -pfestivalgargoyle -e "SELECT * from publicweb_hatmeasureslist" > /home/phil/mysql_copies/publicweb_hatmeasureslist.txt
+mysql -D benpledge_db -u admin -pfestivalgargoyle -e "SELECT * from publicweb_hatmetadata" > /home/phil/mysql_copies/publicweb_hatmetadata.txt
+mysql -D benpledge_db -u admin -pfestivalgargoyle -e "SELECT * from publicweb_homepagechecklist" > /home/phil/mysql_copies/publicweb_homepagechecklist.txt
+mysql -D benpledge_db -u admin -pfestivalgargoyle -e "SELECT * from publicweb_houseidlookup" > /home/phil/mysql_copies/publicweb_houseidlookup.txt
+mysql -D benpledge_db -u admin -pfestivalgargoyle -e "SELECT * from publicweb_lsoadomesticenergyconsumption" > /home/phil/mysql_copies/publicweb_lsoadomesticenergyconsumption.txt
+mysql -D benpledge_db -u admin -pfestivalgargoyle -e "SELECT * from publicweb_organisation" > /home/phil/mysql_copies/publicweb_organisation.txt
+mysql -D benpledge_db -u admin -pfestivalgargoyle -e "SELECT * from publicweb_postcodeoalookup" > /home/phil/mysql_copies/publicweb_postcodeoalookup.txt
+mysql -D benpledge_db -u admin -pfestivalgargoyle -e "SELECT * from publicweb_toptip" > /home/phil/mysql_copies/publicweb_toptip.txt
+mysql -D benpledge_db -u admin -pfestivalgargoyle -e "SELECT * from publicweb_pledge" > /home/phil/mysql_copies/publicweb_pledge.txt
