@@ -22,11 +22,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '0eu763+(x*w0i)%zx1x$7d0fs5ce*!#fjm=ux+q8v+)=k+u%my'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['95.85.39.60']
 
 
 # Application definition
@@ -55,7 +54,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_OPEN = True
 SITE_ID = 1
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = BASE_DIR +'/emails/' 
 
 MIDDLEWARE_CLASSES = (
@@ -84,18 +83,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS' : {
-            'read_default_file': 'bpdbconfig.cnf',
+            'read_default_file': BASE_DIR+'/bpdbconfig.cnf',
         },
     }
 }
 
-ADMINS = (
-    ('Philip McMahon', '13phil13+benpledgeerr@gmail.com'),
-)
-
-MANAGERS = (
-    ('Philip McMahon', '13phil13+benpledgelink@gmail.com'),
-)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -115,18 +107,11 @@ LOGIN_URL = '/accounts/login'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-STATIC_ROOT = '/opt/benpledge/static/'
-STATIC_URL = 'https://benpledge.philipmcmahon.co.uk/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'publicweb/static/')
+STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/opt/benpledge/static/media/'
-MEDIA_URL = 'https://benpledge.philipmcmahon.co.uk/static/media/'
-
-# Email settings
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'benpledgehelp'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_SUBJECT_PREFIX = 'benpledge - '
+MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media/')
+MEDIA_URL = '/media/'
 
 try:
     from local_settings import *
