@@ -40,7 +40,7 @@ class Command(BaseCommand):
             
             data = serializers.serialize("json", results['query'])
 
-            file_name = "publicweb/fixtures/" + results['file_name']
+            file_name = "../publicweb/fixtures/" + results['file_name']
             f = open(file_name, 'w')
             f.write(data)
             f.close()
