@@ -1,0 +1,1611 @@
+[
+{
+    "pk": 1, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Loft Insulation Topup", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 4, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "Heat rises, and in an uninsulated home a quarter of your heat is lost through the roof. Insulating your loft, attic or flat roof is a simple and effective way to save that waste and reduce your heating bills \u2013 you can even do it yourself. \r\n\r\nLoft insulation is effective for at least 40 years, and it will pay for itself over and over again in that time."
+    }
+},
+{
+    "pk": 2, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Cavity Wall Insulation", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 1, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "wallie wallie wallie: http://en.wikipedia.org/wiki/Cavity_wall blob random text"
+    }
+},
+{
+    "pk": 3, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Internal Solid Wall Insulation", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 2, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 4, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "External Solid Wall Insulation", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 5, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 5, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Air source heat pump", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 6, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 6, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Efficient biomass boiler", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 7, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 7, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Gas condensing boiler", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 8, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 8, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Ground source heat pump", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 9, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 9, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Oil condensing boiler", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 10, 
+        "measure_image_1": "", 
+        "size": 2, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 10, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Solar water heating", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 11, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 11, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Micro wind turbine", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 12, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 12, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "1kW solar PV system", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 13, 
+        "measure_image_1": "2014/03/07/solarpanelsmaller.jpg", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "PV panels convert light into electricity which can be used to run household appliances and lighting. They don\u2019t need direct sunlight to work and electricity can still be generated on a cloudy day. Types of system available range from standard roof or frame mounted panels, to thin films which can be integrated into roof tiles. Standard crystalline panel systems typically have the highest efficiency."
+    }
+},
+{
+    "pk": 13, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "2kW solar PV system", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 14, 
+        "measure_image_1": "2014/03/07/solarpanelsmaller_1.jpg", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 14, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Floor insulation - Suspended Floor", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 15, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 15, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Double Glazing", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 16, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 16, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Draught Proofing", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 17, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 17, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Hot water cylinder insulation", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 18, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 18, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Heating Control Upgrade - TRV", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 19, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 19, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Fan assisted replacement storage heaters", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 20, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 20, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Efficient warm air units", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 21, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 21, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Cylinder thermostat", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 22, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 22, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Energy efficient light bulbs", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 23, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 23, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Secondary glazing", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 24, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 24, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Loft Insulation (Full)", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": 3, 
+        "measure_image_1": "", 
+        "size": 2, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 25, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Radiator Controls", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": null, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "Thermostatic radiator valves (TRVs) allow you to have different temperatures in different rooms, and to turn off the heating in rooms that aren't used. For more information see http://www.bristolgreendoors.org/next-steps/quick-wins"
+    }
+},
+{
+    "pk": 26, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Central Heating Controls", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": null, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 27, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Switch Off Standby", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": null, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "For modern devices this has become less of a problem but switching your electronic devices (especially older devices) off completely rather than leaving them on standby can save a significant amount of money. Sometimes you can find out how much energy devices use on standby by looking at the manual or the box your device came in. A device which consumes 1W of power on standby, if left on standby all year, would cost \u00a31/year. Older devices can draw as much as 20W on standby so it's definitely worth investigating!"
+    }
+},
+{
+    "pk": 28, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Efficient Fridges, Freezers, Other white goods", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": null, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 29, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Full load in the washing machine", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": null, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "No description available."
+    }
+},
+{
+    "pk": 30, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Hanging clothes out in the sun", 
+        "estimated_annual_energy_savings_kwh": 100, 
+        "hat_measure": null, 
+        "measure_image_1": "2014/04/02/hanging_cut.png", 
+        "size": 1, 
+        "estimated_annual_cost_savings": 10.0, 
+        "description": "If you have space to hang clothes outside it's a great way to save energy and money compared to using a tumble dryer. And no risk of your clothes shrinking!"
+    }
+},
+{
+    "pk": 31, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Smarter Driving", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": null, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "Changing the way you drive can drastically reduce fuel consumption and save you money at the pump. The AA has some good advice on this: http://www.theaa.com/motoring_advice/fuels-and-environment/drive-smart.html"
+    }
+},
+{
+    "pk": 32, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Better by Bike", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": null, 
+        "measure_image_1": "", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "If you've got a bike and live close enough to work to cycle there, why not try that once a week? In 2008 Bristol was named the UK's first cycling city, and it has good cycle paths on many of the major routes. For more information see http://www.bristol.gov.uk/page/transport-and-streets/cycling and http://www.betterbybike.info/"
+    }
+},
+{
+    "pk": 33, 
+    "model": "publicweb.measure", 
+    "fields": {
+        "name": "Energy Efficient Boiler", 
+        "estimated_annual_energy_savings_kwh": null, 
+        "hat_measure": null, 
+        "measure_image_1": "2014/04/15/boiler_cut.png", 
+        "size": 1, 
+        "estimated_annual_cost_savings": null, 
+        "description": "See http://www.bristolgreendoors.org/next-steps/heating-and-hot-water-systems for information on boilers."
+    }
+},
+{
+    "pk": 1, 
+    "model": "publicweb.provider", 
+    "fields": {
+        "website": "http://www.solarsense-uk.com/", 
+        "name": "Solar Sense", 
+        "measures": [
+            12, 
+            13
+        ], 
+        "display_on_measure_pages": true, 
+        "logo": "providers_2014/0415/solarsense_1.png", 
+        "order": 2, 
+        "description": "Solarsense has been providing trusted advice and installations of renewable technology for more than 19 years. We've seen the industry change and develop and are proud to have played a key role in driving forward the uptake of renewables in the South West."
+    }
+},
+{
+    "pk": 2, 
+    "model": "publicweb.provider", 
+    "fields": {
+        "website": "http://www.sunking.com/", 
+        "name": "Sun King", 
+        "measures": [
+            12, 
+            13
+        ], 
+        "display_on_measure_pages": false, 
+        "logo": "providers_2014/0415/solarsense_2.png", 
+        "order": 1, 
+        "description": "I am the king of sunshine!"
+    }
+},
+{
+    "pk": 1, 
+    "model": "publicweb.aboutpage", 
+    "fields": {
+        "description": "This application has been developed for Bristol Energy Network using data provided by the Centre for Sustainable Energy and the Office for National Statistics.\r\n\r\nSee http://www.bristolenergynetwork.org/ and http://cse.org.uk/ for further information. ", 
+        "title": "About this Site"
+    }
+},
+{
+    "pk": 1, 
+    "model": "publicweb.fundingoption", 
+    "fields": {
+        "name": "Green Deal", 
+        "description": "The Green Deal is a new government scheme to people make their homes more energy smart. The Green Deal is based on the principle that some energy efficiency measures have the potential to pay for themselves through reduced energy bills. Under the Green Deal, you can chose how to pay for energy saving works to your home, but if you use Green Deal Finance you will be able to do the works at no upfront cost. This new approach offers a loan to pay for the measures, which is paid off over an agreed period of time through savings on your energy bills. This is not a personal loan, if you decide to move after installing improvements in your home you will not be expected to take the loan with you to your new home. The loan stays with the property that has received the upgrade in energy efficiency.\r\n\r\nFor more information see http://www.bristolgreendoors.org/green-deal"
+    }
+},
+{
+    "pk": 2, 
+    "model": "publicweb.fundingoption", 
+    "fields": {
+        "name": "Energy Company Obligation (ECO)", 
+        "description": "The ECO came into effect at the same time as the Green Deal as both of these energy saving approaches have replaced former grant schemes. Whilst the Green Deal is a loan, the ECO is a grant that will enable many people to make energy saving improvements to their home. For more information see: http://www.bristolgreendoors.org/green-deal-energy-company-obligation  \r\n<br>\r\nYou can find out whether you live in an area eligible for ECO funding by ensuring you have provided your postcode to us (click on 'My Home' at the top to check - you'll need to login first) and looking on the right side of your profile page."
+    }
+},
+{
+    "pk": 1, 
+    "model": "publicweb.organisation", 
+    "fields": {
+        "website": "http://www.bristolenergynetwork.org/", 
+        "logo": "logos2014/03/26/ben_logo.png", 
+        "organisation_type": 2, 
+        "name": "Bristol Energy Network", 
+        "description": "The Bristol Energy Network is an umbrella organisation for all community energy groups in Bristol and the surrounding area. It aims to facilitate and promote the diverse activities and projects undertaken by its community energy group members by\r\n-  cascading news, information and policy updates from local partners and national organisations,\r\n-  acting as a conduit between local groups and external organisations and\r\n-  providing an open platform for the sharing of resources, ideas and debate through regular open meetings. \r\n\r\nThe network is strongly action-orientated but does not undertake specific projects itself. Instead it seeks to promote collaboration between existing and new groups for the benefit of all.\r\n"
+    }
+},
+{
+    "pk": 2, 
+    "model": "publicweb.organisation", 
+    "fields": {
+        "website": "http://cse.org.uk/", 
+        "logo": "logos2014/03/26/cse_logo.gif", 
+        "organisation_type": 3, 
+        "name": "The Centre for Sustainable Energy", 
+        "description": "We help people and organisations from the public, private and voluntary sectors meet the twin challenges of rising energy costs and climate change.\r\n\r\nOur vision is a world where sustainability is second nature, carbon emissions have been cut to safe levels and fuel poverty has been replaced by energy justice.\r\n\r\nOur mission is to share our knowledge and practical experience to empower people to change the way they think and act about energy\r\n\r\nWe do this by giving advice, managing innovative energy projects, training others to act, and undertaking research and policy analysis.\r\n\r\nAt any one time we have between 50 and 60 different and separately-funded projects underway. All of these are helping people and communities to meet real needs for both environmentally sound and affordable energy services. Read about some of our best projects here.\r\n\r\nCSE is an independent national charitable company that was initiated in 1979. "
+    }
+},
+{
+    "pk": 3, 
+    "model": "publicweb.organisation", 
+    "fields": {
+        "website": "http://www.eastonenergygroup.org/", 
+        "logo": "logos2014/03/26/eeg.jpg", 
+        "organisation_type": 1, 
+        "name": "Easton Energy Group", 
+        "description": "A new community group to help individuals reduce energy use in the home organised by a group of Easton residents who are working in the energy / sustainability field.\r\n\r\nWhat we do:\r\n - Offer free advice on energy saving in the home\r\n - Help with energy saving grants and funding\r\n\r\nWhy we do it:\r\n - Help households to save money by reducing their energy use and carbon emissions\r\n - Community action against climate change\r\n"
+    }
+},
+{
+    "pk": 4, 
+    "model": "publicweb.organisation", 
+    "fields": {
+        "website": "http://www.bristolgreendoors.org/", 
+        "logo": "logos2014/03/26/bgd_new_logo.png", 
+        "organisation_type": 2, 
+        "name": "Bristol Green Doors", 
+        "description": "As so many of our homes are old, the use of measures such as draught-proofing and insulation, and new technologies such as solar PV and smart meters are important. They make the homes energy smart, more comfortable, cleaner for the environment and cheaper to heat. Bristol Green Doors supports this \"retrofitting\" by allowing people to talk and listen to others who have made their homes better in this way at events and through valuable information on this website."
+    }
+},
+{
+    "pk": 5, 
+    "model": "publicweb.organisation", 
+    "fields": {
+        "website": "http://www.bedminsterenergy.org.uk/", 
+        "logo": "logos2014/03/26/beg.png", 
+        "organisation_type": 1, 
+        "name": "Bedminster Energy Group", 
+        "description": "Bedminster Energy Group is a group of local volunteers working to support the local community of Bedminster and Southville to cut their energy bills by improving the energy efficiency of their homes. Meaning a warmer, happier, more comfortable living space for everyone."
+    }
+},
+{
+    "pk": 1, 
+    "model": "publicweb.toptip", 
+    "fields": {
+        "measure_id": null, 
+        "display_on_welcome_screen": true, 
+        "name": "Draught proofing", 
+        "description": "12% of a typical home's heat loss comes from gaps letting in draughts and ventilation.\r\n\r\nFor more information see http://www.bristolgreendoors.org/next-steps/draughtproofing"
+    }
+},
+{
+    "pk": 2, 
+    "model": "publicweb.toptip", 
+    "fields": {
+        "measure_id": null, 
+        "display_on_welcome_screen": true, 
+        "name": "Insulation", 
+        "description": "Insulation is a highly effective way of both reducing your energy bills and making your home more comfortable. Common types of insulation include cavity wall and loft insulation. Depending on your type of home and where you live you may be eligible for a grant to help with the costs of installing insulation. \r\n\r\nFor more information, see the Bristol Green Doors website: http://www.bristolgreendoors.org/next-steps/"
+    }
+},
+{
+    "pk": 3, 
+    "model": "publicweb.toptip", 
+    "fields": {
+        "measure_id": null, 
+        "display_on_welcome_screen": true, 
+        "name": "Energy Efficient Lighting", 
+        "description": "Modern LED lightbulbs can last up to 25 years and use around 10 times less energy than traditional lightbulbs. See http://www.energysavingtrust.org.uk/Electricity/Lighting for more information."
+    }
+},
+{
+    "pk": 1, 
+    "model": "publicweb.homepagechecklist", 
+    "fields": {
+        "text": "looking for ways to reduce your energy bills?", 
+        "order": 1
+    }
+},
+{
+    "pk": 2, 
+    "model": "publicweb.homepagechecklist", 
+    "fields": {
+        "text": "looking for support?", 
+        "order": 3
+    }
+},
+{
+    "pk": 3, 
+    "model": "publicweb.homepagechecklist", 
+    "fields": {
+        "text": "interested in reducing your environmental impact?", 
+        "order": 2
+    }
+},
+{
+    "pk": 1, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "51.4521226,-2.5986163000000033", 
+        "area_name": "City Centre/Redcliffe", 
+        "postcode_district": "BS1"
+    }
+},
+{
+    "pk": 2, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "0,0", 
+        "area_name": "Kingsdown/St Paul's", 
+        "postcode_district": "BS2"
+    }
+},
+{
+    "pk": 3, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "51.4389455,-2.6004718000000366", 
+        "area_name": "Bedminster/Southville/Bower Ashton", 
+        "postcode_district": "BS3"
+    }
+},
+{
+    "pk": 4, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "51.4400242,-2.5512776000000486", 
+        "area_name": "Brislington/Knowle/Knowle West/St Anne's", 
+        "postcode_district": "BS4"
+    }
+},
+{
+    "pk": 5, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "51.4610013,-2.5531961000000365", 
+        "area_name": "Easton/St George/Redfield/Whitehall/Eastville", 
+        "postcode_district": "BS5"
+    }
+},
+{
+    "pk": 6, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "51.4678568,-2.6000819999999294", 
+        "area_name": "Cotham/Redland/Montpelier/Westbury Park", 
+        "postcode_district": "BS6"
+    }
+},
+{
+    "pk": 7, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "0,0", 
+        "area_name": "Bishopston/Horfield/Lockleaze/Ashley Down/St. Andrew's", 
+        "postcode_district": "BS7"
+    }
+},
+{
+    "pk": 8, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "51.4585405,-2.664024799999993", 
+        "area_name": "Clifton/Hotwells/Leigh Woods", 
+        "postcode_district": "BS8"
+    }
+},
+{
+    "pk": 9, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "0,0", 
+        "area_name": "Combe Dingle/Sneyd Park/Stoke Bishop/Westbury on Trym/Henleaze", 
+        "postcode_district": "BS9"
+    }
+},
+{
+    "pk": 10, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "0,0", 
+        "area_name": "Unknown", 
+        "postcode_district": "BS10"
+    }
+},
+{
+    "pk": 11, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "0,0", 
+        "area_name": "Unknown", 
+        "postcode_district": "BS11"
+    }
+},
+{
+    "pk": 12, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "0,0", 
+        "area_name": "Unknown", 
+        "postcode_district": "BS12"
+    }
+},
+{
+    "pk": 13, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "0,0", 
+        "area_name": "Unknown", 
+        "postcode_district": "BS13"
+    }
+},
+{
+    "pk": 14, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "0,0", 
+        "area_name": "Unknown", 
+        "postcode_district": "BS14"
+    }
+},
+{
+    "pk": 15, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "0,0", 
+        "area_name": "Unknown", 
+        "postcode_district": "BS15"
+    }
+},
+{
+    "pk": 16, 
+    "model": "publicweb.area", 
+    "fields": {
+        "position": "0,0", 
+        "area_name": "Unknown", 
+        "postcode_district": "BS16"
+    }
+},
+{
+    "pk": 4, 
+    "model": "publicweb.dwelling", 
+    "fields": {
+        "window_type": 2, 
+        "heating_fuel": 18, 
+        "electricity_supplier": "edf", 
+        "house_id": 2501, 
+        "heating_type": 21, 
+        "loft_insulation": 27, 
+        "approximate_spent_on_electricity_per_month": 1, 
+        "street_name": "Alma Road", 
+        "area": 8, 
+        "number_of_bedrooms": 14, 
+        "aprroximate_spent_on_gas_per_month": 1, 
+        "property_age": 10, 
+        "postcode": "BS82DJ", 
+        "gas_supplier": "edf", 
+        "tenure": 3, 
+        "position": "51.4622043,-2.6130054999999857", 
+        "wall_type": 30, 
+        "energy_efficiency_rating": null, 
+        "number_of_inhabitants": 4, 
+        "dwelling_type": 1
+    }
+},
+{
+    "pk": 5, 
+    "model": "publicweb.dwelling", 
+    "fields": {
+        "window_type": 1, 
+        "heating_fuel": 18, 
+        "electricity_supplier": null, 
+        "house_id": 1385, 
+        "heating_type": 21, 
+        "loft_insulation": 28, 
+        "approximate_spent_on_electricity_per_month": null, 
+        "street_name": null, 
+        "area": 3, 
+        "number_of_bedrooms": 14, 
+        "aprroximate_spent_on_gas_per_month": null, 
+        "property_age": 8, 
+        "postcode": null, 
+        "gas_supplier": null, 
+        "tenure": 4, 
+        "position": "0,0", 
+        "wall_type": 30, 
+        "energy_efficiency_rating": null, 
+        "number_of_inhabitants": null, 
+        "dwelling_type": 1
+    }
+},
+{
+    "pk": 6, 
+    "model": "publicweb.dwelling", 
+    "fields": {
+        "window_type": 1, 
+        "heating_fuel": 18, 
+        "electricity_supplier": null, 
+        "house_id": 1385, 
+        "heating_type": 21, 
+        "loft_insulation": 28, 
+        "approximate_spent_on_electricity_per_month": null, 
+        "street_name": null, 
+        "area": 3, 
+        "number_of_bedrooms": 14, 
+        "aprroximate_spent_on_gas_per_month": null, 
+        "property_age": 8, 
+        "postcode": null, 
+        "gas_supplier": null, 
+        "tenure": 4, 
+        "position": "0,0", 
+        "wall_type": 30, 
+        "energy_efficiency_rating": null, 
+        "number_of_inhabitants": null, 
+        "dwelling_type": 1
+    }
+},
+{
+    "pk": 7, 
+    "model": "publicweb.dwelling", 
+    "fields": {
+        "window_type": 2, 
+        "heating_fuel": 18, 
+        "electricity_supplier": null, 
+        "house_id": 2513, 
+        "heating_type": 22, 
+        "loft_insulation": 26, 
+        "approximate_spent_on_electricity_per_month": null, 
+        "street_name": null, 
+        "area": 2, 
+        "number_of_bedrooms": 14, 
+        "aprroximate_spent_on_gas_per_month": null, 
+        "property_age": 10, 
+        "postcode": null, 
+        "gas_supplier": null, 
+        "tenure": 4, 
+        "position": "0,0", 
+        "wall_type": 30, 
+        "energy_efficiency_rating": null, 
+        "number_of_inhabitants": null, 
+        "dwelling_type": 1
+    }
+},
+{
+    "pk": 8, 
+    "model": "publicweb.dwelling", 
+    "fields": {
+        "window_type": 1, 
+        "heating_fuel": 18, 
+        "electricity_supplier": null, 
+        "house_id": 2501, 
+        "heating_type": 21, 
+        "loft_insulation": 27, 
+        "approximate_spent_on_electricity_per_month": null, 
+        "street_name": null, 
+        "area": 4, 
+        "number_of_bedrooms": 14, 
+        "aprroximate_spent_on_gas_per_month": null, 
+        "property_age": 10, 
+        "postcode": null, 
+        "gas_supplier": null, 
+        "tenure": 1, 
+        "position": "0,0", 
+        "wall_type": 30, 
+        "energy_efficiency_rating": null, 
+        "number_of_inhabitants": null, 
+        "dwelling_type": 1
+    }
+},
+{
+    "pk": 9, 
+    "model": "publicweb.dwelling", 
+    "fields": {
+        "window_type": 1, 
+        "heating_fuel": 17, 
+        "electricity_supplier": "", 
+        "house_id": 1797, 
+        "heating_type": 21, 
+        "loft_insulation": 27, 
+        "approximate_spent_on_electricity_per_month": null, 
+        "street_name": "Baldwin Street", 
+        "area": 1, 
+        "number_of_bedrooms": 13, 
+        "aprroximate_spent_on_gas_per_month": null, 
+        "property_age": 9, 
+        "postcode": "BS11DE", 
+        "gas_supplier": "", 
+        "tenure": null, 
+        "position": "51.4533838,-2.5947599", 
+        "wall_type": 30, 
+        "energy_efficiency_rating": null, 
+        "number_of_inhabitants": null, 
+        "dwelling_type": 1
+    }
+},
+{
+    "pk": 10, 
+    "model": "publicweb.dwelling", 
+    "fields": {
+        "window_type": 1, 
+        "heating_fuel": 17, 
+        "electricity_supplier": "", 
+        "house_id": 11995, 
+        "heating_type": 21, 
+        "loft_insulation": 28, 
+        "approximate_spent_on_electricity_per_month": null, 
+        "street_name": "Small Street", 
+        "area": 1, 
+        "number_of_bedrooms": 14, 
+        "aprroximate_spent_on_gas_per_month": null, 
+        "property_age": 9, 
+        "postcode": "BS11DE", 
+        "gas_supplier": "", 
+        "tenure": 2, 
+        "position": "51.4550503,-2.5949489", 
+        "wall_type": 32, 
+        "energy_efficiency_rating": null, 
+        "number_of_inhabitants": null, 
+        "dwelling_type": 4
+    }
+},
+{
+    "pk": 11, 
+    "model": "publicweb.dwelling", 
+    "fields": {
+        "window_type": null, 
+        "heating_fuel": null, 
+        "electricity_supplier": "345689", 
+        "house_id": 0, 
+        "heating_type": 23, 
+        "loft_insulation": null, 
+        "approximate_spent_on_electricity_per_month": 3456890, 
+        "street_name": "asdfghjkl.", 
+        "area": null, 
+        "number_of_bedrooms": null, 
+        "aprroximate_spent_on_gas_per_month": null, 
+        "property_age": null, 
+        "postcode": "PL210JD", 
+        "gas_supplier": "", 
+        "tenure": null, 
+        "position": "51.454513,-2.58791", 
+        "wall_type": null, 
+        "energy_efficiency_rating": "B", 
+        "number_of_inhabitants": 2, 
+        "dwelling_type": 2
+    }
+},
+{
+    "pk": 12, 
+    "model": "publicweb.dwelling", 
+    "fields": {
+        "window_type": null, 
+        "heating_fuel": null, 
+        "electricity_supplier": "", 
+        "house_id": 0, 
+        "heating_type": null, 
+        "loft_insulation": null, 
+        "approximate_spent_on_electricity_per_month": null, 
+        "street_name": "", 
+        "area": null, 
+        "number_of_bedrooms": null, 
+        "aprroximate_spent_on_gas_per_month": null, 
+        "property_age": null, 
+        "postcode": null, 
+        "gas_supplier": "", 
+        "tenure": null, 
+        "position": "0,0", 
+        "wall_type": null, 
+        "energy_efficiency_rating": null, 
+        "number_of_inhabitants": null, 
+        "dwelling_type": null
+    }
+},
+{
+    "pk": 13, 
+    "model": "publicweb.dwelling", 
+    "fields": {
+        "window_type": null, 
+        "heating_fuel": null, 
+        "electricity_supplier": "", 
+        "house_id": 0, 
+        "heating_type": null, 
+        "loft_insulation": null, 
+        "approximate_spent_on_electricity_per_month": null, 
+        "street_name": "", 
+        "area": null, 
+        "number_of_bedrooms": null, 
+        "aprroximate_spent_on_gas_per_month": null, 
+        "property_age": null, 
+        "postcode": null, 
+        "gas_supplier": "", 
+        "tenure": null, 
+        "position": "0,0", 
+        "wall_type": null, 
+        "energy_efficiency_rating": null, 
+        "number_of_inhabitants": null, 
+        "dwelling_type": null
+    }
+},
+{
+    "pk": 14, 
+    "model": "publicweb.dwelling", 
+    "fields": {
+        "window_type": null, 
+        "heating_fuel": 17, 
+        "electricity_supplier": "", 
+        "house_id": 0, 
+        "heating_type": 22, 
+        "loft_insulation": 27, 
+        "approximate_spent_on_electricity_per_month": null, 
+        "street_name": "", 
+        "area": null, 
+        "number_of_bedrooms": 13, 
+        "aprroximate_spent_on_gas_per_month": null, 
+        "property_age": 9, 
+        "postcode": null, 
+        "gas_supplier": "", 
+        "tenure": null, 
+        "position": "0,0", 
+        "wall_type": 31, 
+        "energy_efficiency_rating": null, 
+        "number_of_inhabitants": null, 
+        "dwelling_type": 1
+    }
+},
+{
+    "pk": 1, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 1, 
+        "measure_category": "Insulation", 
+        "measure_description": "Cavity Wall Insulation", 
+        "measure_comfort_factor": 0.35, 
+        "measure_lifetime": 42, 
+        "measure_name": "CWI"
+    }
+},
+{
+    "pk": 2, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 2, 
+        "measure_category": "Insulation", 
+        "measure_description": "Internal Solid Wall Insulation", 
+        "measure_comfort_factor": 0.25, 
+        "measure_lifetime": 36, 
+        "measure_name": "IWI"
+    }
+},
+{
+    "pk": 3, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 3, 
+        "measure_category": "Insulation", 
+        "measure_description": "Loft insulation FULL", 
+        "measure_comfort_factor": 0.35, 
+        "measure_lifetime": 42, 
+        "measure_name": "LIF"
+    }
+},
+{
+    "pk": 4, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 4, 
+        "measure_category": "Insulation", 
+        "measure_description": "Loft insulation TOPUP", 
+        "measure_comfort_factor": 0.35, 
+        "measure_lifetime": 42, 
+        "measure_name": "LIT"
+    }
+},
+{
+    "pk": 5, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 6, 
+        "measure_category": "Insulation", 
+        "measure_description": "External Solid Wall Insulation", 
+        "measure_comfort_factor": 0.33, 
+        "measure_lifetime": 36, 
+        "measure_name": "SWI"
+    }
+},
+{
+    "pk": 6, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 7, 
+        "measure_category": "Heating", 
+        "measure_description": "Air source heat pump", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 20, 
+        "measure_name": "ASHP"
+    }
+},
+{
+    "pk": 7, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 8, 
+        "measure_category": "Heating", 
+        "measure_description": "Efficient biomass boiler", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 20, 
+        "measure_name": "BIO"
+    }
+},
+{
+    "pk": 8, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 10, 
+        "measure_category": "Heating", 
+        "measure_description": "Gas condensing boiler", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 12, 
+        "measure_name": "GCB"
+    }
+},
+{
+    "pk": 9, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 11, 
+        "measure_category": "Heating", 
+        "measure_description": "Ground source heat pump", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 20, 
+        "measure_name": "GSHP"
+    }
+},
+{
+    "pk": 10, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 14, 
+        "measure_category": "Heating", 
+        "measure_description": "Oil condensing boiler", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 12, 
+        "measure_name": "OCB"
+    }
+},
+{
+    "pk": 11, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 15, 
+        "measure_category": "", 
+        "measure_description": "Solar water heating", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 0, 
+        "measure_name": "SWH1"
+    }
+},
+{
+    "pk": 12, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 17, 
+        "measure_category": "", 
+        "measure_description": "Micro wind turbine", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 0, 
+        "measure_name": "MWT1"
+    }
+},
+{
+    "pk": 13, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 18, 
+        "measure_category": "", 
+        "measure_description": "1kW solar PV system", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 0, 
+        "measure_name": "PV1"
+    }
+},
+{
+    "pk": 14, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 19, 
+        "measure_category": "", 
+        "measure_description": "2kW solar PV system", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 0, 
+        "measure_name": "PV2"
+    }
+},
+{
+    "pk": 15, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 21, 
+        "measure_category": "", 
+        "measure_description": "Floor insulation - Suspended Floor", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 0, 
+        "measure_name": "FI_susp"
+    }
+},
+{
+    "pk": 16, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 22, 
+        "measure_category": "", 
+        "measure_description": "Double Glazing", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 0, 
+        "measure_name": "DG"
+    }
+},
+{
+    "pk": 17, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 23, 
+        "measure_category": "Heating", 
+        "measure_description": "Draught Proofing", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 25, 
+        "measure_name": "DrPrf"
+    }
+},
+{
+    "pk": 18, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 24, 
+        "measure_category": "Power", 
+        "measure_description": "Hot water cylinder insulation 80mm jacket", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 25, 
+        "measure_name": "HWins"
+    }
+},
+{
+    "pk": 19, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 25, 
+        "measure_category": "Insulation", 
+        "measure_description": "Heating Control Upgrade - TRV", 
+        "measure_comfort_factor": 0.15, 
+        "measure_lifetime": 42, 
+        "measure_name": "TRV"
+    }
+},
+{
+    "pk": 20, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 28, 
+        "measure_category": "Insulation", 
+        "measure_description": "Fan assisted replacement storage heaters", 
+        "measure_comfort_factor": 0.15, 
+        "measure_lifetime": 10, 
+        "measure_name": "STGHTR"
+    }
+},
+{
+    "pk": 21, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 29, 
+        "measure_category": "Insulation", 
+        "measure_description": "Efficient warm air units", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 10, 
+        "measure_name": "WRMAIR"
+    }
+},
+{
+    "pk": 22, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 30, 
+        "measure_category": "Insulation", 
+        "measure_description": "Cylinder thermostat", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 12, 
+        "measure_name": "CYLTHM"
+    }
+},
+{
+    "pk": 23, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 32, 
+        "measure_category": "Heating", 
+        "measure_description": "Energy efficient light bulbs", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 20, 
+        "measure_name": "CFL"
+    }
+},
+{
+    "pk": 24, 
+    "model": "publicweb.hatmeasureslist", 
+    "fields": {
+        "measure_id": 33, 
+        "measure_category": "Power", 
+        "measure_description": "Secondary glazing", 
+        "measure_comfort_factor": 0.0, 
+        "measure_lifetime": 10, 
+        "measure_name": "SndGZ"
+    }
+},
+{
+    "pk": 1, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "DwellingType", 
+        "value": 1, 
+        "label": "Detached house"
+    }
+},
+{
+    "pk": 2, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "DwellingType", 
+        "value": 2, 
+        "label": "Semi-detached or End terrace house"
+    }
+},
+{
+    "pk": 3, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "DwellingType", 
+        "value": 3, 
+        "label": "Mid-terrace house"
+    }
+},
+{
+    "pk": 4, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "DwellingType", 
+        "value": 4, 
+        "label": "Low-rise flat"
+    }
+},
+{
+    "pk": 5, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "DwellingType", 
+        "value": 5, 
+        "label": "High-rise flat"
+    }
+},
+{
+    "pk": 6, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "PropertyAge", 
+        "value": 1, 
+        "label": "pre-1870"
+    }
+},
+{
+    "pk": 7, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "PropertyAge", 
+        "value": 2, 
+        "label": "1871-1919"
+    }
+},
+{
+    "pk": 8, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "PropertyAge", 
+        "value": 3, 
+        "label": "1920-1945"
+    }
+},
+{
+    "pk": 9, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "PropertyAge", 
+        "value": 4, 
+        "label": "1946-1954"
+    }
+},
+{
+    "pk": 10, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "PropertyAge", 
+        "value": 5, 
+        "label": "1955-1979"
+    }
+},
+{
+    "pk": 11, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "PropertyAge", 
+        "value": 6, 
+        "label": "post-1980"
+    }
+},
+{
+    "pk": 12, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "NumberofBedrooms", 
+        "value": 1, 
+        "label": "1"
+    }
+},
+{
+    "pk": 13, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "NumberofBedrooms", 
+        "value": 2, 
+        "label": "2"
+    }
+},
+{
+    "pk": 14, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "NumberofBedrooms", 
+        "value": 3, 
+        "label": "3"
+    }
+},
+{
+    "pk": 15, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "NumberofBedrooms", 
+        "value": 4, 
+        "label": "4"
+    }
+},
+{
+    "pk": 16, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "NumberofBedrooms", 
+        "value": 5, 
+        "label": "5 or more"
+    }
+},
+{
+    "pk": 17, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "HeatingFuel", 
+        "value": 1, 
+        "label": "Gas"
+    }
+},
+{
+    "pk": 18, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "HeatingFuel", 
+        "value": 2, 
+        "label": "Electricity"
+    }
+},
+{
+    "pk": 19, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "HeatingFuel", 
+        "value": 3, 
+        "label": "Oil"
+    }
+},
+{
+    "pk": 20, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "HeatingFuel", 
+        "value": 4, 
+        "label": "Solid Fuel"
+    }
+},
+{
+    "pk": 21, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "HeatingType", 
+        "value": 1, 
+        "label": "Boilers and central heating"
+    }
+},
+{
+    "pk": 22, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "HeatingType", 
+        "value": 2, 
+        "label": "Storage heaters"
+    }
+},
+{
+    "pk": 23, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "HeatingType", 
+        "value": 3, 
+        "label": "Warm air system"
+    }
+},
+{
+    "pk": 24, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "HeatingType", 
+        "value": 4, 
+        "label": "Other (Room Heaters)"
+    }
+},
+{
+    "pk": 25, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "LoftInsulation", 
+        "value": 0, 
+        "label": "no roof"
+    }
+},
+{
+    "pk": 26, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "LoftInsulation", 
+        "value": 1, 
+        "label": "< 50 mm"
+    }
+},
+{
+    "pk": 27, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "LoftInsulation", 
+        "value": 2, 
+        "label": "between 50mm and 200mm"
+    }
+},
+{
+    "pk": 28, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "LoftInsulation", 
+        "value": 3, 
+        "label": "over 200mm"
+    }
+},
+{
+    "pk": 29, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "LoftInsulation", 
+        "value": 9, 
+        "label": "unknown"
+    }
+},
+{
+    "pk": 30, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "WallType", 
+        "value": 1, 
+        "label": "Cavity Uninsulated"
+    }
+},
+{
+    "pk": 31, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "WallType", 
+        "value": 2, 
+        "label": "Cavity Insulated"
+    }
+},
+{
+    "pk": 32, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "WallType", 
+        "value": 3, 
+        "label": "Solid Uninsulated"
+    }
+},
+{
+    "pk": 33, 
+    "model": "publicweb.hatmetadata", 
+    "fields": {
+        "variable": "WallType", 
+        "value": 4, 
+        "label": "Solid Insulated"
+    }
+}
+]
