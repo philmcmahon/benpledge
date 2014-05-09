@@ -7,7 +7,10 @@ from models import (Pledge, Measure, Dwelling, HouseIdLookup,
     HatResultsDatabase, PostcodeOaLookup, LsoaDomesticEnergyConsumption,
     EcoEligible, UserProfile, Area)
 
-from benpledge_keys import GOOGLE_API_KEY
+try:
+    from benpledge_keys import GOOGLE_API_KEY
+except ImportError:
+    GOOGLE_API_KEY = ''
 
 ##### helper functions #####
 def get_measures_with_identifiers():
